@@ -4,9 +4,9 @@
       "header header"
       "sidebar main"
       "footer footer";
-  grid-template-rows: 60px 1fr 30px;  /* 高度分配 */
-  grid-template-columns: 200px 1fr;  /* 侧边栏和主内容的宽度 */
-  height: 100vh;  /* 视口高度 */
+  grid-template-rows: 60px 1fr 30px;
+  grid-template-columns: 200px 1fr;
+  height: 100vh;
 }
 
 .header {
@@ -14,21 +14,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
   background: #333;
   color: #fff;
 }
 
 .sidebar {
   grid-area: sidebar;
-  background: #f4f4f4;
-  padding: 20px;
+  background: #d4d4d4;
 }
 
 .main {
   grid-area: main;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
   background: #fff;
+  overflow: hidden;
+  height: calc(100vh - 90px);
 }
 
 .footer {
@@ -36,7 +39,23 @@
   background: #333;
   color: #fff;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
+.canvas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4f4f4;
+  height: calc(100vh - 150px);
+}
+
+.debug-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #505050;
+  color: #fff;
+  height: 150px;
+}
