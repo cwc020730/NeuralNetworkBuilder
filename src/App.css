@@ -90,7 +90,7 @@
 .component-inventory {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: auto;
   background: #888;
   color: #fff;
   height: calc(100vh - 180px);

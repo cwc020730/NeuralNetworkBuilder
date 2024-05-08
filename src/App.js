@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import D3Canvas from "./components/D3Canvas";
+import ComponentInventory from './components/ComponentInventory';
 
 function App() {
     return (
@@ -16,7 +17,7 @@ function App() {
                     </div>
                 </div>
                 <div className="component-inventory">
-                    Components
+                    <ComponentInventory />
                 </div>
             </aside>
             <main className="main">

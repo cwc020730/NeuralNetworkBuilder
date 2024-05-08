@@ -36,6 +36,63 @@ const D3Canvas = () => {
 
     svg.call(zoomBehavior);
 
+    function handleDrop(event) {
+      event.preventDefault();
+      event.stopPropagation();
+    
+      const transform = d3.zoomTransform(svg.node());
+      const pointer = d3.pointer(event, svg.node());
+    
+      const x = transform.invertX(pointer[0]);
+      const y = transform.invertY(pointer[1]);
+    
+      const radius = event.dataTransfer.getData("radius");
+      const color = event.dataTransfer.getData("color");
+    
+      if (x >= 0 && x <= bgWidth && y >= 0 && y <= bgHeight) {
+        createCircle(x, y, radius, color);
+      }
+    }
+    
+    function createCircle(x, y, radius, color) {
+      const newCircle = g.append('circle')
+        .attr('cx', x)
+        .attr('cy', y)
+        .attr('r', radius)
+        .style('fill', color)
+        .style('cursor', 'pointer');
+    
+      applyDragBehavior(newCircle);
+    }
+    
+    function applyDragBehavior(circle) {
+      const dragHandler = d3.drag()
+        .on("start", function (event) {
+          d3.select(this).raise().classed("active", true);
+        })
+        .on("drag", function (event) {
+          const radius = d3.select(this).attr("r");
+          const newX = Math.max(radius, Math.min(bgWidth - radius, event.x));
+          const newY = Math.max(radius, Math.min(bgHeight - radius, event.y));
+          d3.select(this)
+            .attr("cx", newX)
+            .attr("cy", newY);
+        })
+        .on("end", function (event) {
+          d3.select(this).classed("active", false);
+        });
+    
+      dragHandler(circle);
+    }
+
+    svg.on("dragover", function(event) {
+        event.preventDefault();
+    })
+    .on("drop", handleDrop)
+    .on("dragenter", function(event) {
+      event.preventDefault();
+    });
+
     const circle = g.append('circle')
                     .attr('cx', width / 2)
                     .attr('cy', height / 2)
