@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import ScaleContext from './ScaleContext';
 
 const ComponentInventory = () => {
+  const scale = useContext(ScaleContext);
+  
   const handleDragStart = (event) => {
-    event.dataTransfer.setData("radius", "50");
-    event.dataTransfer.setData("color", "steelblue");
+    const radius = 50;
+    const diameter = 1.6 * radius * 2 * scale;
 
-    event.currentTarget.style.opacity = "0.5";
+    const dragImage = document.createElement('div');
+    dragImage.style.width = `${diameter}px`;
+    dragImage.style.height = `${diameter}px`;
+    dragImage.style.backgroundColor = 'steelblue';
+    dragImage.style.borderRadius = '50%';
+    dragImage.style.position = 'absolute';
+    dragImage.style.top = '-9999px';
+    document.body.appendChild(dragImage);
+
+    event.dataTransfer.setData("radius", `${radius}`);
+    event.dataTransfer.setData("color", "steelblue");
+    event.dataTransfer.setDragImage(dragImage, diameter / 2, diameter / 2);
+
+    event.target.ondragend = () => {
+      document.body.removeChild(dragImage);
+    };
   };
 
   return (
@@ -21,3 +39,5 @@ const ComponentInventory = () => {
 };
 
 export default ComponentInventory;
+
+

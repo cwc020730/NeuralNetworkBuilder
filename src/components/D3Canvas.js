@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const D3Canvas = () => {
+const D3Canvas = ( { setScale } ) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -29,9 +29,10 @@ const D3Canvas = () => {
       .attr('fill', '#222');
 
     const zoomBehavior = d3.zoom()
-      .scaleExtent([0.1, 5])
+      .scaleExtent([0.1, 1])
       .on("zoom", (event) => {
         g.attr('transform', event.transform);
+        setScale(event.transform.k);
       });
 
     svg.call(zoomBehavior);
@@ -118,7 +119,7 @@ const D3Canvas = () => {
 
     dragHandler(circle);
 
-  }, []);
+  }, [setScale]);
 
   return <svg ref={ref} style={{ width: '100%', height: '100%' }}></svg>;
 };
