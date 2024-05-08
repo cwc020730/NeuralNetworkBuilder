@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import D3Canvas from "./components/D3Canvas";
 
 function App() {
     return (
@@ -20,7 +21,7 @@ function App() {
             </aside>
             <main className="main">
                 <div className="canvas">
-                    <p>Canvas</p>
+                    <D3Canvas />
                 </div>
                 <div className="debug-area">
                     <p>Terminal/Debug Area</p>
