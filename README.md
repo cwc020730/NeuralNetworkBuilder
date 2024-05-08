@@ -4,6 +4,8 @@ Create flowcharts of neural networks and convert the flowcharts into PyTorch for
 
 ## How to run the project
 
+Install NodeJS from `https://nodejs.org/en`.
+
 Make sure the directory `npm` executable is in the system environment variable `PATH`
 
 ```
