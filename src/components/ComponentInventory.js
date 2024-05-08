@@ -31,8 +31,17 @@ const ComponentInventory = () => {
       <div 
         className="draggable-item" 
         draggable 
-        onDragStart={handleDragStart} 
-        style={{ width: '100px', height: '100px', backgroundColor: 'steelblue', borderRadius: '50%', cursor: 'grab' }}>
+        onDragStart={handleDragStart}>
+      </div>
+      <div 
+        className="draggable-item" 
+        draggable 
+        onDragStart={handleDragStart}>
+      </div>
+      <div 
+        className="draggable-item" 
+        draggable 
+        onDragStart={handleDragStart}>
       </div>
     </div>
   );

@@ -88,10 +88,26 @@
 }
 
 .component-inventory {
-  display: flex;
-  justify-content: space-between;
-  align-items: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0px 0px;
+  grid-auto-rows: 100px;
+  justify-items: left;
+  align-items: top;
   background: #888;
   color: #fff;
   height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+.draggable-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  background-color: steelblue;
+  border-radius: 50%;
+  cursor: grab;
+  user-select: none;
 }
