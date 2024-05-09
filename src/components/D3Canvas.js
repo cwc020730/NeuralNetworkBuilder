@@ -57,37 +57,56 @@ const D3Canvas = ({ setScale }) => {
     }
 
     function createComponent(x, y, w, h, color) {
-      const newComponent = g.append('rect')
-        .attr('x', x)
-        .attr('y', y)
+      const clipId = `clip-${Math.random().toString(36).substring(2, 10)}`;
+    
+      const newComponent = g.append('g')
+        .attr('transform', `translate(${x}, ${y})`);
+
+      newComponent.append('rect')
         .attr('width', w)
         .attr('height', h)
-        .attr('rx', '10px')
-        .attr('ry', '10px')
+        .attr('rx', 10)
+        .attr('ry', 10)
         .style('fill', color)
         .style('cursor', 'pointer');
 
+      newComponent.append('clipPath')
+        .attr('id', clipId)
+        .append('rect')
+        .attr('width', w)
+        .attr('height', h)
+        .attr('rx', 10)
+        .attr('ry', 10);
+
+      newComponent.append('image')
+        .attr('xlink:href', 'https://via.placeholder.com/150')
+        .attr('width', w)
+        .attr('height', h)
+        .attr('clip-path', `url(#${clipId})`)
+        .attr('preserveAspectRatio', 'xMidYMid slice');
+    
       applyDragBehavior(newComponent);
     }
+    
 
     function applyDragBehavior(component) {
       let offsetX, offsetY;
     
       const dragHandler = d3.drag()
         .on('start', function (event) {
-          const rect = d3.select(this);
-          offsetX = event.x - parseFloat(rect.attr('x'));
-          offsetY = event.y - parseFloat(rect.attr('y'));
-          rect.raise().classed('active', true);
+          const transform = d3.select(this).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
+          const initialX = parseFloat(transform[1]);
+          const initialY = parseFloat(transform[2]);
+          offsetX = event.x - initialX;
+          offsetY = event.y - initialY;
+          d3.select(this).raise().classed('active', true)
+            .style('cursor', 'grabbing');
         })
         .on('drag', function (event) {
-          const width = parseFloat(d3.select(this).attr('width'));
-          const height = parseFloat(d3.select(this).attr('height'));
-          const newX = Math.max(0, Math.min(bgWidth - width, event.x - offsetX));
-          const newY = Math.max(0, Math.min(bgHeight - height, event.y - offsetY));
-          d3.select(this)
-            .attr('x', newX)
-            .attr('y', newY);
+          const newX = Math.max(0, Math.min(bgWidth - parseFloat(d3.select(this).select('rect').attr('width')), event.x - offsetX));
+          const newY = Math.max(0, Math.min(bgHeight - parseFloat(d3.select(this).select('rect').attr('height')), event.y - offsetY));
+          d3.select(this).attr('transform', `translate(${newX}, ${newY})`)
+            .style('cursor', 'grabbing');
         })
         .on('end', function (event) {
           d3.select(this).classed('active', false);
