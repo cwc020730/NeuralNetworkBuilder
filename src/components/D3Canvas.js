@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const D3Canvas = ( { setScale } ) => {
+const D3Canvas = ({ setScale }) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -9,28 +9,28 @@ const D3Canvas = ( { setScale } ) => {
     const height = 400;
 
     d3.select(ref.current).select('g').remove();
-    
+
     const svg = d3.select(ref.current)
-                  .attr('viewBox', `0 0 ${width} ${height}`)
-                  .attr('preserveAspectRatio', 'xMidYMid meet')
-                  .style('display', 'block')
-                  .style('margin', 'auto')
-                  .style('background', '#f8f8f8')
-                  .style('border', '1px solid black');
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .style('display', 'block')
+      .style('margin', 'auto')
+      .style('background', '#f8f8f8')
+      .style('border', '1px solid black');
 
     const g = svg.append('g');
-    
+
     const bgWidth = 10 * width;
     const bgHeight = 10 * height;
 
     g.append('rect')
       .attr('width', bgWidth)
       .attr('height', bgHeight)
-      .attr('fill', '#222');
+      .attr('fill', '#545454');
 
     const zoomBehavior = d3.zoom()
       .scaleExtent([0.1, 1])
-      .on("zoom", (event) => {
+      .on('zoom', (event) => {
         g.attr('transform', event.transform);
         setScale(event.transform.k);
       });
@@ -40,84 +40,69 @@ const D3Canvas = ( { setScale } ) => {
     function handleDrop(event) {
       event.preventDefault();
       event.stopPropagation();
-    
+
       const transform = d3.zoomTransform(svg.node());
       const pointer = d3.pointer(event, svg.node());
-    
-      const x = transform.invertX(pointer[0]);
-      const y = transform.invertY(pointer[1]);
-    
-      const radius = event.dataTransfer.getData("radius");
-      const color = event.dataTransfer.getData("color");
-    
+
+      const originalWidth = parseFloat(event.dataTransfer.getData('width'));
+      const originalHeight = parseFloat(event.dataTransfer.getData('height'));
+      const color = event.dataTransfer.getData('color');
+
+      const x = transform.invertX(pointer[0]) - originalWidth / 2;
+      const y = transform.invertY(pointer[1]) - originalHeight / 2;
+
       if (x >= 0 && x <= bgWidth && y >= 0 && y <= bgHeight) {
-        createCircle(x, y, radius, color);
+        createComponent(x, y, originalWidth, originalHeight, color);
       }
     }
-    
-    function createCircle(x, y, radius, color) {
-      const newCircle = g.append('circle')
-        .attr('cx', x)
-        .attr('cy', y)
-        .attr('r', radius)
+
+    function createComponent(x, y, w, h, color) {
+      const newComponent = g.append('rect')
+        .attr('x', x)
+        .attr('y', y)
+        .attr('width', w)
+        .attr('height', h)
+        .attr('rx', '10px')
+        .attr('ry', '10px')
         .style('fill', color)
         .style('cursor', 'pointer');
-    
-      applyDragBehavior(newCircle);
+
+      applyDragBehavior(newComponent);
     }
+
+    function applyDragBehavior(component) {
+      let offsetX, offsetY;
     
-    function applyDragBehavior(circle) {
       const dragHandler = d3.drag()
-        .on("start", function (event) {
-          d3.select(this).raise().classed("active", true);
+        .on('start', function (event) {
+          const rect = d3.select(this);
+          offsetX = event.x - parseFloat(rect.attr('x'));
+          offsetY = event.y - parseFloat(rect.attr('y'));
+          rect.raise().classed('active', true);
         })
-        .on("drag", function (event) {
-          const radius = d3.select(this).attr("r");
-          const newX = Math.max(radius, Math.min(bgWidth - radius, event.x));
-          const newY = Math.max(radius, Math.min(bgHeight - radius, event.y));
+        .on('drag', function (event) {
+          const width = parseFloat(d3.select(this).attr('width'));
+          const height = parseFloat(d3.select(this).attr('height'));
+          const newX = Math.max(0, Math.min(bgWidth - width, event.x - offsetX));
+          const newY = Math.max(0, Math.min(bgHeight - height, event.y - offsetY));
           d3.select(this)
-            .attr("cx", newX)
-            .attr("cy", newY);
+            .attr('x', newX)
+            .attr('y', newY);
         })
-        .on("end", function (event) {
-          d3.select(this).classed("active", false);
+        .on('end', function (event) {
+          d3.select(this).classed('active', false);
         });
     
-      dragHandler(circle);
+      dragHandler(component);
     }
 
-    svg.on("dragover", function(event) {
-        event.preventDefault();
-    })
-    .on("drop", handleDrop)
-    .on("dragenter", function(event) {
+    svg.on('dragover', function (event) {
       event.preventDefault();
-    });
-
-    const circle = g.append('circle')
-                    .attr('cx', width / 2)
-                    .attr('cy', height / 2)
-                    .attr('r', 50)
-                    .style('fill', 'steelblue')
-                    .style('cursor', 'pointer');
-
-    const dragHandler = d3.drag()
-      .on("start", function (event, d) {
-        d3.select(this).raise().classed("active", true);
-      })
-      .on("drag", function (event, d) {
-        const radius = d3.select(this).attr("r");
-        const newX = Math.max(radius, Math.min(bgWidth - radius, event.x));
-        const newY = Math.max(radius, Math.min(bgHeight - radius, event.y));
-        d3.select(this)
-          .attr("cx", newX)
-          .attr("cy", newY);
-      })
-      .on("end", function (event, d) {
-        d3.select(this).classed("active", false);
+    })
+      .on('drop', handleDrop)
+      .on('dragenter', function (event) {
+        event.preventDefault();
       });
-
-    dragHandler(circle);
 
   }, [setScale]);
 
@@ -125,4 +110,5 @@ const D3Canvas = ( { setScale } ) => {
 };
 
 export default D3Canvas;
+
 
