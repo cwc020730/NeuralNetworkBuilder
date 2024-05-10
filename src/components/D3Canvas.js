@@ -84,6 +84,28 @@ const D3Canvas = ({ setScale }) => {
         .attr('height', h)
         .attr('clip-path', `url(#${clipId})`)
         .attr('preserveAspectRatio', 'xMidYMid slice');
+
+      const connectionPoints = [
+        { x: w / 2, y: 0 },
+        { x: w / 2, y: h },
+      ];
+    
+      newComponent.selectAll('.connection-point')
+        .data(connectionPoints)
+        .enter()
+        .append('circle')
+        .attr('class', 'connection-point')
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y)
+        .attr('r', 2)
+        .style('fill', 'red')
+        .style('cursor', 'crosshair')
+        .on('mouseover', function() {
+          d3.select(this).style('fill', 'green');
+        })
+        .on('mouseout', function() {
+          d3.select(this).style('fill', 'red');
+        });
     
       applyDragBehavior(newComponent);
     }
