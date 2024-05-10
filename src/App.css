@@ -133,18 +133,6 @@
   user-select: none;
 }
 
-.draggable-component {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 160px;
-  height: 60px;
-  background-color: steelblue;
-  border-radius: 10px;
-  cursor: grab;
-  user-select: none;
-}
-
 .component-description {
   display: flex;
   justify-content: center;

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import ScaleContext from './ScaleContext';
 import componentStyles from './ComponentStyles';
 
-const ComponentInventory = ({ initialComponents = ['component1', 'component2'] }) => {
+const ComponentInventory = ({ initialComponents = ['component1', 'component3'] }) => {
   const [componentIds, setComponentIds] = useState(initialComponents);
   const scale = useContext(ScaleContext);
 
@@ -13,17 +13,28 @@ const ComponentInventory = ({ initialComponents = ['component1', 'component2'] }
     const adjustedHeight = 1.6 * height * scale;
     const adjustedBorderRadius = 1.6 * 10 * scale;
 
-    let dragImage; 
+    const { color, image } = componentStyles[componentId];
+
+    let dragImage;
 
     dragImage = document.createElement('div');
     dragImage.style.width = `${adjustedWidth}px`;
     dragImage.style.height = `${adjustedHeight}px`;
-    dragImage.style.backgroundColor = 'steelblue';
+    dragImage.style.backgroundColor = color;
     dragImage.style.borderRadius = `${adjustedBorderRadius}px`;
     dragImage.style.position = 'absolute';
     dragImage.style.top = '-9999px';
     dragImage.style.opacity = '1';
     document.body.appendChild(dragImage);
+
+    const img = document.createElement('img');
+    img.src = image;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.borderRadius = `${adjustedBorderRadius}px`;
+    img.style.objectFit = 'cover';
+
+    dragImage.appendChild(img);
 
     event.dataTransfer.setData('height', `${height}`);
     event.dataTransfer.setData('width', `${width}`);
@@ -59,8 +70,21 @@ const ComponentInventory = ({ initialComponents = ['component1', 'component2'] }
               className="draggable-component"
               draggable
               onDragStart={(e) => handleDragStart(e, componentId)}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '160px',
+                height: '60px',
+                backgroundColor: component.color,
+                borderRadius: '10px',
+                cursor: 'grab',
+                userSelect: 'none',
+                backgroundImage: `url(${component.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              {component.label}
             </div>
             <div className='component-description'>{componentId}</div>
           </div>
@@ -71,4 +95,5 @@ const ComponentInventory = ({ initialComponents = ['component1', 'component2'] }
 };
 
 export default ComponentInventory;
+
 
