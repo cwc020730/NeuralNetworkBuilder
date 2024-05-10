@@ -4,6 +4,13 @@ import componentStyles from './ComponentStyles';
 
 const D3Canvas = ({ setScale }) => {
   const ref = useRef(null);
+  const arrowContainerRef = useRef(null);
+  const idToArrowsMap = new Map();
+  const componentList = [];
+  let componentOnCanvasId = 0;
+  let arrowOnCanvasId = 0;
+  let startPoint = null;
+  let currentArrow = null;
 
   useEffect(() => {
     const width = 800;
@@ -20,6 +27,8 @@ const D3Canvas = ({ setScale }) => {
       .style('border', '1px solid black');
 
     const g = svg.append('g');
+    const arrowContainer = svg.append('g').attr('class', 'arrows');
+    arrowContainerRef.current = arrowContainer;
 
     const bgWidth = 10 * width;
     const bgHeight = 10 * height;
@@ -33,6 +42,7 @@ const D3Canvas = ({ setScale }) => {
       .scaleExtent([0.1, 1])
       .on('zoom', (event) => {
         g.attr('transform', event.transform);
+        arrowContainer.attr('transform', event.transform);
         setScale(event.transform.k);
       });
 
@@ -60,25 +70,54 @@ const D3Canvas = ({ setScale }) => {
 
     function calculateConnectionPoints(w, h, in_cnt, out_cnt) {
       const inputPoints = Array.from({ length: in_cnt }, (_, index) => ({
+        originalX: (index + 1) * (w / (in_cnt + 1)),
+        originalY: 0,
         x: (index + 1) * (w / (in_cnt + 1)),
         y: 0
       }));
-    
+
       const outputPoints = Array.from({ length: out_cnt }, (_, index) => ({
+        originalX: (index + 1) * (w / (out_cnt + 1)),
+        originalY: h,
         x: (index + 1) * (w / (out_cnt + 1)),
         y: h
       }));
-    
+
       return [...inputPoints, ...outputPoints];
     }
+
+    function drawArrow(start, end, attachedComponent) {
+      const arrow = arrowContainerRef.current
+        .append('path')
+        .attr('d', d3.line()([[start.x, start.y], [end.x, end.y]]))
+        .attr('stroke', 'blue')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none')
+        .attr('marker-end', 'url(#arrowhead)');
     
+      const arrowObj = {
+        startPoint: start,
+        endPoint: end,
+        startComponent: attachedComponent,
+        endComponent: null,
+        path: arrow,
+        onCanvasId: arrowOnCanvasId
+      };
+    
+      idToArrowsMap.set(arrowOnCanvasId, arrowObj);
+
+      arrowOnCanvasId++;
+    
+      attachedComponent.attachingArrows.push(arrowObj.onCanvasId);
+    
+      return arrowObj;
+    }
 
     function createComponent(x, y, w, h, style) {
-
       const { color, image, in_cnt, out_cnt } = style;
 
       const clipId = `clip-${Math.random().toString(36).substring(2, 10)}`;
-    
+
       const newComponent = g.append('g')
         .attr('transform', `translate(${x}, ${y})`);
 
@@ -106,7 +145,14 @@ const D3Canvas = ({ setScale }) => {
         .attr('preserveAspectRatio', 'xMidYMid slice');
 
       const connectionPoints = calculateConnectionPoints(w, h, in_cnt, out_cnt);
-    
+
+      const componentObj = {
+        onCanvasId: componentOnCanvasId++, 
+        component: newComponent, 
+        connectionPoints: connectionPoints,
+        attachingArrows: []
+      };
+
       newComponent.selectAll('.connection-point')
         .data(connectionPoints)
         .enter()
@@ -114,21 +160,40 @@ const D3Canvas = ({ setScale }) => {
         .attr('class', 'connection-point')
         .attr('cx', d => d.x)
         .attr('cy', d => d.y)
-        .attr('r', 2)
+        .attr('r', 5)
         .style('fill', 'red')
         .style('cursor', 'crosshair')
-        .on('mouseover', function() {
+        .on('mousedown', function (event, d) {
+          event.stopPropagation();
+          const transform = d3.select(newComponent.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
+          const parentX = parseFloat(transform[1]);
+          const parentY = parseFloat(transform[2]);
+          d.x = parentX + d.originalX;
+          d.y = parentY + d.originalY;
+          startPoint = { x: d.x, y: d.y };
+          currentArrow = drawArrow(startPoint, startPoint, componentObj);
+        })
+        .on('mouseover', function () {
           d3.select(this).style('fill', 'green');
         })
-        .on('mouseout', function() {
+        .on('mouseout', function () {
           d3.select(this).style('fill', 'red');
         });
-    
-      applyDragBehavior(newComponent);
-    }
-    
 
-    function applyDragBehavior(component) {
+      applyDragBehavior(componentObj);
+      
+      componentList.push(componentObj);
+
+    }
+
+    function updateArrows(arrows = []) {
+      arrows.forEach(arrow => {
+        arrow.path.attr('d', d3.line()([[arrow.startPoint.x, arrow.startPoint.y], [arrow.endPoint.x, arrow.endPoint.y]]));
+      });
+
+    }
+
+    function applyDragBehavior(componentObj) {
       let offsetX, offsetY;
     
       const dragHandler = d3.drag()
@@ -142,25 +207,71 @@ const D3Canvas = ({ setScale }) => {
             .style('cursor', 'grabbing');
         })
         .on('drag', function (event) {
-          const newX = Math.max(0, Math.min(bgWidth - parseFloat(d3.select(this).select('rect').attr('width')), event.x - offsetX));
-          const newY = Math.max(0, Math.min(bgHeight - parseFloat(d3.select(this).select('rect').attr('height')), event.y - offsetY));
+          const transform = d3.select(this).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
+          const initialX = parseFloat(transform[1]);
+          const initialY = parseFloat(transform[2]);
+          const rect = d3.select(this).select('rect');
+          const width = parseFloat(rect.attr('width'));
+          const height = parseFloat(rect.attr('height'));
+          const newX = Math.max(0, Math.min(bgWidth - width, event.x - offsetX));
+          const newY = Math.max(0, Math.min(bgHeight - height, event.y - offsetY));
+    
           d3.select(this).attr('transform', `translate(${newX}, ${newY})`)
             .style('cursor', 'grabbing');
+    
+          d3.select(this).selectAll('.connection-point')
+            .each(function (d) {
+              d.x = newX + d.originalX;
+              d.y = newY + d.originalY;
+            });
+          
+          for (let id of componentObj.attachingArrows) {
+            const arrow = idToArrowsMap.get(id);
+            arrow.startPoint = { x: (newX - initialX) + arrow.startPoint.x, y: (newY - initialY) + arrow.startPoint.y };
+            updateArrows([arrow]);
+          }
         })
         .on('end', function (event) {
-          d3.select(this).classed('active', false);
+          d3.select(this).classed('active', false)
+            .style('cursor', 'grab');
         });
     
-      dragHandler(component);
+      dragHandler(componentObj.component);
     }
 
-    svg.on('dragover', function (event) {
-      event.preventDefault();
+    svg.on('mousemove', function (event) {
+      if (currentArrow && startPoint) {
+        const pointer = d3.pointer(event, svg.node());
+        currentArrow.path.attr('d', d3.line()([[startPoint.x, startPoint.y], [pointer[0], pointer[1]]]));
+      }
     })
+      .on('mouseup', function (event) {
+        if (currentArrow) {
+          const pointer = d3.pointer(event, svg.node());
+          currentArrow.endPoint = { x: pointer[0], y: pointer[1] };
+          updateArrows();
+          currentArrow = null;
+          startPoint = null;
+        }
+      })
+      .on('dragover', function (event) {
+        event.preventDefault();
+      })
       .on('drop', handleDrop)
       .on('dragenter', function (event) {
         event.preventDefault();
       });
+
+    svg.append('defs').append('marker')
+      .attr('id', 'arrowhead')
+      .attr('markerWidth', 10)
+      .attr('markerHeight', 7)
+      .attr('refX', 10)
+      .attr('refY', 3.5)
+      .attr('orient', 'auto')
+      .append('polygon')
+      .attr('points', '0 0, 10 3.5, 0 7')
+      .attr('fill', 'blue');
 
   }, [setScale]);
 
@@ -168,5 +279,3 @@ const D3Canvas = ({ setScale }) => {
 };
 
 export default D3Canvas;
-
-
