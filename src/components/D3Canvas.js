@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import componentStyles from './ComponentStyles';
 
 const D3Canvas = ({ setScale }) => {
   const ref = useRef(null);
@@ -46,17 +47,36 @@ const D3Canvas = ({ setScale }) => {
 
       const originalWidth = parseFloat(event.dataTransfer.getData('width'));
       const originalHeight = parseFloat(event.dataTransfer.getData('height'));
-      const color = event.dataTransfer.getData('color');
+      const componentId = event.dataTransfer.getData('componentId');
+      const componentStyle = componentStyles[componentId];
 
       const x = transform.invertX(pointer[0]) - originalWidth / 2;
       const y = transform.invertY(pointer[1]) - originalHeight / 2;
 
       if (x >= 0 && x <= bgWidth && y >= 0 && y <= bgHeight) {
-        createComponent(x, y, originalWidth, originalHeight, color);
+        createComponent(x, y, originalWidth, originalHeight, componentStyle);
       }
     }
 
-    function createComponent(x, y, w, h, color) {
+    function calculateConnectionPoints(w, h, in_cnt, out_cnt) {
+      const inputPoints = Array.from({ length: in_cnt }, (_, index) => ({
+        x: (index + 1) * (w / (in_cnt + 1)),
+        y: 0
+      }));
+    
+      const outputPoints = Array.from({ length: out_cnt }, (_, index) => ({
+        x: (index + 1) * (w / (out_cnt + 1)),
+        y: h
+      }));
+    
+      return [...inputPoints, ...outputPoints];
+    }
+    
+
+    function createComponent(x, y, w, h, style) {
+
+      const { color, image, in_cnt, out_cnt } = style;
+
       const clipId = `clip-${Math.random().toString(36).substring(2, 10)}`;
     
       const newComponent = g.append('g')
@@ -79,16 +99,13 @@ const D3Canvas = ({ setScale }) => {
         .attr('ry', 10);
 
       newComponent.append('image')
-        .attr('xlink:href', 'https://via.placeholder.com/150')
+        .attr('xlink:href', image)
         .attr('width', w)
         .attr('height', h)
         .attr('clip-path', `url(#${clipId})`)
         .attr('preserveAspectRatio', 'xMidYMid slice');
 
-      const connectionPoints = [
-        { x: w / 2, y: 0 },
-        { x: w / 2, y: h },
-      ];
+      const connectionPoints = calculateConnectionPoints(w, h, in_cnt, out_cnt);
     
       newComponent.selectAll('.connection-point')
         .data(connectionPoints)
