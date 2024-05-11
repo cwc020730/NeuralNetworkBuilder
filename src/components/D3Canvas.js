@@ -90,7 +90,7 @@ const D3Canvas = ({ setScale }) => {
       const arrow = arrowContainerRef.current
         .append('path')
         .attr('d', d3.line()([[start.x, start.y], [end.x, end.y]]))
-        .attr('stroke', 'blue')
+        .attr('stroke', 'black')
         .attr('stroke-width', 2)
         .attr('fill', 'none')
         .attr('marker-end', 'url(#arrowhead)');
