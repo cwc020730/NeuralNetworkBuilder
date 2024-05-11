@@ -73,14 +73,18 @@ const D3Canvas = ({ setScale }) => {
         originalX: (index + 1) * (w / (in_cnt + 1)),
         originalY: 0,
         x: (index + 1) * (w / (in_cnt + 1)) + x,
-        y: y
+        y: y,
+        is_input: true,
+        is_output: false
       }));
 
       const outputPoints = Array.from({ length: out_cnt }, (_, index) => ({
         originalX: (index + 1) * (w / (out_cnt + 1)),
         originalY: h,
         x: (index + 1) * (w / (out_cnt + 1)) + x,
-        y: h + y
+        y: h + y,
+        is_input: false,
+        is_output: true
       }));
 
       return [...inputPoints, ...outputPoints];
@@ -181,12 +185,13 @@ const D3Canvas = ({ setScale }) => {
           d.y = parentY + d.originalY;
           startPoint = { x: d.x, y: d.y };
         })
-        .on('mouseover', function (d) {
+        .on('mouseover', function () {
           d3.select(this).style('fill', 'green');
         })
-        .on('mouseout', function () {
+        .on('mouseout', function (event, d) {
           d3.select(this).style('fill', 'red');
-          if (d3.select(this).property('isMouseDown') && !d3.select(this).property('isConnectedWithArrow')) {
+          console.log(d.is_output)
+          if (d3.select(this).property('isMouseDown') && !d3.select(this).property('isConnectedWithArrow') && d.is_output) {
             currentArrow = drawArrow(startPoint, startPoint, componentObj);
             d3.select(this).property('isConnectedWithArrow', true);
           }
@@ -273,7 +278,7 @@ const D3Canvas = ({ setScale }) => {
           let connectedPoint = null;
           componentList.forEach(comp => {
             comp.connectionPoints.forEach(point => {
-              if (Math.sqrt((point.x - transformedPointer[0]) ** 2 + (point.y - transformedPointer[1]) ** 2) < 25) {
+              if (Math.sqrt((point.x - transformedPointer[0]) ** 2 + (point.y - transformedPointer[1]) ** 2) < 10 && point.is_input) {
                 connectedComponent = comp;
                 connectedPoint = point;
                 console.log('connected');
