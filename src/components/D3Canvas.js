@@ -242,13 +242,17 @@ const D3Canvas = ({ setScale }) => {
     svg.on('mousemove', function (event) {
       if (currentArrow && startPoint) {
         const pointer = d3.pointer(event, svg.node());
-        currentArrow.path.attr('d', d3.line()([[startPoint.x, startPoint.y], [pointer[0], pointer[1]]]));
+        const transform = d3.zoomTransform(svg.node());
+        const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
+        currentArrow.path.attr('d', d3.line()([[startPoint.x, startPoint.y], [transformedPointer[0], transformedPointer[1]]]));
       }
     })
       .on('mouseup', function (event) {
         if (currentArrow) {
           const pointer = d3.pointer(event, svg.node());
-          currentArrow.endPoint = { x: pointer[0], y: pointer[1] };
+          const transform = d3.zoomTransform(svg.node());
+          const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
+          currentArrow.endPoint = { x: transformedPointer[0], y: transformedPointer[1] };
           updateArrows();
           currentArrow = null;
           startPoint = null;
