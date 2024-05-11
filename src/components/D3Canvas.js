@@ -108,7 +108,7 @@ const D3Canvas = ({ setScale }) => {
 
       arrowOnCanvasId++;
     
-      attachedComponent.attachingArrows.push(arrowObj.onCanvasId);
+      attachedComponent.attachingArrowStarts.push(arrowObj.onCanvasId);
     
       return arrowObj;
     }
@@ -150,7 +150,8 @@ const D3Canvas = ({ setScale }) => {
         onCanvasId: componentOnCanvasId++, 
         component: newComponent, 
         connectionPoints: connectionPoints,
-        attachingArrows: []
+        attachingArrowStarts: [],
+        attachingArrowEnds: []
       };
 
       newComponent.selectAll('.connection-point')
@@ -163,21 +164,27 @@ const D3Canvas = ({ setScale }) => {
         .attr('r', 5)
         .style('fill', 'red')
         .style('cursor', 'crosshair')
+        .each(function() {
+          d3.select(this).property('isMouseDown', false);
+        })
         .on('mousedown', function (event, d) {
           event.stopPropagation();
+          d3.select(this).property('isMouseDown', true);
           const transform = d3.select(newComponent.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
           const parentX = parseFloat(transform[1]);
           const parentY = parseFloat(transform[2]);
           d.x = parentX + d.originalX;
           d.y = parentY + d.originalY;
           startPoint = { x: d.x, y: d.y };
-          currentArrow = drawArrow(startPoint, startPoint, componentObj);
         })
         .on('mouseover', function () {
           d3.select(this).style('fill', 'green');
         })
         .on('mouseout', function () {
           d3.select(this).style('fill', 'red');
+          if (d3.select(this).property('isMouseDown')) {
+            currentArrow = drawArrow(startPoint, startPoint, componentObj);
+          }
         });
 
       applyDragBehavior(componentObj);
@@ -225,9 +232,14 @@ const D3Canvas = ({ setScale }) => {
               d.y = newY + d.originalY;
             });
           
-          for (let id of componentObj.attachingArrows) {
+          for (let id of componentObj.attachingArrowStarts) {
             const arrow = idToArrowsMap.get(id);
             arrow.startPoint = { x: (newX - initialX) + arrow.startPoint.x, y: (newY - initialY) + arrow.startPoint.y };
+            updateArrows([arrow]);
+          }
+          for (let id of componentObj.attachingArrowEnds) {
+            const arrow = idToArrowsMap.get(id);
+            arrow.endPoint = { x: (newX - initialX) + arrow.endPoint.x, y: (newY - initialY) + arrow.endPoint.y };
             updateArrows([arrow]);
           }
         })
@@ -249,10 +261,34 @@ const D3Canvas = ({ setScale }) => {
     })
       .on('mouseup', function (event) {
         if (currentArrow) {
+          console.log('mouseup');
           const pointer = d3.pointer(event, svg.node());
           const transform = d3.zoomTransform(svg.node());
           const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
-          currentArrow.endPoint = { x: transformedPointer[0], y: transformedPointer[1] };
+          //currentArrow.endPoint = { x: transformedPointer[0], y: transformedPointer[1] };
+          let connectedComponent = null;
+          let connectedPoint = null;
+          componentList.forEach(comp => {
+            comp.connectionPoints.forEach(point => {
+              const compTransform = d3.zoomTransform(comp.component.node());
+              const globalPointX = compTransform.applyX(point.x);
+              const globalPointY = compTransform.applyY(point.y);
+              console.log(globalPointX, globalPointY, transformedPointer[0], transformedPointer[1]);
+              if (Math.sqrt((globalPointX - transformedPointer[0]) ** 2 + (globalPointY - transformedPointer[1]) ** 2) < 10) {
+                connectedComponent = comp;
+                connectedPoint = point;
+                console.log('connected');
+              }
+            });
+          });
+
+          if (connectedComponent && connectedPoint) {
+            currentArrow.endPoint = { x: connectedPoint.x, y: connectedPoint.y };
+            currentArrow.endComponent = connectedComponent;
+            connectedComponent.attachingArrowStarts.push(currentArrow.onCanvasId);
+          } else {
+            currentArrow.endPoint = { x: transformedPointer[0], y: transformedPointer[1] };
+          }
           updateArrows();
           currentArrow = null;
           startPoint = null;
