@@ -68,19 +68,19 @@ const D3Canvas = ({ setScale }) => {
       }
     }
 
-    function calculateConnectionPoints(w, h, in_cnt, out_cnt) {
+    function calculateConnectionPoints(x, y, w, h, in_cnt, out_cnt) {
       const inputPoints = Array.from({ length: in_cnt }, (_, index) => ({
         originalX: (index + 1) * (w / (in_cnt + 1)),
         originalY: 0,
-        x: (index + 1) * (w / (in_cnt + 1)),
-        y: 0
+        x: (index + 1) * (w / (in_cnt + 1)) + x,
+        y: y
       }));
 
       const outputPoints = Array.from({ length: out_cnt }, (_, index) => ({
         originalX: (index + 1) * (w / (out_cnt + 1)),
         originalY: h,
-        x: (index + 1) * (w / (out_cnt + 1)),
-        y: h
+        x: (index + 1) * (w / (out_cnt + 1)) + x,
+        y: h + y
       }));
 
       return [...inputPoints, ...outputPoints];
@@ -144,7 +144,10 @@ const D3Canvas = ({ setScale }) => {
         .attr('clip-path', `url(#${clipId})`)
         .attr('preserveAspectRatio', 'xMidYMid slice');
 
-      const connectionPoints = calculateConnectionPoints(w, h, in_cnt, out_cnt);
+      const transform = d3.select(newComponent.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
+      const X = parseFloat(transform[1]);
+      const Y = parseFloat(transform[2]);
+      const connectionPoints = calculateConnectionPoints(X, Y, w, h, in_cnt, out_cnt);
 
       const componentObj = {
         onCanvasId: componentOnCanvasId++, 
@@ -159,13 +162,14 @@ const D3Canvas = ({ setScale }) => {
         .enter()
         .append('circle')
         .attr('class', 'connection-point')
-        .attr('cx', d => d.x)
-        .attr('cy', d => d.y)
+        .attr('cx', d => d.x - X)
+        .attr('cy', d => d.y - Y)
         .attr('r', 5)
         .style('fill', 'red')
         .style('cursor', 'crosshair')
         .each(function() {
           d3.select(this).property('isMouseDown', false);
+          d3.select(this).property('isConnectedWithArrow', false);
         })
         .on('mousedown', function (event, d) {
           event.stopPropagation();
@@ -177,13 +181,14 @@ const D3Canvas = ({ setScale }) => {
           d.y = parentY + d.originalY;
           startPoint = { x: d.x, y: d.y };
         })
-        .on('mouseover', function () {
+        .on('mouseover', function (d) {
           d3.select(this).style('fill', 'green');
         })
         .on('mouseout', function () {
           d3.select(this).style('fill', 'red');
-          if (d3.select(this).property('isMouseDown')) {
+          if (d3.select(this).property('isMouseDown') && !d3.select(this).property('isConnectedWithArrow')) {
             currentArrow = drawArrow(startPoint, startPoint, componentObj);
+            d3.select(this).property('isConnectedWithArrow', true);
           }
         });
 
@@ -261,20 +266,14 @@ const D3Canvas = ({ setScale }) => {
     })
       .on('mouseup', function (event) {
         if (currentArrow) {
-          console.log('mouseup');
           const pointer = d3.pointer(event, svg.node());
           const transform = d3.zoomTransform(svg.node());
           const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
-          //currentArrow.endPoint = { x: transformedPointer[0], y: transformedPointer[1] };
           let connectedComponent = null;
           let connectedPoint = null;
           componentList.forEach(comp => {
             comp.connectionPoints.forEach(point => {
-              const compTransform = d3.zoomTransform(comp.component.node());
-              const globalPointX = compTransform.applyX(point.x);
-              const globalPointY = compTransform.applyY(point.y);
-              console.log(globalPointX, globalPointY, transformedPointer[0], transformedPointer[1]);
-              if (Math.sqrt((globalPointX - transformedPointer[0]) ** 2 + (globalPointY - transformedPointer[1]) ** 2) < 10) {
+              if (Math.sqrt((point.x - transformedPointer[0]) ** 2 + (point.y - transformedPointer[1]) ** 2) < 25) {
                 connectedComponent = comp;
                 connectedPoint = point;
                 console.log('connected');
@@ -285,7 +284,7 @@ const D3Canvas = ({ setScale }) => {
           if (connectedComponent && connectedPoint) {
             currentArrow.endPoint = { x: connectedPoint.x, y: connectedPoint.y };
             currentArrow.endComponent = connectedComponent;
-            connectedComponent.attachingArrowStarts.push(currentArrow.onCanvasId);
+            connectedComponent.attachingArrowEnds.push(currentArrow.onCanvasId);
           } else {
             currentArrow.endPoint = { x: transformedPointer[0], y: transformedPointer[1] };
           }
