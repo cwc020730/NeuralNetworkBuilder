@@ -326,7 +326,7 @@ const D3Canvas = ({ setScale }) => {
           } else {
             currentArrow.endPoint = { x: transformedPointer[0], y: transformedPointer[1] };
           }
-          updateArrows();
+          updateArrows([currentArrow]);
           currentArrow = null;
           startPoint = null;
         }
