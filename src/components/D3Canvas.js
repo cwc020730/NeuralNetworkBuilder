@@ -102,11 +102,33 @@ const D3Canvas = ({ setScale }) => {
       const arrowObj = {
         startPoint: start,
         endPoint: end,
+        endControl: null,
         startComponent: attachedComponent,
         endComponent: null,
         path: arrow,
         onCanvasId: arrowOnCanvasId
       };
+
+      const endControl = arrowContainerRef.current
+        .append('circle')
+        .attr('cx', arrowObj.endPoint.x)
+        .attr('cy', arrowObj.endPoint.y)
+        .attr('r', 0)
+        .attr('fill', 'white')
+        .style('cursor', 'pointer')
+        .on('mousedown', function (event) {
+          event.stopPropagation();
+          currentArrow = arrowObj;
+          startPoint = currentArrow.startPoint;
+          if (currentArrow.endComponent) {
+            currentArrow.endComponent.attachingArrowEnds = currentArrow.endComponent.attachingArrowEnds.filter(id => id !== currentArrow.onCanvasId);
+            currentArrow.endComponent = null;
+          }
+        })
+        .on('mouseup', function (event) {
+        });
+
+      arrowObj.endControl = endControl;
     
       idToArrowsMap.set(arrowOnCanvasId, arrowObj);
 
@@ -175,6 +197,8 @@ const D3Canvas = ({ setScale }) => {
           d3.select(this).property('isMouseDown', false);
           d3.select(this).property('isConnectedWithArrow', false);
         })
+        .on('mouseup', function (event, d) {
+        })
         .on('mousedown', function (event, d) {
           event.stopPropagation();
           d3.select(this).property('isMouseDown', true);
@@ -190,7 +214,6 @@ const D3Canvas = ({ setScale }) => {
         })
         .on('mouseout', function (event, d) {
           d3.select(this).style('fill', 'red');
-          console.log(d.is_output)
           if (d3.select(this).property('isMouseDown') && !d3.select(this).property('isConnectedWithArrow') && d.is_output) {
             currentArrow = drawArrow(startPoint, startPoint, componentObj);
             d3.select(this).property('isConnectedWithArrow', true);
@@ -206,6 +229,7 @@ const D3Canvas = ({ setScale }) => {
     function updateArrows(arrows = []) {
       arrows.forEach(arrow => {
         arrow.path.attr('d', d3.line()([[arrow.startPoint.x, arrow.startPoint.y], [arrow.endPoint.x, arrow.endPoint.y]]));
+        arrow.endControl.attr('cx', arrow.endPoint.x).attr('cy', arrow.endPoint.y);
       });
 
     }
@@ -261,15 +285,24 @@ const D3Canvas = ({ setScale }) => {
       dragHandler(componentObj.component);
     }
 
-    svg.on('mousemove', function (event) {
-      if (currentArrow && startPoint) {
-        const pointer = d3.pointer(event, svg.node());
-        const transform = d3.zoomTransform(svg.node());
-        const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
-        currentArrow.path.attr('d', d3.line()([[startPoint.x, startPoint.y], [transformedPointer[0], transformedPointer[1]]]));
-      }
-    })
+    svg.each(function () {
+        d3.select(this).property('isMouseDown', false);
+      })
+      .on('mousedown', function (event) {
+      })
+      .on('mousemove', function (event) {
+        if (currentArrow && startPoint) {
+          console.log('mousemove with currentArrow');
+          const pointer = d3.pointer(event, svg.node());
+          const transform = d3.zoomTransform(svg.node());
+          const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
+          currentArrow.endControl.attr('cx', transformedPointer[0]).attr('cy', transformedPointer[1]);
+          currentArrow.endControl.attr('r', 2);
+          currentArrow.path.attr('d', d3.line()([[startPoint.x, startPoint.y], [transformedPointer[0], transformedPointer[1]]]));
+        }
+      })
       .on('mouseup', function (event) {
+        console.log('mouseup');
         if (currentArrow) {
           const pointer = d3.pointer(event, svg.node());
           const transform = d3.zoomTransform(svg.node());
