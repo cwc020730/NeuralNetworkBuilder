@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import "./App.css";
 import { ScaleProvider } from './components/ScaleContext';
 import D3Canvas from "./components/D3Canvas";
@@ -8,6 +9,16 @@ import ComponentInventory from './components/ComponentInventory';
 function App() {
 
     const [scale, setScale] = useState(1);
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/message')
+            .then(response => {
+                console.log('Message from Flask:', response.data.message);
+            })
+            .catch(error => {
+                console.error('Error fetching message:', error);
+            });
+    }, []);
 
     return (
         <ScaleProvider value={scale}>
