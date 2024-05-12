@@ -128,7 +128,7 @@
   padding-top: 5px;
   width: 180px;
   height: 100px;
-  background-color: #ffb9b9;
+  /* background-color: #ffb9b9; */
   border-radius: 0px;
   user-select: none;
 }
