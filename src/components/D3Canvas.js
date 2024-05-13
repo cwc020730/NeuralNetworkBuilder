@@ -213,10 +213,16 @@ const D3Canvas = ({ setScale }) => {
           d3.select(this).style('fill', 'green');
         })
         .on('mouseout', function (event, d) {
-          d3.select(this).style('fill', 'red');
+          if (!d3.select(this).property('isConnectedWithArrow')) {
+            d3.select(this).style('fill', 'red');
+          }
+          else {
+            d3.select(this).style('fill', 'pink');
+          }
           if (d3.select(this).property('isMouseDown') && !d3.select(this).property('isConnectedWithArrow') && d.is_output) {
             currentArrow = drawArrow(startPoint, startPoint, componentObj);
             d3.select(this).property('isConnectedWithArrow', true);
+            d3.select(this).style('fill', 'pink');
           }
         });
 
@@ -314,6 +320,7 @@ const D3Canvas = ({ setScale }) => {
               if (Math.sqrt((point.x - transformedPointer[0]) ** 2 + (point.y - transformedPointer[1]) ** 2) < 10 && point.is_input) {
                 connectedComponent = comp;
                 connectedPoint = point;
+                // set the connectedPoint style to be pink
                 console.log('connected');
               }
             });
