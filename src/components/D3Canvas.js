@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import componentStyles from './ComponentStyles';
+import { v4 as uuidv4 } from 'uuid';
 
 const D3Canvas = ({ setScale }) => {
   const ref = useRef(null);
