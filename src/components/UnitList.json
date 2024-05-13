@@ -30,5 +30,33 @@
                 "default": 2
             }
         }
+    },
+    "split": {
+        "primary_label": "split",
+        "alternative_labels": [
+            "split"
+        ],
+        "description": "Split the input into multiple identical outputs.",
+        "color": "white",
+        "image": "https://via.placeholder.com/150",
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            }
+        },
+        "output": {
+            "output_cnt": {
+                "default": 2,
+                "variable": true
+            }
+        },
+        "parameters": {
+            "output_cnt": {
+                "type": "integer",
+                "description": "Number of outputs to split into.",
+                "default": 2
+            }
+        }
     }
 }
