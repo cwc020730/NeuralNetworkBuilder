@@ -1,23 +1,23 @@
 import React, { useContext, useState, useEffect } from 'react';
 import ScaleContext from './ScaleContext';
-import componentStyles from './ComponentStyles';
+import unitList from './UnitList.json';
 
-const ComponentInventory = ({ components }) => {
-  const [componentIds, setComponentIds] = useState(components);
+const ComponentInventory = ({ components: units }) => {
+  const [unitIds, setUnitIds] = useState(units);
   const scale = useContext(ScaleContext);
 
   useEffect(() => {
-    setComponentIds(components);
-  }, [components]);
+    setUnitIds(units);
+  }, [units]);
 
-  const handleDragStart = (event, componentId) => {
+  const handleDragStart = (event, unitId) => {
     const width = 160;
     const height = 60;
     const adjustedWidth = 1.6 * width * scale;
     const adjustedHeight = 1.6 * height * scale;
     const adjustedBorderRadius = 1.6 * 10 * scale;
 
-    const { color, image } = componentStyles[componentId];
+    const [color, image] = [unitList[unitId]["color"], unitList[unitId]["image"]];
 
     let dragImage;
 
@@ -44,7 +44,7 @@ const ComponentInventory = ({ components }) => {
     event.dataTransfer.setData('width', `${width}`);
     event.dataTransfer.setDragImage(dragImage, adjustedWidth / 2, adjustedHeight / 2);
 
-    event.dataTransfer.setData('componentId', componentId);
+    event.dataTransfer.setData('unitId', unitId);
 
     let isDragImageRemoved = false;
 
@@ -58,39 +58,35 @@ const ComponentInventory = ({ components }) => {
     event.target.addEventListener('dragend', removeDragImage, { once: true });
   };
 
-  const showComponents = (ids) => {
-    setComponentIds(ids);
-  };
-
   return (
     <div className="component-inventory">
-      {componentIds.map((componentId) => {
-        const component = componentStyles[componentId];
-        if (!component) return null;
+      {unitIds.map((unitId) => {
+        const unit = unitList[unitId];
+        if (!unit) return null;
 
         return (
-          <div className="component-showcase-slot" key={componentId}>
+          <div className="component-showcase-slot" key={unitId}>
             <div
               className="draggable-component"
               draggable
-              onDragStart={(e) => handleDragStart(e, componentId)}
+              onDragStart={(e) => handleDragStart(e, unitId)}
               style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: '160px',
                 height: '60px',
-                backgroundColor: component.color,
+                backgroundColor: unit.color,
                 borderRadius: '10px',
                 cursor: 'grab',
                 userSelect: 'none',
-                backgroundImage: `url(${component.image})`,
+                backgroundImage: `url(${unit.image})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }}
             >
             </div>
-            <div className='component-description'>{componentId}</div>
+            <div className='component-description'>{unitId}</div>
           </div>
         );
       })}

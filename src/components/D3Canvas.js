@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import componentStyles from './ComponentStyles';
 import { v4 as uuidv4 } from 'uuid';
+import unitList from './UnitList.json';
 
 const D3Canvas = ({ setScale }) => {
   const ref = useRef(null);
   const arrowContainerRef = useRef(null);
   const idToArrowsMap = new Map();
-  const componentList = [];
+  const existedUnitList = [];
   let startPoint = null;
   let currentArrow = null;
 
@@ -56,14 +56,14 @@ const D3Canvas = ({ setScale }) => {
 
       const originalWidth = parseFloat(event.dataTransfer.getData('width'));
       const originalHeight = parseFloat(event.dataTransfer.getData('height'));
-      const componentId = event.dataTransfer.getData('componentId');
-      const componentStyle = componentStyles[componentId];
+      const unitId = event.dataTransfer.getData('unitId');
+      const unitData = unitList[unitId];
 
       const x = transform.invertX(pointer[0]) - originalWidth / 2;
       const y = transform.invertY(pointer[1]) - originalHeight / 2;
 
       if (x >= 0 && x <= bgWidth && y >= 0 && y <= bgHeight) {
-        createComponent(x, y, originalWidth, originalHeight, componentStyle);
+        createComponent(x, y, originalWidth, originalHeight, unitData);
       }
     }
 
@@ -136,8 +136,15 @@ const D3Canvas = ({ setScale }) => {
       return arrowObj;
     }
 
-    function createComponent(x, y, w, h, style) {
-      const { color, image, in_cnt, out_cnt } = style;
+    function createComponent(x, y, w, h, unitData) {
+      const [color, image, in_cnt, out_cnt] = [
+        unitData["color"], 
+        unitData["image"],
+        unitData["input"]["input_cnt"]["default"],
+        unitData["output"]["output_cnt"]["default"]
+      ];
+
+      console.log(color, image, in_cnt, out_cnt)
 
       const clipId = `clip-${Math.random().toString(36).substring(2, 10)}`;
 
@@ -231,7 +238,7 @@ const D3Canvas = ({ setScale }) => {
 
       applyDragBehavior(componentObj);
       
-      componentList.push(componentObj);
+      existedUnitList.push(componentObj);
 
     }
 
@@ -318,7 +325,7 @@ const D3Canvas = ({ setScale }) => {
           const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
           let connectedComponent = null;
           let connectedPoint = null;
-          componentList.forEach(comp => {
+          existedUnitList.forEach(comp => {
             comp.connectionPoints.forEach(point => {
               if (Math.sqrt((point.x - transformedPointer[0]) ** 2 + (point.y - transformedPointer[1]) ** 2) < 10 && point.is_input) {
                 connectedComponent = comp;

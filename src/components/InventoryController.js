@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ComponentInventory from './ComponentInventory';
+import unitList from './UnitList.json';
 
 const InventoryController = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState(['component1', 'component2', 'component3']);
+  const [searchResults, setSearchResults] = useState([]);
+  const [allUnits, setAllUnits] = useState([]);
+
+  useEffect(() => {
+    const unitKeys = Object.keys(unitList);
+    setAllUnits(unitKeys);
+    setSearchResults(unitKeys);
+  }, []);
 
   const handleSearch = (query) => {
+    console.log('allUnits:', allUnits);
     console.log('query:', query);
     setSearchQuery(query);
-    const allComponents = ['component1', 'component2', 'component3'];
-    const filteredComponents = allComponents.filter(id =>
+    const filteredUnits = allUnits.filter(id =>
       id.toLowerCase().includes(query.toLowerCase())
     );
-    setSearchResults(filteredComponents);
-    console.log('filteredComponents:', filteredComponents);
+    setSearchResults(filteredUnits);
+    console.log('filteredComponents:', filteredUnits);
   };
 
   return (
