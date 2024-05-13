@@ -8,8 +8,6 @@ const D3Canvas = ({ setScale }) => {
   const arrowContainerRef = useRef(null);
   const idToArrowsMap = new Map();
   const componentList = [];
-  let componentOnCanvasId = 0;
-  let arrowOnCanvasId = 0;
   let startPoint = null;
   let currentArrow = null;
 
@@ -107,7 +105,7 @@ const D3Canvas = ({ setScale }) => {
         startComponent: attachedComponent,
         endComponent: null,
         path: arrow,
-        onCanvasId: arrowOnCanvasId
+        onCanvasId: uuidv4()
       };
 
       const endControl = arrowContainerRef.current
@@ -131,9 +129,7 @@ const D3Canvas = ({ setScale }) => {
 
       arrowObj.endControl = endControl;
     
-      idToArrowsMap.set(arrowOnCanvasId, arrowObj);
-
-      arrowOnCanvasId++;
+      idToArrowsMap.set(arrowObj.onCanvasId, arrowObj);
     
       attachedComponent.attachingArrowStarts.push(arrowObj.onCanvasId);
     
@@ -177,7 +173,7 @@ const D3Canvas = ({ setScale }) => {
       const connectionPoints = calculateConnectionPoints(X, Y, w, h, in_cnt, out_cnt);
 
       const componentObj = {
-        onCanvasId: componentOnCanvasId++, 
+        onCanvasId: uuidv4(), 
         component: newComponent, 
         connectionPoints: connectionPoints,
         attachingArrowStarts: [],
