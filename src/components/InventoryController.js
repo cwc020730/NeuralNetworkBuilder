@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ComponentInventory from './ComponentInventory';
+import UnitInventory from './UnitInventory';
 import unitList from './UnitList.json';
 
 const InventoryController = () => {
@@ -43,7 +43,7 @@ const InventoryController = () => {
         </div>
       </div>
       <div className="component-inventory">
-        <ComponentInventory components={searchResults} />
+        <UnitInventory components={searchResults} />
       </div>
     </>
   );

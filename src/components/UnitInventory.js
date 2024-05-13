@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import ScaleContext from './ScaleContext';
 import unitList from './UnitList.json';
 
-const ComponentInventory = ({ components: units }) => {
+const UnitInventory = ({ components: units }) => {
   const [unitIds, setUnitIds] = useState(units);
   const scale = useContext(ScaleContext);
 
@@ -59,15 +59,15 @@ const ComponentInventory = ({ components: units }) => {
   };
 
   return (
-    <div className="component-inventory">
+    <div className="unit-inventory">
       {unitIds.map((unitId) => {
         const unit = unitList[unitId];
         if (!unit) return null;
 
         return (
-          <div className="component-showcase-slot" key={unitId}>
+          <div className="unit-showcase-slot" key={unitId}>
             <div
-              className="draggable-component"
+              className="draggable-unit"
               draggable
               onDragStart={(e) => handleDragStart(e, unitId)}
               style={{
@@ -86,7 +86,7 @@ const ComponentInventory = ({ components: units }) => {
               }}
             >
             </div>
-            <div className='component-description'>{unitId}</div>
+            <div className='unit-description'>{unitId}</div>
           </div>
         );
       })}
@@ -94,6 +94,6 @@ const ComponentInventory = ({ components: units }) => {
   );
 };
 
-export default ComponentInventory;
+export default UnitInventory;
 
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 import "./App.css";
 import { ScaleProvider } from './components/ScaleContext';
 import D3Canvas from "./components/D3Canvas";
-import ComponentInventory from './components/ComponentInventory';
+import UnitInventory from './components/UnitInventory';
 import InventoryController from "./components/InventoryController";
 
 

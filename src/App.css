@@ -94,7 +94,7 @@
   border: 1px solid #ccc;
 }
 
-.component-inventory {
+.unit-inventory {
   display: grid;
   padding-left: 5px;
   padding-right: 5px;
@@ -110,25 +110,25 @@
   overflow-x: hidden;
 }
 
-.component-inventory::-webkit-scrollbar {
+.unit-inventory::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.component-inventory::-webkit-scrollbar-thumb {
+.unit-inventory::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
-.component-inventory::-webkit-scrollbar-thumb:hover {
+.unit-inventory::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.component-inventory::-webkit-scrollbar-track {
+.unit-inventory::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
-.component-showcase-slot {
+.unit-showcase-slot {
   display: grid;
   justify-content: center;
   align-items: top;
@@ -140,7 +140,7 @@
   user-select: none;
 }
 
-.component-description {
+.unit-description {
   display: flex;
   justify-content: center;
   align-items: center;
