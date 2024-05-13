@@ -1,10 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import ScaleContext from './ScaleContext';
 import componentStyles from './ComponentStyles';
 
-const ComponentInventory = ({ initialComponents = ['component1', 'component3'] }) => {
-  const [componentIds, setComponentIds] = useState(initialComponents);
+const ComponentInventory = ({ components }) => {
+  const [componentIds, setComponentIds] = useState(components);
   const scale = useContext(ScaleContext);
+
+  useEffect(() => {
+    setComponentIds(components);
+  }, [components]);
 
   const handleDragStart = (event, componentId) => {
     const width = 160;

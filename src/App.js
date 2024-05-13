@@ -4,6 +4,7 @@ import "./App.css";
 import { ScaleProvider } from './components/ScaleContext';
 import D3Canvas from "./components/D3Canvas";
 import ComponentInventory from './components/ComponentInventory';
+import InventoryController from "./components/InventoryController";
 
 
 function App() {
@@ -25,17 +26,7 @@ function App() {
             <div className="app">
                 <header className="header">Header</header>
                 <aside className="sidebar">
-                    <div className="sidebar-menu">
-                        <div className="category-menu">
-                            Category Menu
-                        </div>
-                        <div className="search-bar">
-                            Search Bar
-                        </div>
-                    </div>
-                    <div className="component-inventory">
-                        <ComponentInventory />
-                    </div>
+                    <InventoryController />
                 </aside>
                 <main className="main">
                     <div className="canvas">
