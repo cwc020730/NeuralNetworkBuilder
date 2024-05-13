@@ -89,7 +89,7 @@ const D3Canvas = ({ setScale }) => {
       return [...inputPoints, ...outputPoints];
     }
 
-    function drawArrow(start, end, attachedUnit) {
+    function drawArrow(start, end, attachedUnit, anchorPointId) {
       const arrow = arrowContainerRef.current
         .append('path')
         .attr('d', d3.line()([[start.x, start.y], [end.x, end.y]]))
@@ -104,6 +104,8 @@ const D3Canvas = ({ setScale }) => {
         endControl: null,
         startUnit: attachedUnit,
         endUnit: null,
+        startAnchorPointId: anchorPointId,
+        endAnchorPointId: null,
         path: arrow,
         onCanvasId: uuidv4()
       };
@@ -122,6 +124,8 @@ const D3Canvas = ({ setScale }) => {
           if (currentArrow.endUnit) {
             currentArrow.endUnit.attachingArrowEnds = currentArrow.endUnit.attachingArrowEnds.filter(id => id !== currentArrow.onCanvasId);
             currentArrow.endUnit = null;
+            d3.select(`#${CSS.escape(currentArrow.endAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
+            currentArrow.endAnchorPointId = null;
           }
         })
         .on('mouseup', function (event) {
@@ -230,7 +234,7 @@ const D3Canvas = ({ setScale }) => {
             d3.select(this).style('fill', 'pink');
           }
           if (d3.select(this).property('isMouseDown') && !d3.select(this).property('isConnectedWithArrow') && d.is_output) {
-            currentArrow = drawArrow(startPoint, startPoint, unitObj);
+            currentArrow = drawArrow(startPoint, startPoint, unitObj, d.id);
             d3.select(this).property('isConnectedWithArrow', true);
             d3.select(this).style('fill', 'pink');
           }
@@ -330,6 +334,7 @@ const D3Canvas = ({ setScale }) => {
               if (Math.sqrt((point.x - transformedPointer[0]) ** 2 + (point.y - transformedPointer[1]) ** 2) < 10 && point.is_input) {
                 connectedUnit = comp;
                 connectedPoint = point;
+                currentArrow.endAnchorPointId = point.id;
                 // set the connectedPoint style to be pink
                 d3.select(`#${CSS.escape(point.id)}`).style('fill', 'pink').property('isConnectedWithArrow', true);;
                 console.log('connected');
