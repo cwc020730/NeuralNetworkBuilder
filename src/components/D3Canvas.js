@@ -170,10 +170,15 @@ const D3Canvas = ({ setScale }) => {
       const transform = d3.select(newComponent.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
       const X = parseFloat(transform[1]);
       const Y = parseFloat(transform[2]);
-      const connectionPoints = calculateConnectionPoints(X, Y, w, h, in_cnt, out_cnt);
+      const currComponentId = uuidv4();
+      const connectionPoints = calculateConnectionPoints(x, y, w, h, in_cnt, out_cnt).map((cp, index) => ({
+        ...cp,
+        id: `${currComponentId}-cp-${index}`,
+        componentId: currComponentId
+      }));
 
       const componentObj = {
-        onCanvasId: uuidv4(), 
+        onCanvasId: currComponentId, 
         component: newComponent, 
         connectionPoints: connectionPoints,
         attachingArrowStarts: [],
@@ -185,6 +190,7 @@ const D3Canvas = ({ setScale }) => {
         .enter()
         .append('circle')
         .attr('class', 'connection-point')
+        .attr('id', d => d.id)
         .attr('cx', d => d.x - X)
         .attr('cy', d => d.y - Y)
         .attr('r', 5)
@@ -318,6 +324,7 @@ const D3Canvas = ({ setScale }) => {
                 connectedComponent = comp;
                 connectedPoint = point;
                 // set the connectedPoint style to be pink
+                d3.select(`#${CSS.escape(point.id)}`).style('fill', 'pink').property('isConnectedWithArrow', true);;
                 console.log('connected');
               }
             });
