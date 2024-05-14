@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import ScaleContext from './ScaleContext';
+import { AppContext } from './AppContext';
 import unitList from './UnitList.json';
 
 const UnitInventory = ({ components: units }) => {
   const [unitIds, setUnitIds] = useState(units);
-  const scale = useContext(ScaleContext);
+  const scale = useContext(AppContext).scale;
 
   useEffect(() => {
     setUnitIds(units);

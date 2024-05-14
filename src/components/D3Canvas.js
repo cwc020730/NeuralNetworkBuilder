@@ -1,17 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import unitList from './UnitList.json';
+import { AppContext } from './AppContext';
 
-const D3Canvas = ({ setScale }) => {
+const D3Canvas = () => {
   const ref = useRef(null);
   const arrowContainerRef = useRef(null);
   const idToArrowsMap = new Map();
-  const existedUnitList = [];
+  const existedUnitList = useRef([]);
   let startPoint = null;
   let currentArrow = null;
-  let selectedUnitId = null;
-  let prevSelectedUnitId = null;
+  let isUnitClicked = useRef(false);
+
+  const { scale, setScale, selectedUnitId, setSelectedUnitId } = useContext(AppContext);
 
   useEffect(() => {
     const width = 800;
@@ -208,20 +210,14 @@ const D3Canvas = ({ setScale }) => {
         unit: newUnit, 
         connectionPoints: connectionPoints,
         attachingArrowStarts: [],
-        attachingArrowEnds: []
+        attachingArrowEnds: [],
+        baseRect: baseRect
       };
 
       // on click event to the unit
       newUnit.on('click', function (event) {
-        console.log('click', selectedUnitId);
-        if (currUnitId === selectedUnitId) {
-          baseRect.style('stroke-width', 0);
-          selectedUnitId = null;
-        }
-        else {
-          baseRect.style('stroke-width', 2).style('stroke', 'black');
-          selectedUnitId = currUnitId;
-        }
+        isUnitClicked.current = true;
+        setSelectedUnitId(currUnitId);
       });
 
       newUnit.selectAll('.connection-point')
@@ -270,7 +266,7 @@ const D3Canvas = ({ setScale }) => {
 
       applyDragBehavior(unitObj);
       
-      existedUnitList.push(unitObj);
+      existedUnitList.current.push(unitObj);
 
     }
 
@@ -340,7 +336,7 @@ const D3Canvas = ({ setScale }) => {
       })
       .on('mousemove', function (event) {
         if (currentArrow && startPoint) {
-          console.log('mousemove with currentArrow');
+          // console.log('mousemove with currentArrow');
           const pointer = d3.pointer(event, svg.node());
           const transform = d3.zoomTransform(svg.node());
           const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
@@ -350,14 +346,14 @@ const D3Canvas = ({ setScale }) => {
         }
       })
       .on('mouseup', function (event) {
-        console.log('mouseup');
+        // console.log('mouseup');
         if (currentArrow) {
           const pointer = d3.pointer(event, svg.node());
           const transform = d3.zoomTransform(svg.node());
           const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
           let connectedUnit = null;
           let connectedPoint = null;
-          existedUnitList.forEach(comp => {
+          existedUnitList.current.forEach(comp => {
             comp.connectionPoints.forEach(point => {
               if (Math.sqrt((point.x - transformedPointer[0]) ** 2 + (point.y - transformedPointer[1]) ** 2) < 10 && point.is_input) {
                 connectedUnit = comp;
@@ -365,7 +361,7 @@ const D3Canvas = ({ setScale }) => {
                 currentArrow.endAnchorPointId = point.id;
                 // set the connectedPoint style to be pink
                 d3.select(`#${CSS.escape(point.id)}`).style('fill', 'pink').property('isConnectedWithArrow', true);;
-                console.log('connected');
+                // console.log('connected');
               }
             });
           });
@@ -391,12 +387,11 @@ const D3Canvas = ({ setScale }) => {
       })
       .on('click', function (event) {
         console.log('click on svg', selectedUnitId);
-        // remove the stroke of all the other units
-        existedUnitList.forEach(unit => {
-          if (unit.onCanvasId !== selectedUnitId) {
-            unit.unit.select('rect').style('stroke-width', 0);
-          }
-        });
+        // remove strokes from selected unit
+        if (!isUnitClicked.current) {
+          setSelectedUnitId(null);
+        }
+        isUnitClicked.current = false;
       });
 
     svg.append('defs').append('marker')
@@ -411,6 +406,25 @@ const D3Canvas = ({ setScale }) => {
       .attr('fill', 'blue');
 
   }, [setScale]);
+
+  useEffect(() => {
+    console.log('activated')
+    existedUnitList.current.forEach((unit) => {
+      if (unit.onCanvasId === selectedUnitId) {
+        console.log(unit.baseRect.style('stroke-width'));
+        if (unit.baseRect.style('stroke-width') !== 2) {
+          console.log('set stroke')
+          unit.baseRect.style('stroke-width', 2).style('stroke', 'black');
+        }
+        else {
+          console.log('remove stroke')
+          unit.baseRect.style('stroke-width', 0);
+        }
+      } else {
+        unit.baseRect.style('stroke-width', 0);
+      }
+    });
+  }, [selectedUnitId]);
 
   return <svg ref={ref} style={{ width: '100%', height: '100%' }}></svg>;
 };

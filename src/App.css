@@ -52,13 +52,23 @@
   height: calc(100vh - 150px);
 }
 
-.debug-area {
-  display: flex;
+.unit-param-info-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   justify-content: space-between;
   align-items: center;
   background: #505050;
   color: #fff;
   height: 150px;
+}
+
+.selected-unit-description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #666;
+  color: #fff;
+  height: 30px;
 }
 
 .sidebar-menu {

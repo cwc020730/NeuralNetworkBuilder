@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "./App.css";
-import { ScaleProvider } from './components/ScaleContext';
+import { AppProvider } from './components/AppContext';
 import D3Canvas from "./components/D3Canvas";
 import UnitInventory from './components/UnitInventory';
 import InventoryController from "./components/InventoryController";
@@ -9,7 +9,8 @@ import InventoryController from "./components/InventoryController";
 
 function App() {
 
-    const [scale, setScale] = useState(1);
+    // const [scale, setScale] = useState(1);
+    // const [selectedUnitId, setSelectedUnitId] = useState(null);
 
     useEffect(() => {
         axios.get('http://localhost:5000/api/message')
@@ -22,7 +23,7 @@ function App() {
     }, []);
 
     return (
-        <ScaleProvider value={scale}>
+        <AppProvider>
             <div className="app">
                 <header className="header">Header</header>
                 <aside className="sidebar">
@@ -30,15 +31,22 @@ function App() {
                 </aside>
                 <main className="main">
                     <div className="canvas">
-                        <D3Canvas setScale={setScale}/>
+                        <D3Canvas 
+                            // setScale={setScale} 
+                            // selectedUnitId={selectedUnitId} 
+                            // setSelectedUnitId={setSelectedUnitId}
+                        />
                     </div>
-                    <div className="debug-area">
-                        <p>Terminal/Debug Area</p>
+                    <div className="unit-param-info-area">
+                        <div className="selected-unit-description"></div>
+                        <div className="io-info"></div>
+                        <div className="param-controls"></div>
+                        <div className="action-buttons"></div>
                     </div>
                 </main>
                 <footer className="footer">Footer</footer>
             </div>
-        </ScaleProvider>
+        </AppProvider>
     );
 }
 
