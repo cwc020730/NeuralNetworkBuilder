@@ -131,6 +131,7 @@ const D3Canvas = ({ setScale }) => {
         .on('mouseup', function (event) {
         });
 
+        
       arrowObj.endControl = endControl;
     
       idToArrowsMap.set(arrowObj.onCanvasId, arrowObj);
@@ -141,11 +142,13 @@ const D3Canvas = ({ setScale }) => {
     }
 
     function createUnit(x, y, w, h, unitData) {
-      const [color, image, in_cnt, out_cnt] = [
+      const [color, image, in_cnt, out_cnt, inUnitLabel, inUnitLabelColor] = [
         unitData["color"], 
         unitData["image"],
         unitData["input"]["input_cnt"]["default"],
-        unitData["output"]["output_cnt"]["default"]
+        unitData["output"]["output_cnt"]["default"],
+        unitData["in_unit_label"],
+        unitData["in_unit_label_color"]
       ];
 
       console.log(color, image, in_cnt, out_cnt)
@@ -176,7 +179,18 @@ const D3Canvas = ({ setScale }) => {
         .attr('width', w)
         .attr('height', h)
         .attr('clip-path', `url(#${clipId})`)
-        .attr('preserveAspectRatio', 'xMidYMid slice');
+        .attr('preserveAspectRatio', 'xMidYMid slice')
+
+      newUnit.append('text')
+        .attr('x', w / 2)
+        .attr('y', h / 2)
+        .attr('dy', '.35em')
+        .attr('text-anchor', 'middle')
+        .style('fill', inUnitLabelColor)
+        .style('font-size', '14px')
+        .style('pointer-events', 'none')
+        .text(inUnitLabel);
+    
 
       const transform = d3.select(newUnit.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
       const X = parseFloat(transform[1]);

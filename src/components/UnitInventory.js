@@ -16,8 +16,11 @@ const UnitInventory = ({ components: units }) => {
     const adjustedWidth = 1.6 * width * scale;
     const adjustedHeight = 1.6 * height * scale;
     const adjustedBorderRadius = 1.6 * 10 * scale;
+    const adjustedFontSize = 1.6 * 16 * scale; // Adjust font size based on scale
 
     const [color, image] = [unitList[unitId]["color"], unitList[unitId]["image"]];
+    const inUnitLabel = unitList[unitId]["in_unit_label"];
+    const inUnitLabelColor = unitList[unitId]["in_unit_label_color"];
 
     let dragImage;
 
@@ -29,6 +32,12 @@ const UnitInventory = ({ components: units }) => {
     dragImage.style.position = 'absolute';
     dragImage.style.top = '-9999px';
     dragImage.style.opacity = '1';
+    dragImage.style.display = 'flex';
+    dragImage.style.justifyContent = 'center';
+    dragImage.style.alignItems = 'center';
+    dragImage.style.color = inUnitLabelColor;
+    dragImage.style.fontSize = `${adjustedFontSize}px`; // Set font size based on scale
+    dragImage.style.textShadow = '0 0 5px rgba(0, 0, 0, 0.5)';
     document.body.appendChild(dragImage);
 
     const img = document.createElement('img');
@@ -37,8 +46,19 @@ const UnitInventory = ({ components: units }) => {
     img.style.height = '100%';
     img.style.borderRadius = `${adjustedBorderRadius}px`;
     img.style.objectFit = 'cover';
+    img.style.position = 'absolute';
+    img.style.top = '0';
+    img.style.left = '0';
+    img.style.zIndex = '-1';
+
+    const text = document.createElement('div');
+    text.innerText = inUnitLabel;
+    text.style.position = 'absolute';
+    text.style.zIndex = '1';
+    text.style.fontSize = `${adjustedFontSize}px`; // Set font size based on scale
 
     dragImage.appendChild(img);
+    dragImage.appendChild(text);
 
     event.dataTransfer.setData('height', `${height}`);
     event.dataTransfer.setData('width', `${width}`);
@@ -82,11 +102,14 @@ const UnitInventory = ({ components: units }) => {
                 userSelect: 'none',
                 backgroundImage: `url(${unit.image})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
+                color: unit.in_unit_label_color,
+                textShadow: '0 0 5px rgba(0, 0, 0, 0.5)'
               }}
             >
+              {unit.in_unit_label}
             </div>
-            <div className='unit-description'>{unitId}</div>
+            <div className="unit-description">{unitId}</div>
           </div>
         );
       })}
@@ -95,5 +118,6 @@ const UnitInventory = ({ components: units }) => {
 };
 
 export default UnitInventory;
+
 
 

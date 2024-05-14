@@ -2,15 +2,11 @@
 {
     "add": {
         "primary_label": "add",
-        "alternative_labels": [
-            "add", 
-            "addition", 
-            "plus", 
-            "sum"
-        ],
+        "in_unit_label": "ADD",
+        "in_unit_label_color": "black",
         "description": "Sum two or more numbers.",
         "color": "white",
-        "image": "https://via.placeholder.com/150",
+        "image": null,
         "input": {
             "input_cnt": {
                 "default": 2,
@@ -33,12 +29,11 @@
     },
     "split": {
         "primary_label": "split",
-        "alternative_labels": [
-            "split"
-        ],
+        "in_unit_label": "SPLIT",
+        "in_unit_label_color": "black",
         "description": "Split the input into multiple identical outputs.",
         "color": "white",
-        "image": "https://via.placeholder.com/150",
+        "image": null,
         "input": {
             "input_cnt": {
                 "default": 1,
