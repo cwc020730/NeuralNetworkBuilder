@@ -407,7 +407,7 @@ const D3Canvas = () => {
       .attr('orient', 'auto')
       .append('polygon')
       .attr('points', '0 0, 10 3.5, 0 7')
-      .attr('fill', 'blue');
+      .attr('fill', 'black');
 
   }, [setScale]);
 
