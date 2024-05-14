@@ -193,6 +193,7 @@ const D3Canvas = () => {
         .style('fill', inUnitLabelColor)
         .style('font-size', '14px')
         .style('pointer-events', 'none')
+        .classed('no-select', true)
         .text(inUnitLabel);
 
       const transform = d3.select(newUnit.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
