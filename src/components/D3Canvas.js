@@ -10,6 +10,8 @@ const D3Canvas = ({ setScale }) => {
   const existedUnitList = [];
   let startPoint = null;
   let currentArrow = null;
+  let selectedUnitId = null;
+  let prevSelectedUnitId = null;
 
   useEffect(() => {
     const width = 800;
@@ -158,7 +160,7 @@ const D3Canvas = ({ setScale }) => {
       const newUnit = g.append('g')
         .attr('transform', `translate(${x}, ${y})`);
 
-      newUnit.append('rect')
+      const baseRect = newUnit.append('rect')
         .attr('width', w)
         .attr('height', h)
         .attr('rx', 10)
@@ -190,7 +192,6 @@ const D3Canvas = ({ setScale }) => {
         .style('font-size', '14px')
         .style('pointer-events', 'none')
         .text(inUnitLabel);
-    
 
       const transform = d3.select(newUnit.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
       const X = parseFloat(transform[1]);
@@ -209,6 +210,19 @@ const D3Canvas = ({ setScale }) => {
         attachingArrowStarts: [],
         attachingArrowEnds: []
       };
+
+      // on click event to the unit
+      newUnit.on('click', function (event) {
+        console.log('click', selectedUnitId);
+        if (currUnitId === selectedUnitId) {
+          baseRect.style('stroke-width', 0);
+          selectedUnitId = null;
+        }
+        else {
+          baseRect.style('stroke-width', 2).style('stroke', 'black');
+          selectedUnitId = currUnitId;
+        }
+      });
 
       newUnit.selectAll('.connection-point')
         .data(connectionPoints)
@@ -374,6 +388,15 @@ const D3Canvas = ({ setScale }) => {
       .on('drop', handleDrop)
       .on('dragenter', function (event) {
         event.preventDefault();
+      })
+      .on('click', function (event) {
+        console.log('click on svg', selectedUnitId);
+        // remove the stroke of all the other units
+        existedUnitList.forEach(unit => {
+          if (unit.onCanvasId !== selectedUnitId) {
+            unit.unit.select('rect').style('stroke-width', 0);
+          }
+        });
       });
 
     svg.append('defs').append('marker')
