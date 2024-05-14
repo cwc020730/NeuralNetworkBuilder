@@ -12,6 +12,7 @@ const D3Canvas = () => {
   let startPoint = null;
   let currentArrow = null;
   let isUnitClicked = useRef(false);
+  let isEndPointDragging = useRef(false);
 
   const { scale, setScale, selectedUnitId, setSelectedUnitId } = useContext(AppContext);
 
@@ -133,6 +134,7 @@ const D3Canvas = () => {
           }
         })
         .on('mouseup', function (event) {
+          isEndPointDragging.current = true;
         });
 
         
@@ -389,10 +391,11 @@ const D3Canvas = () => {
       .on('click', function (event) {
         console.log('click on svg', selectedUnitId);
         // remove strokes from selected unit
-        if (!isUnitClicked.current) {
+        if (!isUnitClicked.current && !isEndPointDragging.current) {
           setSelectedUnitId(null);
         }
         isUnitClicked.current = false;
+        isEndPointDragging.current = false;
       });
 
     svg.append('defs').append('marker')
