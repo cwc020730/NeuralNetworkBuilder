@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import unitList from './UnitList.json';
 import { AppContext } from './AppContext';
 
+export const idToUnitMap = new Map();
+
 const D3Canvas = () => {
   const ref = useRef(null);
   const arrowContainerRef = useRef(null);
@@ -148,13 +150,14 @@ const D3Canvas = () => {
     }
 
     function createUnit(x, y, w, h, unitData) {
-      const [color, image, in_cnt, out_cnt, inUnitLabel, inUnitLabelColor] = [
+      const [color, image, in_cnt, out_cnt, inUnitLabel, inUnitLabelColor, type] = [
         unitData["color"], 
         unitData["image"],
         unitData["input"]["input_cnt"]["default"],
         unitData["output"]["output_cnt"]["default"],
         unitData["in_unit_label"],
-        unitData["in_unit_label_color"]
+        unitData["in_unit_label_color"],
+        unitData["primary_label"]
       ];
 
       console.log(color, image, in_cnt, out_cnt)
@@ -209,6 +212,7 @@ const D3Canvas = () => {
       }));
 
       const unitObj = {
+        type: type,
         onCanvasId: currUnitId, 
         unit: newUnit, 
         connectionPoints: connectionPoints,
@@ -270,6 +274,7 @@ const D3Canvas = () => {
       applyDragBehavior(unitObj);
       
       existedUnitList.current.push(unitObj);
+      idToUnitMap.set(currUnitId, unitObj);
 
     }
 

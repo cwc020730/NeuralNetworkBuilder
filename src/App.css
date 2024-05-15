@@ -56,7 +56,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   justify-content: space-between;
-  align-items: center;
+  align-items: top;
   background: #505050;
   color: #fff;
   height: 150px;
@@ -150,8 +150,9 @@
   user-select: none;
 }
 
-.unit-description {
-  display: flex;
+.selected-unit-description {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
   justify-content: center;
   align-items: center;
   background: #999;

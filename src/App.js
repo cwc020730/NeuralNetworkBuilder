@@ -5,6 +5,7 @@ import { AppProvider } from './components/AppContext';
 import D3Canvas from "./components/D3Canvas";
 import UnitInventory from './components/UnitInventory';
 import InventoryController from "./components/InventoryController";
+import SelectedUnitDescription from "./components/SelectedUnitDescription";
 
 
 function App() {
@@ -31,14 +32,10 @@ function App() {
                 </aside>
                 <main className="main">
                     <div className="canvas">
-                        <D3Canvas 
-                            // setScale={setScale} 
-                            // selectedUnitId={selectedUnitId} 
-                            // setSelectedUnitId={setSelectedUnitId}
-                        />
+                        <D3Canvas />
                     </div>
                     <div className="unit-param-info-area">
-                        <div className="selected-unit-description"></div>
+                        <SelectedUnitDescription />
                         <div className="io-info"></div>
                         <div className="param-controls"></div>
                         <div className="action-buttons"></div>
