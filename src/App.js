@@ -6,6 +6,7 @@ import D3Canvas from "./components/D3Canvas";
 import UnitInventory from './components/UnitInventory';
 import InventoryController from "./components/InventoryController";
 import SelectedUnitDescription from "./components/SelectedUnitDescription";
+import IOInfo from "./components/IOInfo";
 
 
 function App() {
@@ -36,7 +37,7 @@ function App() {
                     </div>
                     <div className="unit-param-info-area">
                         <SelectedUnitDescription />
-                        <div className="io-info"></div>
+                        <IOInfo />
                         <div className="param-controls"></div>
                         <div className="action-buttons"></div>
                     </div>
