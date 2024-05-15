@@ -85,8 +85,7 @@ const D3Canvas = () => {
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .style('display', 'block')
       .style('margin', 'auto')
-      .style('background', '#f8f8f8')
-      .style('border', '1px solid black');
+      .style('background', '#f8f8f8');
 
     const g = svg.append('g');
     const arrowContainer = svg.append('g').attr('class', 'arrows');
