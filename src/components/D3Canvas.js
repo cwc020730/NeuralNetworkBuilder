@@ -9,7 +9,7 @@ export const idToUnitMap = new Map();
 const D3Canvas = () => {
   const ref = useRef(null);
   const arrowContainerRef = useRef(null);
-  const idToArrowsMap = new Map();
+  const idToArrowsMap = useRef(new Map());
   const existedUnitList = useRef([]);
   let startPoint = null;
   let currentArrow = null;
@@ -21,7 +21,46 @@ const D3Canvas = () => {
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, unitId: null });
 
   const handleDelete = (unitId) => {
-
+    // handle unit deletion if unitId is not null
+    if (unitId) {
+      const unit = idToUnitMap.get(unitId);
+      // remove the all the attachingArrowStarts
+      unit.attachingArrowStarts.forEach(arrowId => {
+        const arrow = idToArrowsMap.current.get(arrowId);
+        if (arrow.endUnit) {
+          arrow.endUnit.attachingArrowEnds = arrow.endUnit.attachingArrowEnds.filter(id => id !== arrowId);
+        }
+        arrow.endControl.remove();
+        arrow.path.remove();
+        idToArrowsMap.current.delete(arrowId);
+      });
+      // remove the attachedUnit field from the attachedArrowEnds
+      unit.attachingArrowEnds.forEach(arrowId => {
+        const arrow = idToArrowsMap.current.get(arrowId);
+        // remove the attachedUnit field from the attachedArrowEnds
+        arrow.attachedUnit = null;
+      });
+      unit.unit.remove();
+      idToUnitMap.delete(unitId);
+      existedUnitList.current = existedUnitList.current.filter(comp => comp.onCanvasId !== unitId);
+      setSelectedUnitId(null);
+    }
+    else if (contextMenu.arrowId) {
+      const arrow = idToArrowsMap.current.get(contextMenu.arrowId);
+      if (arrow.startUnit) {
+        arrow.startUnit.attachingArrowStarts = arrow.startUnit.attachingArrowStarts.filter(id => id !== contextMenu.arrowId);
+        // reset the startAnchorPointId style to red
+        d3.select(`#${CSS.escape(arrow.startAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
+      }
+      if (arrow.endUnit) {
+        arrow.endUnit.attachingArrowEnds = arrow.endUnit.attachingArrowEnds.filter(id => id !== contextMenu.arrowId);
+        // reset the endAnchorPointId style to red
+        d3.select(`#${CSS.escape(arrow.endAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
+      }
+      arrow.endControl.remove();
+      arrow.path.remove();
+      idToArrowsMap.current.delete(contextMenu.arrowId);
+    }
     setContextMenu({ ...contextMenu, visible: false });
   };
   
@@ -117,10 +156,26 @@ const D3Canvas = () => {
       const arrow = arrowContainerRef.current
         .append('path')
         .attr('d', d3.line()([[start.x, start.y], [end.x, end.y]]))
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2)
+        .attr('stroke', 'grey')
+        .attr('stroke-width', 1)
         .attr('fill', 'none')
-        .attr('marker-end', 'url(#arrowhead)');
+        .attr('marker-end', 'url(#arrowhead)')
+        .on('mouseover', function () {
+          // change the mouse cursor to a hand
+          d3.select(this).style('cursor', 'pointer');
+        })
+        .on('contextmenu', function (event) {
+          event.preventDefault();
+          console.log('right click on arrow');
+          setContextMenu({
+            visible: true,
+            x: event.clientX,
+            y: event.clientY,
+            unitId: null,
+            arrowId: arrowObj.onCanvasId
+          });
+        });
+        
     
       const arrowObj = {
         startPoint: start,
@@ -159,7 +214,7 @@ const D3Canvas = () => {
         
       arrowObj.endControl = endControl;
     
-      idToArrowsMap.set(arrowObj.onCanvasId, arrowObj);
+      idToArrowsMap.current.set(arrowObj.onCanvasId, arrowObj);
     
       attachedUnit.attachingArrowStarts.push(arrowObj.onCanvasId);
     
@@ -250,7 +305,8 @@ const D3Canvas = () => {
           visible: true,
           x: event.clientX,
           y: event.clientY,
-          unitId: currUnitId
+          unitId: currUnitId,
+          arrowId: null
         });
       });
 
@@ -346,12 +402,12 @@ const D3Canvas = () => {
             });
           
           for (let id of unitObj.attachingArrowStarts) {
-            const arrow = idToArrowsMap.get(id);
+            const arrow = idToArrowsMap.current.get(id);
             arrow.startPoint = { x: (newX - initialX) + arrow.startPoint.x, y: (newY - initialY) + arrow.startPoint.y };
             updateArrows([arrow]);
           }
           for (let id of unitObj.attachingArrowEnds) {
-            const arrow = idToArrowsMap.get(id);
+            const arrow = idToArrowsMap.current.get(id);
             arrow.endPoint = { x: (newX - initialX) + arrow.endPoint.x, y: (newY - initialY) + arrow.endPoint.y };
             updateArrows([arrow]);
           }
@@ -430,7 +486,7 @@ const D3Canvas = () => {
         isEndPointDragging.current = false;
       });
 
-    svg.append('defs').append('marker')
+      svg.append('defs').append('marker')
       .attr('id', 'arrowhead')
       .attr('markerWidth', 10)
       .attr('markerHeight', 7)
@@ -439,7 +495,7 @@ const D3Canvas = () => {
       .attr('orient', 'auto')
       .append('polygon')
       .attr('points', '0 0, 10 3.5, 0 7')
-      .attr('fill', 'black');
+      .attr('fill', 'grey');
 
   }, [setScale]);
 
