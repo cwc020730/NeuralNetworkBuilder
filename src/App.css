@@ -62,15 +62,6 @@
   height: 150px;
 }
 
-.selected-unit-description {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #666;
-  color: #fff;
-  height: 30px;
-}
-
 .sidebar-menu {
   display: flex;
   justify-content: space-between;
@@ -156,17 +147,27 @@
   justify-content: left;
   align-items: center;
   height: 100%;
-  background: #999;
   color: #fff;
-  padding-left: 20px;
+  padding-left: 15px;
+  border-right: 1px rgba(255, 255, 255, 0.3) solid;
+}
+
+.selected-unit-bold-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+  text-align: center;
+  margin-right: 30px;
+  border-right: 1px rgba(255, 255, 255, 0.3) solid;
 }
 
 .unit-description {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+  border-top: 1px rgba(255, 255, 255, 0.3) solid;
+  border-bottom: 1px rgba(255, 255, 255, 0.3) solid;
   color: #fff;
 }
 
