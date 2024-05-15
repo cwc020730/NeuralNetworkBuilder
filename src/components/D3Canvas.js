@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useContext, useState } from 'react';
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import unitList from './UnitList.json';
@@ -17,6 +17,23 @@ const D3Canvas = () => {
   let isEndPointDragging = useRef(false);
 
   const { scale, setScale, selectedUnitId, setSelectedUnitId } = useContext(AppContext);
+
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, unitId: null });
+
+  const handleDelete = (unitId) => {
+
+    setContextMenu({ ...contextMenu, visible: false });
+  };
+  
+  const handleCopy = (unitId) => {
+
+    setContextMenu({ ...contextMenu, visible: false });
+  };
+  
+  const handleCut = (unitId) => {
+
+    setContextMenu({ ...contextMenu, visible: false });
+  };
 
   useEffect(() => {
     const width = 800;
@@ -225,6 +242,16 @@ const D3Canvas = () => {
       newUnit.on('click', function (event) {
         isUnitClicked.current = true;
         setSelectedUnitId(currUnitId);
+      })
+      .on('contextmenu', function (event) {
+        event.preventDefault();
+        console.log('right click on unit');
+        setContextMenu({
+          visible: true,
+          x: event.clientX,
+          y: event.clientY,
+          unitId: currUnitId
+        });
       });
 
       newUnit.selectAll('.connection-point')
@@ -435,7 +462,98 @@ const D3Canvas = () => {
     });
   }, [selectedUnitId]);
 
-  return <svg ref={ref} style={{ width: '100%', height: '100%' }}></svg>;
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (contextMenu.visible) {
+        setContextMenu({ ...contextMenu, visible: false });
+      }
+    };
+  
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [contextMenu]);
+
+  return (
+    <>
+      <svg ref={ref} style={{ width: '100%', height: '100%' }}></svg>
+      {contextMenu.visible && (
+        <div
+          style={{
+            position: 'absolute',
+            top: `${contextMenu.y}px`,
+            left: `${contextMenu.x}px`,
+            backgroundColor: 'white',
+            border: '1px solid #ccc',
+            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
+            borderRadius: '4px',
+            zIndex: 1000,
+            padding: '5px',
+            cursor: 'default'
+          }}
+        >
+          <ul style={{
+            listStyleType: 'none',
+            padding: '5px 0',
+            margin: '0',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '5px'
+          }}>
+            <li style={{
+              padding: '5px 10px',
+              cursor: 'pointer',
+              borderRadius: '3px',
+              transition: 'background-color 0.3s, color 0.3s'
+            }}
+              onClick={() => handleCopy(contextMenu.unitId)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#007BFF';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+                e.currentTarget.style.color = 'black';
+              }}
+            >Copy</li>
+            <li style={{
+              padding: '5px 10px',
+              cursor: 'pointer',
+              borderRadius: '3px',
+              transition: 'background-color 0.3s, color 0.3s'
+            }}
+              onClick={() => handleCut(contextMenu.unitId)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#007BFF';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+                e.currentTarget.style.color = 'black';
+              }}
+            >Cut</li>
+            <li style={{
+              padding: '5px 10px',
+              cursor: 'pointer',
+              borderRadius: '3px',
+              transition: 'background-color 0.3s, color 0.3s'
+            }}
+              onClick={() => handleDelete(contextMenu.unitId)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#007BFF';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+                e.currentTarget.style.color = 'black';
+              }}
+            >Delete</li>
+          </ul>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default D3Canvas;
