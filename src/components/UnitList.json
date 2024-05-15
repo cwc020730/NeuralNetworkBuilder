@@ -11,13 +11,21 @@
             "input_cnt": {
                 "default": 2,
                 "variable": true
-            }
+            },
+            "input_labels": [
+                "Addend 1",
+                "Addend 2",
+                "*var*Addend {n}"
+            ]
         },
         "output": {
             "output_cnt": {
                 "default": 1,
                 "variable": false
-            }
+            },
+            "output_labels": [
+                "Sum"
+            ]
         },
         "parameters": {
             "input_cnt": {
@@ -38,13 +46,21 @@
             "input_cnt": {
                 "default": 1,
                 "variable": false
-            }
+            },
+            "input_labels": [
+                "Input"
+            ]
         },
         "output": {
             "output_cnt": {
                 "default": 2,
                 "variable": true
-            }
+            },
+            "output_labels": [
+                "Output 1",
+                "Output 2",
+                "*var*Output {n}"
+            ]
         },
         "parameters": {
             "output_cnt": {

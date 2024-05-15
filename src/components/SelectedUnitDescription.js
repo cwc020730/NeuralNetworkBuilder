@@ -19,7 +19,7 @@ const SelectedUnitDescription = () => {
 
     return (
         <div className="selected-unit-description">
-            <div>{unitTypeInfo.in_unit_label}</div>
+            <h3>{unitTypeInfo.in_unit_label}</h3>
             <div>{unitTypeInfo.description}</div>
         </div>
     );
