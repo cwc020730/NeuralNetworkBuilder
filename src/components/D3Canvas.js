@@ -28,6 +28,8 @@ const D3Canvas = () => {
       unit.attachingArrowStarts.forEach(arrowId => {
         const arrow = idToArrowsMap.current.get(arrowId);
         if (arrow.endUnit) {
+          // reset the endAnchorPointId style to red
+          d3.select(`#${CSS.escape(arrow.endAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
           arrow.endUnit.attachingArrowEnds = arrow.endUnit.attachingArrowEnds.filter(id => id !== arrowId);
         }
         arrow.endControl.remove();
