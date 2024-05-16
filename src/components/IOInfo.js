@@ -4,15 +4,30 @@ import { idToUnitMap } from './D3Canvas';
 import unitList from './UnitList.json';
 
 const IOInfo = () => {
+  const [activeHeader, setActiveHeader] = useState(null);
 
-    return (
-        <div className="io-info">
-            <div className="input-header">Input</div>
-            <div className="output-header">Output</div>
-            <div className="input-info">Input</div>
-            <div className="output-info">Output</div>
-        </div>
-    );
-}
+  const handleHeaderClick = (header) => {
+    setActiveHeader(header);
+  };
+
+  return (
+    <div className="io-info">
+      <div
+        className={`io-info-header ${activeHeader === 'input' ? 'active' : ''}`}
+        onClick={() => handleHeaderClick('input')}
+      >
+        INPUT
+      </div>
+      <div
+        className={`io-info-header ${activeHeader === 'output' ? 'active' : ''}`}
+        onClick={() => handleHeaderClick('output')}
+      >
+        OUTPUT
+      </div>
+      <div className="input-info">Input</div>
+      <div className="output-info">Output</div>
+    </div>
+  );
+};
 
 export default IOInfo;
