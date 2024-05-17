@@ -9,7 +9,12 @@ const SelectedUnitDescription = () => {
     if (!selectedUnitId) {
         return (
             <div className="selected-unit-description">
-                <div>Select A Unit</div>
+                <div className='selected-unit-bold-label'>SELECT A UNIT</div>
+                <div className='selected-unit-category'>N/A</div>
+                <div className='selected-unit-description-text-container'>
+                    <div className='selected-unit-uuid'>UUID: N/A</div>
+                    <div className='selected-unit-description-text'></div>
+                </div>
             </div>
         );
     }
@@ -21,9 +26,9 @@ const SelectedUnitDescription = () => {
         <div className="selected-unit-description">
             <div className='selected-unit-bold-label'>{unitTypeInfo.in_unit_label}</div>
             <div className='selected-unit-category'>{unitTypeInfo.category}</div>
-            <div className='unit-description'>
-                <div className='unit-uuid'>UUID: {selectedUnitId}</div>
-                <div className='unit-description-text'>{unitTypeInfo.description}</div>
+            <div className='selected-unit-description-text-container'>
+                <div className='selected-unit-uuid'>UUID: {selectedUnitId}</div>
+                <div className='selected-unit-description-text'>{unitTypeInfo.description}</div>
             </div>
         </div>
     );
