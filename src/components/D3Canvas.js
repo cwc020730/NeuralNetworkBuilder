@@ -16,9 +16,14 @@ const D3Canvas = () => {
   let isUnitClicked = useRef(false);
   let isEndPointDragging = useRef(false);
 
-  const { scale, setScale, selectedUnitId, setSelectedUnitId } = useContext(AppContext);
+  const { scale, setScale, selectedUnitId, setSelectedUnitId, triggerRender, setTriggerRender } = useContext(AppContext);
 
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, unitId: null });
+
+  const updateConnectionPoint = (cp, occupied) => {
+    cp.occupied = occupied;
+    setTriggerRender(prev => prev + 1); // Trigger re-render
+  };
 
   const handleDelete = (unitId) => {
     // handle unit deletion if unitId is not null
@@ -30,6 +35,7 @@ const D3Canvas = () => {
         if (arrow.endUnit) {
           // reset the endAnchorPointId style to red
           d3.select(`#${CSS.escape(arrow.endAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
+          updateConnectionPoint(d3.select(`#${CSS.escape(arrow.endAnchorPointId)}`).datum(), false);
           arrow.endUnit.attachingArrowEnds = arrow.endUnit.attachingArrowEnds.filter(id => id !== arrowId);
         }
         arrow.endControl.remove();
@@ -53,11 +59,13 @@ const D3Canvas = () => {
         arrow.startUnit.attachingArrowStarts = arrow.startUnit.attachingArrowStarts.filter(id => id !== contextMenu.arrowId);
         // reset the startAnchorPointId style to red
         d3.select(`#${CSS.escape(arrow.startAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
+        updateConnectionPoint(d3.select(`#${CSS.escape(arrow.startAnchorPointId)}`).datum(), false);
       }
       if (arrow.endUnit) {
         arrow.endUnit.attachingArrowEnds = arrow.endUnit.attachingArrowEnds.filter(id => id !== contextMenu.arrowId);
         // reset the endAnchorPointId style to red
         d3.select(`#${CSS.escape(arrow.endAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
+        updateConnectionPoint(d3.select(`#${CSS.escape(arrow.endAnchorPointId)}`).datum(), false);
       }
       arrow.endControl.remove();
       arrow.path.remove();
@@ -131,14 +139,16 @@ const D3Canvas = () => {
       }
     }
 
-    function calculateConnectionPoints(x, y, w, h, in_cnt, out_cnt) {
+    function calculateConnectionPoints(x, y, w, h, in_cnt, out_cnt, in_label, out_label) {
       const inputPoints = Array.from({ length: in_cnt }, (_, index) => ({
         originalX: (index + 1) * (w / (in_cnt + 1)),
         originalY: 0,
         x: (index + 1) * (w / (in_cnt + 1)) + x,
         y: y,
         is_input: true,
-        is_output: false
+        is_output: false,
+        label: in_label[index],
+        occupied: false
       }));
 
       const outputPoints = Array.from({ length: out_cnt }, (_, index) => ({
@@ -147,7 +157,9 @@ const D3Canvas = () => {
         x: (index + 1) * (w / (out_cnt + 1)) + x,
         y: h + y,
         is_input: false,
-        is_output: true
+        is_output: true,
+        label: out_label[index],
+        occupied: false
       }));
 
       return [...inputPoints, ...outputPoints];
@@ -205,6 +217,7 @@ const D3Canvas = () => {
             currentArrow.endUnit.attachingArrowEnds = currentArrow.endUnit.attachingArrowEnds.filter(id => id !== currentArrow.onCanvasId);
             currentArrow.endUnit = null;
             d3.select(`#${CSS.escape(currentArrow.endAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
+            updateConnectionPoint(d3.select(`#${CSS.escape(currentArrow.endAnchorPointId)}`).datum(), false);
             currentArrow.endAnchorPointId = null;
           }
         })
@@ -223,14 +236,16 @@ const D3Canvas = () => {
     }
 
     function createUnit(x, y, w, h, unitData) {
-      const [color, image, in_cnt, out_cnt, inUnitLabel, inUnitLabelColor, type] = [
+      const [color, image, in_cnt, out_cnt, inUnitLabel, inUnitLabelColor, type, in_label_raw, out_label_raw] = [
         unitData["color"], 
         unitData["image"],
         unitData["input"]["input_cnt"]["default"],
         unitData["output"]["output_cnt"]["default"],
         unitData["in_unit_label"],
         unitData["in_unit_label_color"],
-        unitData["primary_label"]
+        unitData["primary_label"],
+        unitData["input"]["input_labels"],
+        unitData["output"]["output_labels"]
       ];
 
       console.log(color, image, in_cnt, out_cnt)
@@ -278,11 +293,25 @@ const D3Canvas = () => {
       const X = parseFloat(transform[1]);
       const Y = parseFloat(transform[2]);
       const currUnitId = uuidv4();
-      const connectionPoints = calculateConnectionPoints(x, y, w, h, in_cnt, out_cnt).map((cp, index) => ({
+
+      const inputLabel = []
+      const outputLabel = []
+
+      for (let i = 1; i <= in_cnt; i++) {
+        inputLabel.push(in_label_raw[i - 1]);
+      }
+      
+      for (let i = 1; i <= out_cnt; i++) {
+        outputLabel.push(out_label_raw[i - 1]);
+      }
+
+      const connectionPoints = calculateConnectionPoints(x, y, w, h, in_cnt, out_cnt, inputLabel, outputLabel).map((cp, index) => ({
         ...cp,
         id: `${currUnitId}-cp-${index}`,
         unitId: currUnitId
       }));
+
+      console.log(connectionPoints)
 
       const unitObj = {
         type: type,
@@ -322,9 +351,10 @@ const D3Canvas = () => {
         .attr('r', 5)
         .style('fill', 'red')
         .style('cursor', 'crosshair')
-        .each(function() {
+        .each(function(d) {
           d3.select(this).property('isMouseDown', false);
           d3.select(this).property('isConnectedWithArrow', false);
+          updateConnectionPoint(d, false);
         })
         .on('mouseup', function (event, d) {
         })
@@ -352,6 +382,7 @@ const D3Canvas = () => {
             currentArrow = drawArrow(startPoint, startPoint, unitObj, d.id);
             d3.select(this).property('isConnectedWithArrow', true);
             d3.select(this).style('fill', 'pink');
+            updateConnectionPoint(d, true);
           }
         });
 
@@ -452,7 +483,8 @@ const D3Canvas = () => {
                 connectedPoint = point;
                 currentArrow.endAnchorPointId = point.id;
                 // set the connectedPoint style to be pink
-                d3.select(`#${CSS.escape(point.id)}`).style('fill', 'pink').property('isConnectedWithArrow', true);;
+                d3.select(`#${CSS.escape(point.id)}`).style('fill', 'pink').property('isConnectedWithArrow', true);
+                updateConnectionPoint(d3.select(`#${CSS.escape(point.id)}`).datum(), true);
                 // console.log('connected');
               }
             });
