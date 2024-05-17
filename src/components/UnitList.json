@@ -1,5 +1,38 @@
 
 {
+    "randomInput": {
+        "primary_label": "randomInput",
+        "in_unit_label": "RANDINP",
+        "in_unit_label_color": "black",
+        "category": "INPUT",
+        "description": "Generate a random input with a specified size.",
+        "color": "#FADADD",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 0,
+                "variable": false
+            },
+            "input_labels": [
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Random Input"
+            ]
+        },
+        "parameters": {
+            "dimension": {
+                "type": "list",
+                "description": "Dimension of the random input.",
+                "default": []
+            }
+        }
+    },
     "add": {
         "primary_label": "add",
         "in_unit_label": "ADD",
