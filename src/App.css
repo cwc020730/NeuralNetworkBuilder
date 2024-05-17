@@ -143,9 +143,10 @@
 
 .selected-unit-description {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 30% 70%;
+  grid-template-rows: 15% 85%;
   justify-content: left;
-  align-items: center;
+  align-items: top;
   height: 100%;
   color: #fff;
   padding-left: 15px;
@@ -154,21 +155,45 @@
 
 .selected-unit-bold-label {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
-  height: 70%;
   text-align: center;
-  margin-right: 30px;
-  border-right: 1px rgba(255, 255, 255, 0.3) solid;
+  font-weight: bold;
+  font-size: 12px;
+  padding-top: 5px;
+}
+
+.selected-unit-category {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  text-align: center;
+  font-size: 12px;
+  margin-right: 5px;
+  padding-top: 5px;
 }
 
 .unit-description {
-  display: flex;
+  display: grid;
+  width: 100%;
+  grid-template-rows: 40% 60%;
+  grid-column: 1 / span 2;
   justify-content: center;
   align-items: center;
   border-top: 1px rgba(255, 255, 255, 0.3) solid;
-  border-bottom: 1px rgba(255, 255, 255, 0.3) solid;
   color: #fff;
+  font-size: 10px;
+  margin-right: 5px;
+}
+
+.unit-description-text {
+  border-top: 1px rgba(255, 255, 255, 0.3) solid;
+  align-self: start;
+  width: 100%;
+}
+
+.unit-uuid {
+  width: 100%;
 }
 
 .io-info {
