@@ -174,9 +174,9 @@
 .io-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 15% 85%;
+  grid-template-rows: auto 1fr;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   color: #fff;
   height: 100%;
   border-right: 1px rgba(255, 255, 255, 0.3) solid;
@@ -194,6 +194,40 @@
   cursor: pointer;
 }
 
+.io-info-display {
+  display: grid;
+  grid-template-columns: 7.5% 92.5%;
+  grid-column: 1 / span 2;
+  width: 100%;
+  text-align: center;
+  align-items: start;
+  padding-top: 5px;
+}
+
+.io-occupied-flag {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  align-self: center;
+  justify-self: right;
+}
+
+.io-occupied-flag.unoccupied {
+  background: red;
+}
+
+.io-occupied-flag.occupied {
+  background: pink;
+}
+
+.io-label {
+  display: flex;
+  justify-content: left;
+  margin-left: 15px;
+  height: 100%;
+  color: #fff;
+  font-size: 12px;
+}
 
 .io-info-header.active {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
