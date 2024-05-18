@@ -236,7 +236,7 @@ const D3Canvas = () => {
     }
 
     function createUnit(x, y, w, h, unitData) {
-      const [color, image, in_cnt, out_cnt, inUnitLabel, inUnitLabelColor, type, in_label_raw, out_label_raw] = [
+      const [color, image, in_cnt, out_cnt, inUnitLabel, inUnitLabelColor, type, in_label_raw, out_label_raw, params] = [
         unitData["color"], 
         unitData["image"],
         unitData["input"]["input_cnt"]["default"],
@@ -245,10 +245,11 @@ const D3Canvas = () => {
         unitData["in_unit_label_color"],
         unitData["primary_label"],
         unitData["input"]["input_labels"],
-        unitData["output"]["output_labels"]
+        unitData["output"]["output_labels"],
+        unitData["parameters"]
       ];
 
-      console.log(color, image, in_cnt, out_cnt)
+      console.log(color, image, in_cnt, out_cnt, params)
 
       const clipId = `clip-${Math.random().toString(36).substring(2, 10)}`;
 
@@ -313,6 +314,10 @@ const D3Canvas = () => {
 
       console.log(connectionPoints)
 
+      for (const [param_name, param_attr] of Object.entries(params)) {
+        param_attr['value'] = param_attr['default'];
+      }
+
       const unitObj = {
         type: type,
         onCanvasId: currUnitId, 
@@ -320,7 +325,8 @@ const D3Canvas = () => {
         connectionPoints: connectionPoints,
         attachingArrowStarts: [],
         attachingArrowEnds: [],
-        baseRect: baseRect
+        baseRect: baseRect,
+        parameters: params
       };
 
       // on click event to the unit

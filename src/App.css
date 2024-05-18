@@ -273,12 +273,125 @@
 }
 
 .param-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  justify-content: center;
+  align-items: start;
+  color: #fff;
+  height: 100%;
+  border-right: 1px rgba(255, 255, 255, 0.3) solid;
+}
+
+.param-controls-header {
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
+  margin-left: 75px;
+  margin-right: 75px;
+  padding-top: 5px;
+  font-size: 12px;
+  border-bottom: 1px rgba(255, 255, 255, 0.3) solid;
+}
+
+.param-info-triplet {
+  display: grid;
+  grid-template-columns: 10% 20% 40% 30%;
+  grid-column: 1 / span 2;
+  width: 100%;
+  text-align: center;
+  align-items: start;
+  padding-top: 5px;
+}
+
+.param-type {
+  display: flex;
+  justify-content: right;
+  padding-right: 5px;
   height: 100%;
-  border-right: 1px rgba(255, 255, 255, 0.3) solid;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.param-name {
+  display: flex;
+  justify-content: left;
+  padding-left: 5px;
+  height: 100%;
+  color: #fff;
+  font-size: 12px;
+}
+
+.param-value-list-container-grid {
+  display: grid;
+  align-items: start;
+  grid-template-columns: 4% 92% 4%;
+  padding-left: 10px;
+}
+
+.param-value-grid {
+  display: grid;
+  align-items: end;
+  grid-template-columns:repeat(auto-fit, minmax(10px, 1fr));
+}
+
+.param-value-grid input {
+  max-width: 80px;
+  font-size: 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px rgba(255, 255, 255, 0.3) solid;
+  color: #fff;
+  outline: none;
+  text-align: center;
+  margin-left: 2.5px;
+  margin-right: 2.5px;
+  padding: 2px 0 0 0;
+}
+
+.param-value-list-start {
+  display: flex;
+  justify-content: right;
+  align-items: start;
+  font-size: 12px;
+}
+.param-value-list-end {
+  display: flex;
+  justify-content: left;
+  align-self: start;
+  font-size: 12px;
+}
+
+.param-apply-button {
+  background-color: #A8DADC;
+  border: none;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  margin-left: 15px;
+  width: 50%;
+  justify-self: left;
+  align-self: end;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.param-apply-button:hover {
+  background-color: #1D3557;
+  color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.param-apply-button:active {
+  background-color: #1D3557;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transform: translateY(1px);
 }
 
 .glassy-effect {

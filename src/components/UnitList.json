@@ -29,7 +29,7 @@
             "dimension": {
                 "type": "list",
                 "description": "Dimension of the random input.",
-                "default": []
+                "default": [0, 0, 0, 0]
             }
         }
     },
