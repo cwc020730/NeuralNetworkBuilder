@@ -49,7 +49,7 @@
   justify-content: space-between;
   align-items: center;
   background: #f4f4f4;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 90px - 150px);
 }
 
 .unit-param-info-area {
@@ -317,11 +317,25 @@
 
 .param-name {
   display: flex;
-  justify-content: left;
+  justify-content: right;
   padding-left: 5px;
   height: 100%;
   color: #fff;
   font-size: 12px;
+}
+
+.param-value{
+  max-width: 30px;
+  font-size: 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px rgba(255, 255, 255, 0.3) solid;
+  color: #fff;
+  outline: none;
+  text-align: center;
+  margin-left: 17.5px;
+  margin-right: 2.5px;
+  padding: 2px 0 0 0;
 }
 
 .param-value-list-container-grid {
@@ -392,6 +406,30 @@
   color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transform: translateY(1px);
+}
+
+.param-container {
+  flex: 1;
+  max-height: 127.5px;
+  overflow-y: auto;
+}
+
+.param-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.param-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.param-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.param-container::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 .glassy-effect {

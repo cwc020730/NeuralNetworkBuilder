@@ -104,5 +104,69 @@
                 "default": 2
             }
         }
+    },
+    "multiParamTest": {
+        "primary_label": "multiParamTest",
+        "in_unit_label": "MPT",
+        "in_unit_label_color": "black",
+        "category": "TEST",
+        "description": "Test a function with multiple parameters.",
+        "color": "white",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Input"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Output"
+            ]
+        },
+        "parameters": {
+            "param1": {
+                "type": "integer",
+                "description": "First parameter.",
+                "default": 0
+            },
+            "param2": {
+                "type": "integer",
+                "description": "Second parameter.",
+                "default": 0
+            },
+            "param3": {
+                "type": "integer",
+                "description": "Third parameter.",
+                "default": 0
+            },
+            "param4": {
+                "type": "integer",
+                "description": "Fourth parameter.",
+                "default": 0
+            },
+            "param5": {
+                "type": "integer",
+                "description": "Fifth parameter.",
+                "default": 0
+            },
+            "param6": {
+                "type": "integer",
+                "description": "Sixth parameter.",
+                "default": 0
+            },
+            "param7": {
+                "type": "integer",
+                "description": "Seventh parameter.",
+                "default": 0
+            }
+        }
     }
 }

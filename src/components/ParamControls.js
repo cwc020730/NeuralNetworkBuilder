@@ -88,7 +88,9 @@ const ParamControls = () => {
     return (
         <div className="param-controls">
             <div className='param-controls-header'>PARAMETERS</div>
-            {selectedUnit ? constructEntireParamJSX(unitParameters) : ""}
+            <div className='param-container'>
+                {selectedUnit ? constructEntireParamJSX(unitParameters) : ""}
+            </div>
         </div>
     );
 }
