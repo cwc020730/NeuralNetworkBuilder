@@ -5,6 +5,14 @@ import unitList from './UnitList.json';
 import { AppContext } from './AppContext';
 
 export const idToUnitMap = new Map();
+export function updateUnitParameters(unitId, parameters) {
+  const unit = idToUnitMap.get(unitId);
+  if (unit) {
+    unit.parameters = parameters;
+    console.log('Unit' + unitId + ' parameters updated:', unit.parameters);
+    // redrawUnit(unit); // Pseudocode for updating the visual representation
+  }
+}
 
 const D3Canvas = () => {
   const ref = useRef(null);

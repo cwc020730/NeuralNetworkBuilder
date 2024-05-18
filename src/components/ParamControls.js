@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AppContext } from './AppContext';
-import { idToUnitMap } from './D3Canvas';
+import { idToUnitMap, updateUnitParameters } from './D3Canvas';
 
 const ParamControls = () => {
     const { selectedUnitId } = useContext(AppContext);
@@ -27,6 +27,10 @@ const ParamControls = () => {
             }
             return newParameters;
         });
+    };
+
+    const handleApplyClick = () => {
+        updateUnitParameters(selectedUnitId, Object.fromEntries(unitParameters));
     };
 
     function constructModifiableParamValueJSX(param, value, type) {
@@ -67,7 +71,7 @@ const ParamControls = () => {
                 <div className='param-type'>{type_abbr}</div>
                 <div className='param-name'>{param}:</div>
                 {constructModifiableParamValueJSX(param, value, type)}
-                <div className='param-apply-button'>APPLY</div>
+                <div className='param-apply-button' onClick={handleApplyClick}>APPLY</div>
             </div>
         );
     }
