@@ -54,7 +54,7 @@ const D3Canvas = () => {
       unit.attachingArrowEnds.forEach(arrowId => {
         const arrow = idToArrowsMap.current.get(arrowId);
         // remove the attachedUnit field from the attachedArrowEnds
-        arrow.attachedUnit = null;
+        arrow.endUnit = null;
       });
       unit.unit.remove();
       idToUnitMap.delete(unitId);
