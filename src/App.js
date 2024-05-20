@@ -8,6 +8,7 @@ import InventoryController from "./components/InventoryController";
 import SelectedUnitDescription from "./components/SelectedUnitDescription";
 import ParamControls from "./components/ParamControls";
 import IOInfo from "./components/IOInfo";
+import Header from "./components/Header";
 
 
 function App() {
@@ -28,7 +29,9 @@ function App() {
     return (
         <AppProvider>
             <div className="app">
-                <header className="header">Header</header>
+                <header className="header">
+                    <Header />
+                </header>
                 <aside className="sidebar">
                     <InventoryController />
                 </aside>

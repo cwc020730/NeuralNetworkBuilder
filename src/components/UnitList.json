@@ -137,10 +137,10 @@
                 "description": "First parameter.",
                 "default": 0
             },
-            "param2": {
-                "type": "integer",
+            "parampa2": {
+                "type": "list",
                 "description": "Second parameter.",
-                "default": 0
+                "default": [0, 0, 0]
             },
             "param3": {
                 "type": "integer",
@@ -148,9 +148,9 @@
                 "default": 0
             },
             "param4": {
-                "type": "integer",
+                "type": "list",
                 "description": "Fourth parameter.",
-                "default": 0
+                "default": [0, 0, 0, 0]
             },
             "param5": {
                 "type": "integer",
