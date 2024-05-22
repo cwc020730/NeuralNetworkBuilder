@@ -20,6 +20,8 @@ const Header = () => {
                             <button className='dropdown-button'>New</button>
                             <button className='dropdown-button'>Open</button>
                             <button className='dropdown-button'>Save</button>
+                            <button className='dropdown-button'>Import</button>
+                            <button className='dropdown-button'>Export</button>
                         </div>
                     )}
                 </div>
