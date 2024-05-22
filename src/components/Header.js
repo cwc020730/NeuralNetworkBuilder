@@ -7,6 +7,10 @@ const Header = () => {
         setIsListVisible(!isListVisible);
     };
 
+    const handleFileExportButtonClick = () => {
+        alert('Exporting file...');
+    }
+
     return (
         <div className='header-container'>
             <div className='logo'></div>
@@ -21,7 +25,7 @@ const Header = () => {
                             <button className='dropdown-button'>Open</button>
                             <button className='dropdown-button'>Save</button>
                             <button className='dropdown-button'>Import</button>
-                            <button className='dropdown-button'>Export</button>
+                            <button className='dropdown-button' onClick={handleFileExportButtonClick}>Export</button>
                         </div>
                     )}
                 </div>

@@ -5,6 +5,7 @@ import unitList from './UnitList.json';
 import { AppContext } from './AppContext';
 
 export const idToUnitMap = new Map();
+export const existedUnitList = [];
 export function updateUnitParameters(unitId, parameters) {
   const unit = idToUnitMap.get(unitId);
   if (unit) {
@@ -12,6 +13,9 @@ export function updateUnitParameters(unitId, parameters) {
     console.log('Unit' + unitId + ' parameters updated:', unit.parameters);
     // redrawUnit(unit); // Pseudocode for updating the visual representation
   }
+}
+export function generateJSONCanvasRepresentation() {
+  // TODO: Implement this function for exporting the canvas to JSON
 }
 
 const D3Canvas = () => {
