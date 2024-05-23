@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { generateJSONCanvasRepresentation } from './D3Canvas';
+import { generateJSONCanvasRepresentation, removeAllObjectsOnCanvas } from './D3Canvas';
 
 const Header = () => {
     const [isListVisible, setIsListVisible] = useState(false);
 
     const handleFileButtonClick = () => {
         setIsListVisible(!isListVisible);
+    };
+
+    const handleFileNewButtonClick = () => {
+        removeAllObjectsOnCanvas();
     };
 
     const handleFileExportButtonClick = async () => {
@@ -31,6 +35,24 @@ const Header = () => {
         }
     };
 
+    const handleFileImportButtonClick = async () => {
+        try {
+            const [fileHandle] = await window.showOpenFilePicker({
+                types: [{
+                    description: 'JSON file',
+                    accept: { 'application/json': ['.json'] },
+                }],
+            });
+    
+            const file = await fileHandle.getFile();
+            const fileContents = await file.text();
+            const JSONImport = JSON.parse(fileContents);
+            console.log('Imported JSON:', JSONImport);
+        } catch (error) {
+            console.error('Error importing file:', error);
+        }
+    };
+
     return (
         <div className='header-container'>
             <div className='logo'></div>
@@ -41,10 +63,10 @@ const Header = () => {
                     </button>
                     {isListVisible && (
                         <div className='header-dropdown-menu'>
-                            <button className='dropdown-button'>New</button>
+                            <button className='dropdown-button' onClick={handleFileNewButtonClick}>New</button>
                             <button className='dropdown-button'>Open</button>
                             <button className='dropdown-button'>Save</button>
-                            <button className='dropdown-button'>Import</button>
+                            <button className='dropdown-button' onClick={handleFileImportButtonClick}>Import</button>
                             <button className='dropdown-button' onClick={handleFileExportButtonClick}>Export</button>
                         </div>
                     )}

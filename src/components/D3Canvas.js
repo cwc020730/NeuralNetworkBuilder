@@ -52,6 +52,26 @@ export function generateJSONCanvasRepresentation() {
   };
 }
 
+export function removeAllObjectsOnCanvas() {
+  // Remove all unit elements from the canvas
+  existedUnitList.forEach(unit => {
+    unit.unit.remove();
+  });
+
+  // Remove all arrow elements from the canvas
+  idToArrowsMap.forEach(arrow => {
+    arrow.path.remove();
+    if (arrow.endControl) {
+      arrow.endControl.remove();
+    }
+  });
+
+  // Clear the lists and maps
+  existedUnitList = [];
+  idToUnitMap.clear();
+  idToArrowsMap.clear();
+}
+
 const idToArrowsMap = new Map();
 
 const D3Canvas = () => {
