@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { generateJSONCanvasRepresentation } from './D3Canvas';
 
 const Header = () => {
     const [isListVisible, setIsListVisible] = useState(false);
@@ -8,7 +9,7 @@ const Header = () => {
     };
 
     const handleFileExportButtonClick = () => {
-        alert('Exporting file...');
+        generateJSONCanvasRepresentation();
     }
 
     return (

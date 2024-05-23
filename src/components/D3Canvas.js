@@ -5,7 +5,7 @@ import unitList from './UnitList.json';
 import { AppContext } from './AppContext';
 
 export const idToUnitMap = new Map();
-export const existedUnitList = [];
+export let existedUnitList = [];
 export function updateUnitParameters(unitId, parameters) {
   const unit = idToUnitMap.get(unitId);
   if (unit) {
@@ -15,14 +15,16 @@ export function updateUnitParameters(unitId, parameters) {
   }
 }
 export function generateJSONCanvasRepresentation() {
-  // TODO: Implement this function for exporting the canvas to JSON
+  for (let unit of existedUnitList) {
+    console.log(unit);
+  }
 }
 
 const D3Canvas = () => {
   const ref = useRef(null);
   const arrowContainerRef = useRef(null);
   const idToArrowsMap = useRef(new Map());
-  const existedUnitList = useRef([]);
+  //const existedUnitList = useRef([]);
   let startPoint = null;
   let currentArrow = null;
   let isUnitClicked = useRef(false);
@@ -62,7 +64,7 @@ const D3Canvas = () => {
       });
       unit.unit.remove();
       idToUnitMap.delete(unitId);
-      existedUnitList.current = existedUnitList.current.filter(comp => comp.onCanvasId !== unitId);
+      existedUnitList = existedUnitList.filter(comp => comp.onCanvasId !== unitId);
       setSelectedUnitId(null);
     }
     else if (contextMenu.arrowId) {
@@ -406,7 +408,7 @@ const D3Canvas = () => {
 
       applyDragBehavior(unitObj);
       
-      existedUnitList.current.push(unitObj);
+      existedUnitList.push(unitObj);
       idToUnitMap.set(currUnitId, unitObj);
 
     }
@@ -494,7 +496,7 @@ const D3Canvas = () => {
           const transformedPointer = [transform.invertX(pointer[0]), transform.invertY(pointer[1])];
           let connectedUnit = null;
           let connectedPoint = null;
-          existedUnitList.current.forEach(comp => {
+          existedUnitList.forEach(comp => {
             comp.connectionPoints.forEach(point => {
               if (Math.sqrt((point.x - transformedPointer[0]) ** 2 + (point.y - transformedPointer[1]) ** 2) < 10 && point.is_input) {
                 connectedUnit = comp;
@@ -552,7 +554,7 @@ const D3Canvas = () => {
 
   useEffect(() => {
     console.log('activated')
-    existedUnitList.current.forEach((unit) => {
+    existedUnitList.forEach((unit) => {
       if (unit.onCanvasId === selectedUnitId) {
         console.log(unit.baseRect.style('stroke-width'));
         if (unit.baseRect.style('stroke-width') !== 2) {
