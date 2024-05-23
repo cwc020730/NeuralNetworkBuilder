@@ -8,9 +8,28 @@ const Header = () => {
         setIsListVisible(!isListVisible);
     };
 
-    const handleFileExportButtonClick = () => {
-        generateJSONCanvasRepresentation();
-    }
+    const handleFileExportButtonClick = async () => {
+        try {
+            const JSONExport = generateJSONCanvasRepresentation();
+            const JSONString = JSON.stringify(JSONExport, null, 4);
+            const blob = new Blob([JSONString], { type: 'application/json' });
+            
+            const fileHandle = await window.showSaveFilePicker({
+                suggestedName: 'canvas.json',
+                types: [{
+                    description: 'JSON file',
+                    accept: { 'application/json': ['.json'] },
+                }],
+            });
+            
+            const writableStream = await fileHandle.createWritable();
+            await writableStream.write(blob);
+            await writableStream.close();
+            console.log('File saved successfully.');
+        } catch (error) {
+            console.error('Error saving file:', error);
+        }
+    };
 
     return (
         <div className='header-container'>

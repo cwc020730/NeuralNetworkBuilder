@@ -15,15 +15,34 @@ export function updateUnitParameters(unitId, parameters) {
   }
 }
 export function generateJSONCanvasRepresentation() {
+  let unitPosList = [];
+  let arrowList = [];
   for (let unit of existedUnitList) {
-    console.log(unit);
+    const transform = d3.select(unit.unit.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
+    const x = parseFloat(transform[1]);
+    const y = parseFloat(transform[2]);
+    unitPosList.push({
+      unitObj: unit,
+      x: x,
+      y: y
+    });
+    for (let arrowId of unit.attachingArrowStarts) {
+      const arrow = idToArrowsMap.get(arrowId);
+      arrowList.push(arrow);
+    }
   }
+  return {
+    units: unitPosList,
+    arrows: arrowList
+  };
 }
+
+const idToArrowsMap = new Map();
 
 const D3Canvas = () => {
   const ref = useRef(null);
   const arrowContainerRef = useRef(null);
-  const idToArrowsMap = useRef(new Map());
+  //const idToArrowsMap = useRef(new Map());
   //const existedUnitList = useRef([]);
   let startPoint = null;
   let currentArrow = null;
@@ -45,7 +64,7 @@ const D3Canvas = () => {
       const unit = idToUnitMap.get(unitId);
       // remove the all the attachingArrowStarts
       unit.attachingArrowStarts.forEach(arrowId => {
-        const arrow = idToArrowsMap.current.get(arrowId);
+        const arrow = idToArrowsMap.get(arrowId);
         if (arrow.endUnit) {
           // reset the endAnchorPointId style to red
           d3.select(`#${CSS.escape(arrow.endAnchorPointId)}`).style('fill', 'red').property('isConnectedWithArrow', false);
@@ -54,11 +73,11 @@ const D3Canvas = () => {
         }
         arrow.endControl.remove();
         arrow.path.remove();
-        idToArrowsMap.current.delete(arrowId);
+        idToArrowsMap.delete(arrowId);
       });
       // remove the attachedUnit field from the attachedArrowEnds
       unit.attachingArrowEnds.forEach(arrowId => {
-        const arrow = idToArrowsMap.current.get(arrowId);
+        const arrow = idToArrowsMap.get(arrowId);
         // remove the attachedUnit field from the attachedArrowEnds
         arrow.endUnit = null;
       });
@@ -68,7 +87,7 @@ const D3Canvas = () => {
       setSelectedUnitId(null);
     }
     else if (contextMenu.arrowId) {
-      const arrow = idToArrowsMap.current.get(contextMenu.arrowId);
+      const arrow = idToArrowsMap.get(contextMenu.arrowId);
       if (arrow.startUnit) {
         arrow.startUnit.attachingArrowStarts = arrow.startUnit.attachingArrowStarts.filter(id => id !== contextMenu.arrowId);
         // reset the startAnchorPointId style to red
@@ -83,7 +102,7 @@ const D3Canvas = () => {
       }
       arrow.endControl.remove();
       arrow.path.remove();
-      idToArrowsMap.current.delete(contextMenu.arrowId);
+      idToArrowsMap.delete(contextMenu.arrowId);
     }
     setContextMenu({ ...contextMenu, visible: false });
   };
@@ -242,7 +261,7 @@ const D3Canvas = () => {
         
       arrowObj.endControl = endControl;
     
-      idToArrowsMap.current.set(arrowObj.onCanvasId, arrowObj);
+      idToArrowsMap.set(arrowObj.onCanvasId, arrowObj);
     
       attachedUnit.attachingArrowStarts.push(arrowObj.onCanvasId);
     
@@ -454,12 +473,12 @@ const D3Canvas = () => {
             });
           
           for (let id of unitObj.attachingArrowStarts) {
-            const arrow = idToArrowsMap.current.get(id);
+            const arrow = idToArrowsMap.get(id);
             arrow.startPoint = { x: (newX - initialX) + arrow.startPoint.x, y: (newY - initialY) + arrow.startPoint.y };
             updateArrows([arrow]);
           }
           for (let id of unitObj.attachingArrowEnds) {
-            const arrow = idToArrowsMap.current.get(id);
+            const arrow = idToArrowsMap.get(id);
             arrow.endPoint = { x: (newX - initialX) + arrow.endPoint.x, y: (newY - initialY) + arrow.endPoint.y };
             updateArrows([arrow]);
           }
