@@ -21,7 +21,6 @@ export function generateJSONCanvasRepresentation() {
     const transform = d3.select(unit.unit.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
     const x = parseFloat(transform[1]);
     const y = parseFloat(transform[2]);
-    console.log(unit.onCanvasId, x, y);
     unitPosMap.set(unit.onCanvasId, 
       { 
         unitInfo: {

@@ -12,7 +12,6 @@ const Header = () => {
         try {
             const JSONExport = generateJSONCanvasRepresentation();
             const JSONString = JSON.stringify(JSONExport, null, 4);
-            console.log('JSONString:', JSONExport);
             const blob = new Blob([JSONString], { type: 'application/json' });
             
             const fileHandle = await window.showSaveFilePicker({
