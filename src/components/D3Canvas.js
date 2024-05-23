@@ -15,25 +15,41 @@ export function updateUnitParameters(unitId, parameters) {
   }
 }
 export function generateJSONCanvasRepresentation() {
-  let unitPosList = [];
-  let arrowList = [];
+  let unitPosMap = new Map();
+  let arrowMap = new Map();
   for (let unit of existedUnitList) {
     const transform = d3.select(unit.unit.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
     const x = parseFloat(transform[1]);
     const y = parseFloat(transform[2]);
-    unitPosList.push({
-      unitObj: unit,
-      x: x,
-      y: y
-    });
+    console.log(unit.onCanvasId, x, y);
+    unitPosMap.set(unit.onCanvasId, 
+      { 
+        unitInfo: {
+          type: unit.type,
+          connectionPoints: unit.connectionPoints,
+          attachingArrowStarts: unit.attachingArrowStarts,
+          attachingArrowEnds: unit.attachingArrowEnds,
+          parameters: unit.parameters
+        },
+        x: x,
+        y: y,
+      }
+    );
     for (let arrowId of unit.attachingArrowStarts) {
       const arrow = idToArrowsMap.get(arrowId);
-      arrowList.push(arrow);
+      arrowMap.set(arrowId, {
+        startPoint: arrow.startPoint,
+        endPoint: arrow.endPoint,
+        startUnitId: arrow.startUnit ? arrow.startUnit.onCanvasId : null,
+        endUnitId: arrow.endUnit ? arrow.endUnit.onCanvasId : null,
+        startAnchorPointId: arrow.startAnchorPointId,
+        endAnchorPointId: arrow.endAnchorPointId
+      });
     }
   }
   return {
-    units: unitPosList,
-    arrows: arrowList
+    units: Object.fromEntries(unitPosMap),
+    arrows: Object.fromEntries(arrowMap)
   };
 }
 
