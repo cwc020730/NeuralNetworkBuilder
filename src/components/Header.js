@@ -9,10 +9,12 @@ const Header = () => {
     };
 
     const handleFileNewButtonClick = () => {
+        setIsListVisible(false);
         removeAllObjectsOnCanvas();
     };
 
     const handleFileExportButtonClick = async () => {
+        setIsListVisible(false);
         try {
             const JSONExport = generateJSONCanvasRepresentation();
             const JSONString = JSON.stringify(JSONExport, null, 4);
@@ -36,6 +38,7 @@ const Header = () => {
     };
 
     const handleFileImportButtonClick = async () => {
+        setIsListVisible(false);
         try {
             const [fileHandle] = await window.showOpenFilePicker({
                 types: [{
