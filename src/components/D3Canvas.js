@@ -458,7 +458,7 @@ const D3Canvas = () => {
 
       // console.log(connectionPoints)
 
-      for (const [param_name, param_attr] of Object.entries(params)) {
+      for (const [, param_attr] of Object.entries(params)) {
         param_attr['value'] = param_attr['default'];
       }
 
