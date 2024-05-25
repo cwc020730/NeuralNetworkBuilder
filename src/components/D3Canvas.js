@@ -73,7 +73,7 @@ export function loadJSONCanvasRepresentation(jsonData) {
 
       // Create the unit
       window.createUnit(x, y, width, height, unitTypeData,
-      { onCanvasId: unitId, connectionPoints, attachingArrowStarts, attachingArrowEnds, parameters }, true);
+      { onCanvasId: unitId, connectionPoints, attachingArrowEnds, parameters }, true);
 
     } else {
       console.error(`Unit type ${type} not found in unitList`);
@@ -90,28 +90,20 @@ export function loadJSONCanvasRepresentation(jsonData) {
 
     if (startUnit && endUnit) {
       // Create the arrow
-      const arrowObj = window.drawArrow(startPoint, endPoint, startUnit, startAnchorPointId);
-
-      arrowObj.onCanvasId = arrowId;
-      arrowObj.endUnit = endUnit;
-      arrowObj.endAnchorPointId = endAnchorPointId;
-      arrowObj.path.attr('d', d3.line()([[startPoint.x, startPoint.y], [endPoint.x, endPoint.y]]));
+      const arrowObj = window.drawArrow(
+        startPoint, 
+        endPoint, 
+        startUnit,
+        startAnchorPointId,
+        { endUnit, endAnchorPointId, onCanvasId: arrowId}
+    );
 
       // Add end control
       arrowObj.endControl.attr('cx', endPoint.x).attr('cy', endPoint.y).attr('r', 2);
 
-      // Add to maps
-      idToArrowsMap.set(arrowId, arrowObj);
-
-      // Update units with arrow information
-      startUnit.attachingArrowStarts.push(arrowId);
-      endUnit.attachingArrowEnds.push(arrowId);
-
       // Update connection points
       d3.select(`#${CSS.escape(startAnchorPointId)}`).style('fill', 'pink').property('isConnectedWithArrow', true);
       d3.select(`#${CSS.escape(endAnchorPointId)}`).style('fill', 'pink').property('isConnectedWithArrow', true);
-
-      window.setTriggerRender(prev => prev + 1); // Trigger re-render
 
     } else {
       console.error(`Start or end unit not found for arrow ${arrowId}`);
@@ -311,7 +303,7 @@ const D3Canvas = () => {
       return [...inputPoints, ...outputPoints];
     }
 
-    function drawArrow(start, end, attachedUnit, anchorPointId) {
+    function drawArrow(start, end, attachedUnit, anchorPointId, customParams = null) {
       const arrow = arrowContainerRef.current
         .append('path')
         .attr('d', d3.line()([[start.x, start.y], [end.x, end.y]]))
@@ -334,18 +326,19 @@ const D3Canvas = () => {
             arrowId: arrowObj.onCanvasId
           });
         });
-        
+      
+      const customParamsKeys = customParams ? Object.keys(customParams) : [];
     
       const arrowObj = {
         startPoint: start,
         endPoint: end,
         endControl: null,
         startUnit: attachedUnit,
-        endUnit: null,
+        endUnit: customParamsKeys.includes('endUnit') ? customParams['endUnit'] : null,
         startAnchorPointId: anchorPointId,
-        endAnchorPointId: null,
+        endAnchorPointId: customParamsKeys.includes('endAnchorPointId') ? customParams['endAnchorPointId'] : null,
         path: arrow,
-        onCanvasId: uuidv4()
+        onCanvasId: customParamsKeys.includes('onCanvasId') ? customParams['onCanvasId'] : uuidv4()
       };
 
       const endControl = arrowContainerRef.current
@@ -548,9 +541,6 @@ const D3Canvas = () => {
       
       existedUnitList.push(unitObj);
       idToUnitMap.set(currUnitId, unitObj);
-      // console.log('Unit created:', currUnitId, unitObj);
-      // console.log('Updated idToUnitMap:', idToUnitMap);
-      // console.log('Updated existedUnitList:', existedUnitList);
 
     }
 
@@ -659,6 +649,7 @@ const D3Canvas = () => {
             currentArrow.endPoint = { x: transformedPointer[0], y: transformedPointer[1] };
           }
           updateArrows([currentArrow]);
+          console.log('Arrow created:', currentArrow);
           currentArrow = null;
           startPoint = null;
         }
