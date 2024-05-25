@@ -151,11 +151,36 @@
 }
 
 .main-bottom-area-control-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 15% 85%;
   justify-content: space-between;
   align-items: center;
   background: #505050;
+  padding-left: 30px;
   height: 30px;
+}
+
+.main-bottom-area-control-bar-grid-1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-size: 12px;
+}
+
+.main-bottom-area-control-bar-grid-1-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-bottom: 1px rgba(255, 255, 255, 0) solid;
+}
+
+.main-bottom-area-control-bar-grid-1-button.active {
+  border-bottom: 1px rgba(255, 255, 255, 0.3) solid;
 }
 
 .unit-param-info-area {
