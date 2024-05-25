@@ -1,9 +1,10 @@
 
-import { React, useState } from "react";
+import { React, useContext } from "react";
+import { AppContext } from "./AppContext";
 
 const MainBottomAreaControlBar = () => {
 
-    const [activeButtomArea, setActiveBottomArea] = useState('unit-info');
+    const { activeBottomArea, setActiveBottomArea } = useContext(AppContext);
 
     function handleControlButtonClick(activeButton) {
         setActiveBottomArea(activeButton);
@@ -13,13 +14,13 @@ const MainBottomAreaControlBar = () => {
         <div className="main-bottom-area-control-bar">
             <div className="main-bottom-area-control-bar-grid-1">
                 <div 
-                    className = {`main-bottom-area-control-bar-grid-1-button ${activeButtomArea === 'unit-info' ? 'active' : ''}`}
+                    className = {`main-bottom-area-control-bar-grid-1-button ${activeBottomArea === 'unit-info' ? 'active' : ''}`}
                     onClick={() => handleControlButtonClick('unit-info')}
                 >
                     UNIT INFO
                 </div>
                 <div 
-                    className = {`main-bottom-area-control-bar-grid-1-button ${activeButtomArea === 'run' ? 'active' : ''}`}
+                    className = {`main-bottom-area-control-bar-grid-1-button ${activeBottomArea === 'run' ? 'active' : ''}`}
                     onClick={() => handleControlButtonClick('run')}
                 >
                     RUN

@@ -10,6 +10,7 @@ import ParamControls from "./components/ParamControls";
 import IOInfo from "./components/IOInfo";
 import Header from "./components/Header";
 import MainBottomAreaControlBar from "./components/MainBottomAreaControlBar";
+import MainBottomArea from "./components/MainBottomArea";
 
 
 function App() {
@@ -40,13 +41,7 @@ function App() {
                     <div className="canvas">
                         <D3Canvas />
                     </div>
-                    <MainBottomAreaControlBar />
-                    <div className="unit-param-info-area">
-                        <SelectedUnitDescription />
-                        <IOInfo />
-                        <ParamControls />
-                        <div className="action-buttons"></div>
-                    </div>
+                    <MainBottomArea />
                 </main>
                 <footer className="footer">Footer</footer>
             </div>

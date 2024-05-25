@@ -183,6 +183,16 @@
   border-bottom: 1px rgba(255, 255, 255, 0.3) solid;
 }
 
+.run-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-content: space-between;
+  align-items: top;
+  background: #505050;
+  color: #fff;
+  height: 150px;
+}
+
 .unit-param-info-area {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
