@@ -68,8 +68,6 @@ const Header = () => {
                     {isListVisible && (
                         <div className='header-dropdown-menu'>
                             <button className='dropdown-button' onClick={handleFileNewButtonClick}>New</button>
-                            <button className='dropdown-button'>Open</button>
-                            <button className='dropdown-button'>Save</button>
                             <button className='dropdown-button' onClick={handleFileImportButtonClick}>Import</button>
                             <button className='dropdown-button' onClick={handleFileExportButtonClick}>Export</button>
                         </div>
@@ -80,7 +78,6 @@ const Header = () => {
             </div>
             <div className='header-blank-reserve'></div>
             <div className='header-action-buttons'>
-                <button className='header-button'>Export</button>
                 <button className='header-button'>Run</button>
             </div>
         </div>
