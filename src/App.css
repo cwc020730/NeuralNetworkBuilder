@@ -147,7 +147,15 @@
   justify-content: space-between;
   align-items: center;
   background: #f4f4f4;
-  height: calc(100vh - 90px - 150px);
+  height: calc(100vh - 90px - 30px - 150px);
+}
+
+.main-bottom-area-control-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #505050;
+  height: 30px;
 }
 
 .unit-param-info-area {

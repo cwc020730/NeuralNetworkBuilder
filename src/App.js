@@ -39,6 +39,7 @@ function App() {
                     <div className="canvas">
                         <D3Canvas />
                     </div>
+                    <div className="main-bottom-area-control-bar">control bar</div>
                     <div className="unit-param-info-area">
                         <SelectedUnitDescription />
                         <IOInfo />
