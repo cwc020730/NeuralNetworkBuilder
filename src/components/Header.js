@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { generateJSONCanvasRepresentation, removeAllObjectsOnCanvas } from './D3Canvas';
+import { generateJSONCanvasRepresentation, removeAllObjectsOnCanvas, loadJSONCanvasRepresentation } from './D3Canvas';
 
 const Header = () => {
     const [isListVisible, setIsListVisible] = useState(false);
@@ -48,6 +48,7 @@ const Header = () => {
             const fileContents = await file.text();
             const JSONImport = JSON.parse(fileContents);
             console.log('Imported JSON:', JSONImport);
+            loadJSONCanvasRepresentation(JSONImport);
         } catch (error) {
             console.error('Error importing file:', error);
         }

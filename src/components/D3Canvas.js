@@ -10,7 +10,7 @@ export function updateUnitParameters(unitId, parameters) {
   const unit = idToUnitMap.get(unitId);
   if (unit) {
     unit.parameters = parameters;
-    console.log('Unit' + unitId + ' parameters updated:', unit.parameters);
+    // console.log('Unit' + unitId + ' parameters updated:', unit.parameters);
     // redrawUnit(unit); // Pseudocode for updating the visual representation
   }
 }
@@ -52,6 +52,84 @@ export function generateJSONCanvasRepresentation() {
   };
 }
 
+export function loadJSONCanvasRepresentation(jsonData) {
+  // Clear the canvas first
+  removeAllObjectsOnCanvas();
+
+  // Destructure units and arrows from the jsonData
+  const { units, arrows } = jsonData;
+
+  // Helper function to create units
+  const createUnitFromJSON = (unitId, unitData) => {
+    const { x, y, unitInfo } = unitData;
+    const { type, connectionPoints, attachingArrowStarts, attachingArrowEnds, parameters } = unitInfo;
+
+    // Find unit data from unitList by type
+    const unitTypeData = unitList[type];
+
+    if (unitTypeData) {
+      const width = 160;
+      const height = 60;
+
+      // Create the unit
+      window.createUnit(x, y, width, height, unitTypeData,
+      { onCanvasId: unitId, connectionPoints, attachingArrowStarts, attachingArrowEnds, parameters }, true);
+
+    } else {
+      console.error(`Unit type ${type} not found in unitList`);
+    }
+  };
+
+  // Helper function to create arrows
+  const createArrowFromJSON = (arrowId, arrowData) => {
+    const { startPoint, endPoint, startUnitId, endUnitId, startAnchorPointId, endAnchorPointId } = arrowData;
+
+    // Get the start and end units
+    const startUnit = idToUnitMap.get(startUnitId);
+    const endUnit = idToUnitMap.get(endUnitId);
+
+    if (startUnit && endUnit) {
+      // Create the arrow
+      const arrowObj = window.drawArrow(startPoint, endPoint, startUnit, startAnchorPointId);
+
+      arrowObj.onCanvasId = arrowId;
+      arrowObj.endUnit = endUnit;
+      arrowObj.endAnchorPointId = endAnchorPointId;
+      arrowObj.path.attr('d', d3.line()([[startPoint.x, startPoint.y], [endPoint.x, endPoint.y]]));
+
+      // Add end control
+      arrowObj.endControl.attr('cx', endPoint.x).attr('cy', endPoint.y).attr('r', 2);
+
+      // Add to maps
+      idToArrowsMap.set(arrowId, arrowObj);
+
+      // Update units with arrow information
+      startUnit.attachingArrowStarts.push(arrowId);
+      endUnit.attachingArrowEnds.push(arrowId);
+
+      // Update connection points
+      d3.select(`#${CSS.escape(startAnchorPointId)}`).style('fill', 'pink').property('isConnectedWithArrow', true);
+      d3.select(`#${CSS.escape(endAnchorPointId)}`).style('fill', 'pink').property('isConnectedWithArrow', true);
+
+      window.setTriggerRender(prev => prev + 1); // Trigger re-render
+
+    } else {
+      console.error(`Start or end unit not found for arrow ${arrowId}`);
+    }
+  };
+
+  // Load units
+  for (const [unitId, unitData] of Object.entries(units)) {
+    createUnitFromJSON(unitId, unitData);
+  }
+
+  // Load arrows
+  for (const [arrowId, arrowData] of Object.entries(arrows)) {
+    createArrowFromJSON(arrowId, arrowData);
+  }
+}
+    
+
 export function removeAllObjectsOnCanvas() {
   // Remove all unit elements from the canvas
   existedUnitList.forEach(unit => {
@@ -84,7 +162,7 @@ const D3Canvas = () => {
   let isUnitClicked = useRef(false);
   let isEndPointDragging = useRef(false);
 
-  const { scale, setScale, selectedUnitId, setSelectedUnitId, triggerRender, setTriggerRender } = useContext(AppContext);
+  const { setScale, selectedUnitId, setSelectedUnitId, setTriggerRender } = useContext(AppContext);
 
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, unitId: null });
 
@@ -247,7 +325,7 @@ const D3Canvas = () => {
         })
         .on('contextmenu', function (event) {
           event.preventDefault();
-          console.log('right click on arrow');
+          // console.log('right click on arrow');
           setContextMenu({
             visible: true,
             x: event.clientX,
@@ -303,7 +381,7 @@ const D3Canvas = () => {
       return arrowObj;
     }
 
-    function createUnit(x, y, w, h, unitData) {
+    function createUnit(x, y, w, h, unitData, customParams = null, freezeConnectionPointsState = false) {
       const [color, image, in_cnt, out_cnt, inUnitLabel, inUnitLabelColor, type, in_label_raw, out_label_raw, params] = [
         unitData["color"], 
         unitData["image"],
@@ -317,7 +395,10 @@ const D3Canvas = () => {
         unitData["parameters"]
       ];
 
-      console.log(color, image, in_cnt, out_cnt, params)
+      // include custom parameters for convenience
+      const customParamsKeys = customParams ? Object.keys(customParams) : [];
+
+      // console.log(color, image, in_cnt, out_cnt, params)
 
       const clipId = `clip-${Math.random().toString(36).substring(2, 10)}`;
 
@@ -361,7 +442,7 @@ const D3Canvas = () => {
       const transform = d3.select(newUnit.node()).attr('transform').match(/translate\(([^,]+),([^)]+)\)/);
       const X = parseFloat(transform[1]);
       const Y = parseFloat(transform[2]);
-      const currUnitId = uuidv4();
+      const currUnitId = customParamsKeys.includes('onCanvasId') ? customParams['onCanvasId'] : uuidv4();
 
       const inputLabel = []
       const outputLabel = []
@@ -374,13 +455,14 @@ const D3Canvas = () => {
         outputLabel.push(out_label_raw[i - 1]);
       }
 
-      const connectionPoints = calculateConnectionPoints(x, y, w, h, in_cnt, out_cnt, inputLabel, outputLabel).map((cp, index) => ({
-        ...cp,
-        id: `${currUnitId}-cp-${index}`,
-        unitId: currUnitId
-      }));
+      const connectionPoints = customParamsKeys.includes('connectionPoints') ? customParams['connectionPoints'] : 
+        calculateConnectionPoints(x, y, w, h, in_cnt, out_cnt, inputLabel, outputLabel).map((cp, index) => ({
+          ...cp,
+          id: `${currUnitId}-cp-${index}`,
+          unitId: currUnitId
+        }));
 
-      console.log(connectionPoints)
+      // console.log(connectionPoints)
 
       for (const [param_name, param_attr] of Object.entries(params)) {
         param_attr['value'] = param_attr['default'];
@@ -391,10 +473,10 @@ const D3Canvas = () => {
         onCanvasId: currUnitId, 
         unit: newUnit, 
         connectionPoints: connectionPoints,
-        attachingArrowStarts: [],
-        attachingArrowEnds: [],
+        attachingArrowStarts: customParamsKeys.includes('attachingArrowStarts') ? customParams['attachingArrowStarts'] : [],
+        attachingArrowEnds: customParamsKeys.includes('attachingArrowEnds') ? customParams['attachingArrowEnds'] : [],
         baseRect: baseRect,
-        parameters: params
+        parameters: customParamsKeys.includes('parameters') ? customParams['parameters'] : params
       };
 
       // on click event to the unit
@@ -404,7 +486,7 @@ const D3Canvas = () => {
       })
       .on('contextmenu', function (event) {
         event.preventDefault();
-        console.log('right click on unit');
+        // console.log('right click on unit');
         setContextMenu({
           visible: true,
           x: event.clientX,
@@ -428,7 +510,9 @@ const D3Canvas = () => {
         .each(function(d) {
           d3.select(this).property('isMouseDown', false);
           d3.select(this).property('isConnectedWithArrow', false);
-          updateConnectionPoint(d, false);
+          if (!freezeConnectionPointsState) {
+            updateConnectionPoint(d, false);
+          }
         })
         .on('mouseup', function (event, d) {
         })
@@ -464,6 +548,9 @@ const D3Canvas = () => {
       
       existedUnitList.push(unitObj);
       idToUnitMap.set(currUnitId, unitObj);
+      // console.log('Unit created:', currUnitId, unitObj);
+      // console.log('Updated idToUnitMap:', idToUnitMap);
+      // console.log('Updated existedUnitList:', existedUnitList);
 
     }
 
@@ -584,7 +671,7 @@ const D3Canvas = () => {
         event.preventDefault();
       })
       .on('click', function (event) {
-        console.log('click on svg', selectedUnitId);
+        // console.log('click on svg', selectedUnitId);
         // remove strokes from selected unit
         if (!isUnitClicked.current && !isEndPointDragging.current) {
           setSelectedUnitId(null);
@@ -604,19 +691,23 @@ const D3Canvas = () => {
       .attr('points', '0 0, 10 3.5, 0 7')
       .attr('fill', 'grey');
 
+      window.createUnit = createUnit;
+      window.drawArrow = drawArrow;
+      window.setTriggerRender = setTriggerRender;
+
   }, [setScale]);
 
   useEffect(() => {
-    console.log('activated')
+    //console.log('activated')
     existedUnitList.forEach((unit) => {
       if (unit.onCanvasId === selectedUnitId) {
-        console.log(unit.baseRect.style('stroke-width'));
+        //console.log(unit.baseRect.style('stroke-width'));
         if (unit.baseRect.style('stroke-width') !== 2) {
-          console.log('set stroke')
+          //console.log('set stroke')
           unit.baseRect.style('stroke-width', 2).style('stroke', 'black');
         }
         else {
-          console.log('remove stroke')
+          //console.log('remove stroke')
           unit.baseRect.style('stroke-width', 0);
         }
       } else {
