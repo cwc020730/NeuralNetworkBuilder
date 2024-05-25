@@ -62,7 +62,7 @@ export function loadJSONCanvasRepresentation(jsonData) {
   // Helper function to create units
   const createUnitFromJSON = (unitId, unitData) => {
     const { x, y, unitInfo } = unitData;
-    const { type, connectionPoints, attachingArrowStarts, attachingArrowEnds, parameters } = unitInfo;
+    const { type, connectionPoints, attachingArrowEnds, parameters } = unitInfo;
 
     // Find unit data from unitList by type
     const unitTypeData = unitList[type];
@@ -149,8 +149,6 @@ const D3Canvas = () => {
   const arrowContainerRef = useRef(null);
   //const idToArrowsMap = useRef(new Map());
   //const existedUnitList = useRef([]);
-  let startPoint = null;
-  let currentArrow = null;
   let isUnitClicked = useRef(false);
   let isEndPointDragging = useRef(false);
 
@@ -225,6 +223,9 @@ const D3Canvas = () => {
   useEffect(() => {
     const width = 800;
     const height = 400;
+
+    let startPoint = null;
+    let currentArrow = null;
 
     d3.select(ref.current).select('g').remove();
 
