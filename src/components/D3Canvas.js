@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext, useState } from 'react';
+import React, { useEffect, useRef, useContext, useState, useCallback } from 'react';
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import unitList from './UnitList.json';
@@ -156,10 +156,10 @@ const D3Canvas = () => {
 
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, unitId: null });
 
-  const updateConnectionPoint = (cp, occupied) => {
+  const updateConnectionPoint = useCallback((cp, occupied) => {
     cp.occupied = occupied;
     setTriggerRender(prev => prev + 1); // Trigger re-render
-  };
+  }, [setTriggerRender]);
 
   const handleDelete = (unitId) => {
     // handle unit deletion if unitId is not null
@@ -687,7 +687,7 @@ const D3Canvas = () => {
       window.drawArrow = drawArrow;
       window.setTriggerRender = setTriggerRender;
 
-  }, [setScale]);
+  }, [setScale, setSelectedUnitId, setTriggerRender, updateConnectionPoint]);
 
   useEffect(() => {
     //console.log('activated')
