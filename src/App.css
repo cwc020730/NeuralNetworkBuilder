@@ -613,7 +613,6 @@
   background-color: #1D3557;
   color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transform: translateY(1px);
 }
 
 .param-container {

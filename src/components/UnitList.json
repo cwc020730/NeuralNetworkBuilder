@@ -33,6 +33,39 @@
             }
         }
     },
+    "dataset input": {
+        "primary_label": "dataset input",
+        "in_unit_label": "DSINP",
+        "in_unit_label_color": "black",
+        "category": "INPUT",
+        "description": "Input a dataset.",
+        "color": "#FADADD",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 0,
+                "variable": false
+            },
+            "input_labels": [
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Dataset"
+            ]
+        },
+        "parameters": {
+            "dataset": {
+                "type": "string",
+                "description": "Dataset to input.",
+                "default": "mnist"
+            }
+        }
+    },
     "add": {
         "primary_label": "add",
         "in_unit_label": "ADD",
@@ -102,70 +135,6 @@
                 "type": "integer",
                 "description": "Number of outputs to split into.",
                 "default": 2
-            }
-        }
-    },
-    "multiParamTest": {
-        "primary_label": "multiParamTest",
-        "in_unit_label": "MPT",
-        "in_unit_label_color": "black",
-        "category": "TEST",
-        "description": "Test a function with multiple parameters.",
-        "color": "white",
-        "image": null,
-        "input": {
-            "input_cnt": {
-                "default": 1,
-                "variable": false
-            },
-            "input_labels": [
-                "Input"
-            ]
-        },
-        "output": {
-            "output_cnt": {
-                "default": 1,
-                "variable": false
-            },
-            "output_labels": [
-                "Output"
-            ]
-        },
-        "parameters": {
-            "param1": {
-                "type": "integer",
-                "description": "First parameter.",
-                "default": 0
-            },
-            "parampa2": {
-                "type": "list",
-                "description": "Second parameter.",
-                "default": [0, 0, 0]
-            },
-            "param3": {
-                "type": "integer",
-                "description": "Third parameter.",
-                "default": 0
-            },
-            "param4": {
-                "type": "list",
-                "description": "Fourth parameter.",
-                "default": [0, 0, 0, 0]
-            },
-            "param5": {
-                "type": "integer",
-                "description": "Fifth parameter.",
-                "default": 0
-            },
-            "param6": {
-                "type": "integer",
-                "description": "Sixth parameter.",
-                "default": 0
-            },
-            "param7": {
-                "type": "integer",
-                "description": "Seventh parameter.",
-                "default": 0
             }
         }
     }
