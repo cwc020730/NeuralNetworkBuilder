@@ -256,6 +256,10 @@
   border-color: #ccc;
 }
 
+.data-property {
+  border-right: 1px rgba(255, 255, 255, 0.3) solid;
+}
+
 .unit-param-info-area {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
