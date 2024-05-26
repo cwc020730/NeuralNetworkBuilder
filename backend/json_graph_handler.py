@@ -1,15 +1,23 @@
 
+import json
+
 class JSONGraphHandler:
     def __init__(
         self, 
         raw_data: dict
     ):
+        with open('../src/components/UnitList.json', 'r') as f:
+            unit_list = json.load(f)
+        self.unit_list = unit_list
         self.raw_data = raw_data
         self.data_validity_check()
         self.simplified_data = self.simplify_data()
         self.summary()
 
     def data_validity_check(self):
+
+        contains_input = False
+
         assert isinstance(self.raw_data, dict)
         assert 'units' in self.raw_data
         assert 'arrows' in self.raw_data
@@ -25,6 +33,10 @@ class JSONGraphHandler:
             assert isinstance(unit_info_details, dict)
             assert 'type' in unit_info_details
             assert isinstance(unit_info_details['type'], str)
+            assert unit_info_details['type'] in self.unit_list
+            if self.unit_list[unit_info_details['type']]['category'] == 'INPUT':
+                assert contains_input == False
+                contains_input = True
             assert 'connectionPoints' in unit_info_details
             assert isinstance(unit_info_details['connectionPoints'], list)
             for connection_point in unit_info_details['connectionPoints']:
@@ -61,6 +73,7 @@ class JSONGraphHandler:
         for unit_id, unit_info in self.raw_data['units'].items():
             simplified_data[unit_id] = {
                 'type': unit_info['unitInfo']['type'],
+                'input_unit': self.unit_list[unit_info['unitInfo']['type']]['category'] == 'INPUT',
                 'inputs': [],
                 'outputs': [],
                 'parameters': unit_info['unitInfo']['parameters']
@@ -94,6 +107,8 @@ class JSONGraphHandler:
         for unit_id, unit_info in self.simplified_data.items():
             print(f'Unit ID: {unit_id}')
             print(f'Unit Type: {unit_info["type"]}')
+            if unit_info['input_unit']:
+                print('This unit is an input unit')
             print('Inputs:')
             for connection in unit_info['inputs']:
                 print(f'  {connection["name"]} connects to {connection["connects_to"]}')
