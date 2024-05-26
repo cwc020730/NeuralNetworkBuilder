@@ -20,10 +20,10 @@ const MainBottomAreaControlBar = () => {
                     UNIT INFO
                 </div>
                 <div 
-                    className = {`main-bottom-area-control-bar-grid-1-button ${activeBottomArea === 'run' ? 'active' : ''}`}
-                    onClick={() => handleControlButtonClick('run')}
+                    className = {`main-bottom-area-control-bar-grid-1-button ${activeBottomArea === 'data' ? 'active' : ''}`}
+                    onClick={() => handleControlButtonClick('data')}
                 >
-                    RUN
+                    DATA
                 </div>
             </div>
         </div>

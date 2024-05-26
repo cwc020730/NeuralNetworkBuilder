@@ -20,8 +20,8 @@ const MainBottomArea = () => {
     )
 
     const runPanel = (
-        <div className="run-panel">
-            RUN PANEL
+        <div className="data-panel">
+            DATA
         </div>
     );
 
@@ -29,7 +29,7 @@ const MainBottomArea = () => {
         <>
             <MainBottomAreaControlBar />
             {activeBottomArea === 'unit-info' ? unitParamInfoArea : null}
-            {activeBottomArea === 'run' ? runPanel : null}
+            {activeBottomArea === 'data' ? runPanel : null}
         </>
     );
 }
