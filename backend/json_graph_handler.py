@@ -1,0 +1,106 @@
+
+class JSONGraphHandler:
+    def __init__(
+        self, 
+        raw_data: dict
+    ):
+        self.raw_data = raw_data
+        self.data_validity_check()
+        self.simplified_data = self.simplify_data()
+        self.summary()
+
+    def data_validity_check(self):
+        assert isinstance(self.raw_data, dict)
+        assert 'units' in self.raw_data
+        assert 'arrows' in self.raw_data
+        units = self.raw_data['units']
+        connections = self.raw_data['arrows']
+        assert isinstance(units, dict)
+        assert isinstance(connections, dict)
+        for unit_id, unit_info in units.items():
+            assert isinstance(unit_id, str)
+            assert isinstance(unit_info, dict)
+            assert 'unitInfo' in unit_info
+            unit_info_details = unit_info['unitInfo']
+            assert isinstance(unit_info_details, dict)
+            assert 'type' in unit_info_details
+            assert isinstance(unit_info_details['type'], str)
+            assert 'connectionPoints' in unit_info_details
+            assert isinstance(unit_info_details['connectionPoints'], list)
+            for connection_point in unit_info_details['connectionPoints']:
+                assert isinstance(connection_point, dict)
+                assert 'is_input' in connection_point
+                assert isinstance(connection_point['is_input'], bool)
+                assert 'is_output' in connection_point
+                assert isinstance(connection_point['is_output'], bool)
+                assert 'label' in connection_point
+                assert isinstance(connection_point['label'], str)
+                assert 'occupied' in connection_point
+                assert isinstance(connection_point['occupied'], bool)
+                assert 'id' in connection_point
+                assert isinstance(connection_point['id'], str)
+            assert 'attachingArrowStarts' in unit_info_details
+            assert 'attachingArrowEnds' in unit_info_details
+            for arrow_id in unit_info_details['attachingArrowStarts'] + unit_info_details['attachingArrowEnds']:
+                assert isinstance(arrow_id, str)
+            assert 'parameters' in unit_info_details
+            assert isinstance(unit_info_details['parameters'], dict)
+        for arrow_id, arrow_info in connections.items():
+            assert isinstance(arrow_id, str)
+            assert 'startUnitId' in arrow_info
+            assert isinstance(arrow_info['startUnitId'], (str, type(None)))
+            assert 'endUnitId' in arrow_info
+            assert isinstance(arrow_info['endUnitId'], (str, type(None)))
+            assert 'startAnchorPointId' in arrow_info
+            assert isinstance(arrow_info['startAnchorPointId'], (str, type(None)))
+            assert 'endAnchorPointId' in arrow_info
+            assert isinstance(arrow_info['endAnchorPointId'], (str, type(None)))
+
+    def simplify_data(self):
+        simplified_data = {}
+        for unit_id, unit_info in self.raw_data['units'].items():
+            simplified_data[unit_id] = {
+                'type': unit_info['unitInfo']['type'],
+                'inputs': [],
+                'outputs': [],
+                'parameters': unit_info['unitInfo']['parameters']
+            }
+            for connection_point in unit_info['unitInfo']['connectionPoints']:
+                if connection_point['is_input']:
+                    this_connection = {}
+                    # find units that attach to this input using attachingArrowEnds
+                    for arrow_id in unit_info['unitInfo']['attachingArrowEnds']:
+                        if self.raw_data['arrows'][arrow_id]['endAnchorPointId'] == connection_point['id']:
+                            this_connection['name'] = connection_point['label']
+                            this_connection['connects_to'] = self.raw_data['arrows'][arrow_id]['startUnitId']
+                            break
+                    if this_connection:
+                        simplified_data[unit_id]['inputs'].append(this_connection)
+                elif connection_point['is_output']:
+                    this_connection = {}
+                    # find units that attach to this output using attachingArrowStarts
+                    for arrow_id in unit_info['unitInfo']['attachingArrowStarts']:
+                        if self.raw_data['arrows'][arrow_id]['startAnchorPointId'] == connection_point['id']:
+                            this_connection['name'] = connection_point['label']
+                            this_connection['connects_to'] = self.raw_data['arrows'][arrow_id]['endUnitId']
+                            break
+                    if this_connection:
+                        simplified_data[unit_id]['outputs'].append(this_connection)
+            
+        return simplified_data
+    
+    def summary(self):
+        print('Units:')
+        for unit_id, unit_info in self.simplified_data.items():
+            print(f'Unit ID: {unit_id}')
+            print(f'Unit Type: {unit_info["type"]}')
+            print('Inputs:')
+            for connection in unit_info['inputs']:
+                print(f'  {connection["name"]} connects to {connection["connects_to"]}')
+            print('Outputs:')
+            for connection in unit_info['outputs']:
+                print(f'  {connection["name"]} connects to {connection["connects_to"]}')
+            print('Parameters:')
+            for param_name, param_value in unit_info['parameters'].items():
+                print(f'  {param_name}: {param_value}')
+            print()
