@@ -57,6 +57,26 @@ const Header = () => {
         }
     };
 
+    const handleRunButtonClick = async () => {
+        try {
+            const JSONExport = generateJSONCanvasRepresentation();
+            const response = await fetch('http://localhost:5000/receive_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(JSONExport),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const result = await response.json();
+            console.log('Response from backend:', result);
+        } catch (error) {
+            console.error('Error sending data to backend:', error);
+        }
+    };
+
     return (
         <div className='header-container'>
             <div className='logo'></div>
@@ -78,7 +98,7 @@ const Header = () => {
             </div>
             <div className='header-blank-reserve'></div>
             <div className='header-action-buttons'>
-                <button className='header-button'>Run</button>
+            <button className='header-button' onClick={handleRunButtonClick}>Run</button>
             </div>
         </div>
     );
