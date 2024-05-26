@@ -31,14 +31,14 @@ Try `npm start` until all the packages are installed correctly.
 
 ## Project Prototyping Components
 
-### Front-End (TBD)
-- Flowchart Canvas with zoom in/out utility
-- Menu for neural network layer blocks
-- Draggable neural network layer blocks (To be dropped into the canvas)
-- Arrows attach to the neural network layers blocks
-- Data exchange with backend
+### Front-End (React)
+- Flowchart Canvas with zoom in/out utility (Finished)
+- Menu for neural network layer blocks (In Progress)
+- Draggable neural network layer blocks (To be dropped into the canvas) (Finished)
+- Arrows attach to the neural network layers blocks (Finished)
+- Data exchange with backend (TODO)
 
 ### Back-End (Python)
-- Graph To PyTorch code converter
-- PyTorch inferencing/training utility
-- Data exchange with frontend
+- Graph To PyTorch code converter (TODO)
+- PyTorch inferencing/training utility (TODO)
+- Data exchange with frontend (TODO)
