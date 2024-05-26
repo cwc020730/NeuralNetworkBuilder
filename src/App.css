@@ -198,12 +198,16 @@
   align-items: start;
   border-right: 1px rgba(255, 255, 255, 0.3) solid;
   color: #fff;
+  position: relative;
 }
 
 .data-selection-item-container {
   flex: 1;
   max-height: 150px;
   overflow-y: auto;
+  padding-right: 10px;
+  box-sizing: content-box;
+  padding-left: 10px;
 }
 
 .data-selection-item-container::-webkit-scrollbar {
@@ -222,6 +226,34 @@
 
 .data-selection-item-container::-webkit-scrollbar-track {
   background-color: transparent;
+}
+
+.data-selection-item {
+  padding: 2px 2px;
+  margin: 2px 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  user-select: none; /* Prevent text selection */
+  font-size: 10px;
+}
+
+.data-selection-item:hover {
+  background-color: #666;
+  border-color: #ccc;
+}
+
+.data-selection-item:active {
+  background-color: #d9d9d9;
+  border-color: #bbb;
+}
+
+.data-selection-item.selected {
+  background-color: #666;
+  color: white;
+  border-color: #ccc;
 }
 
 .unit-param-info-area {
