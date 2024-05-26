@@ -185,12 +185,43 @@
 
 .data-panel {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 15% 25% 60%;
   justify-content: space-between;
-  align-items: top;
   background: #505050;
   color: #fff;
   height: 150px;
+}
+
+.data-selection-controller {
+  display: flex;
+  justify-content: left;
+  align-items: start;
+  border-right: 1px rgba(255, 255, 255, 0.3) solid;
+  color: #fff;
+}
+
+.data-selection-item-container {
+  flex: 1;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.data-selection-item-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.data-selection-item-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.data-selection-item-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.data-selection-item-container::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 .unit-param-info-area {
