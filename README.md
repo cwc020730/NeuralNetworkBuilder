@@ -41,4 +41,4 @@ Try `npm start` until all the packages are installed correctly.
 ### Back-End (Python)
 - Graph To PyTorch code converter (TODO)
 - PyTorch inferencing/training utility (TODO)
-- Data exchange with frontend (TODO)
+- Data exchange with frontend (In Progress)
