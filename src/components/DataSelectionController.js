@@ -8,7 +8,7 @@ const DataSelectionController = () => {
 
     const [selectedId, setSelectedId] = useState(null);
     const [selectedUnit, setSelectedUnit] = useState(null);
-    const { selectedUnitId } = useContext(AppContext); 
+    const { selectedUnitId, setTriggerRefreshUnitData } = useContext(AppContext); 
 
     // for each output_label in the selected unit, create a data selection item
     useEffect(() => {
@@ -17,6 +17,7 @@ const DataSelectionController = () => {
         } else {
           setSelectedUnit(null);
         }
+        setTriggerRefreshUnitData(prev => prev + 1)
     }, [selectedUnitId]);
     const selectedUnitInfo = selectedUnit ? UnitList[selectedUnit.type] : null;
     const dataSelectionList = [];
