@@ -1,22 +1,37 @@
 
-import { React, useState } from "react";
+import { React, useState, useContext, useEffect } from "react";
+import UnitList from "./UnitList";
+import { AppContext } from "./AppContext";
+import { idToUnitMap } from "./D3Canvas";
 
 const DataSelectionController = () => {
 
     const [selectedId, setSelectedId] = useState(null);
+    const [selectedUnit, setSelectedUnit] = useState(null);
+    const { selectedUnitId } = useContext(AppContext); 
 
-    const dataSelectionList = [
-        { id: 1, name: 'Data Selection 1' },
-        { id: 2, name: 'Data Selection 2' },
-        { id: 3, name: 'Data Selection 3' },
-        { id: 4, name: 'Data Selection 4' },
-        { id: 5, name: 'Data Selection 5' },
-        { id: 6, name: 'Data Selection 6' },
-        { id: 7, name: 'Data Selection 7' },
-        { id: 8, name: 'Data Selection 8' },
-        { id: 9, name: 'Data Selection 9' },
-        { id: 10, name: 'Data Selection 10' }
-    ];
+    // for each output_label in the selected unit, create a data selection item
+    useEffect(() => {
+        if (selectedUnitId) {
+          setSelectedUnit(idToUnitMap.get(selectedUnitId));
+        } else {
+          setSelectedUnit(null);
+        }
+    }, [selectedUnitId]);
+    const selectedUnitInfo = selectedUnit ? UnitList[selectedUnit.type] : null;
+    const dataSelectionList = [];
+    if (selectedUnitInfo) {
+        for (let i = 0; i < selectedUnitInfo["output"]["output_labels"].length; i++) {
+            // filter names that starts with *
+            if (selectedUnitInfo["output"]["output_labels"][i].startsWith('*')) {
+                continue;
+            }
+            dataSelectionList.push({
+                id: i,
+                name: selectedUnitInfo["output"]["output_labels"][i]
+            });
+        }
+    }
 
     const handleItemClick = (id) => {
         setSelectedId(id);
