@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 // Create the context
 export const AppContext = createContext();
@@ -55,8 +55,8 @@ export const AppProvider = ({ children }) => {
         setLoading,
         error,
         setError,
-        triggerRefreshData: triggerRefreshUnitData,
-        setTriggerRefreshData: setTriggerRefreshUnitData
+        triggerRefreshUnitData,
+        setTriggerRefreshUnitData
       }
     }>
       {children}

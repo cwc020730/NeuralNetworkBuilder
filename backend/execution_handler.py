@@ -26,6 +26,7 @@ class ExecutionHandler:
         for unit_id, unit_info in self.simplified_data.items():
             unit_object = self.create_unit_object(unit_id, unit_info)
             print(f'Executing unit: {unit_object}')
+            print(f'Output: {unit_object.execute()}')
 
     def create_unit_object(self, unit_id: str, unit_info: dict):
         """
@@ -40,7 +41,8 @@ class ExecutionHandler:
         """
         unit_type = unit_info['type']
         if unit_type == 'randomInput':
-            return RandomInputUnit(unit_id, unit_info)
+            shape = tuple([int(dim) for dim in unit_info['parameters']['dimension']['value']])
+            return RandomInputUnit(unit_id, unit_info, shape)
         else:
             raise ValueError(f'Invalid unit type: {unit_type}')
 
