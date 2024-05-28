@@ -1,12 +1,28 @@
-
+"""
+The JSONGraphHandler class is responsible for handling the JSON data received from the frontend. 
+It performs data validation checks and simplifies the data for further processing. 
+The simplified data is then used to generate a summary of the units, connections, 
+and parameters in the graph.
+"""
 import json
 
 class JSONGraphHandler:
+    """
+    The JSONGraphHandler class is responsible for handling the JSON data received from the frontend.
+
+    Args:
+        raw_data (dict): The raw JSON data received from the frontend.
+    
+    Attributes:
+        unit_list (dict): A dictionary containing information about different unit types.
+        raw_data (dict): The raw JSON data received from the frontend.
+        simplified_data (dict): The simplified version of the JSON data after processing.
+    """
     def __init__(
-        self, 
+        self,
         raw_data: dict
     ):
-        with open('../src/components/UnitList.json', 'r') as f:
+        with open('../src/components/UnitList.json', 'r', encoding='utf-8') as f:
             unit_list = json.load(f)
         self.unit_list = unit_list
         self.raw_data = raw_data
@@ -15,7 +31,10 @@ class JSONGraphHandler:
         self.summary()
 
     def data_validity_check(self):
-
+        """
+        This method performs data validation checks on the raw JSON data received 
+        from the frontend.
+        """
         contains_input = False
 
         assert isinstance(self.raw_data, dict)
@@ -69,6 +88,9 @@ class JSONGraphHandler:
             assert isinstance(arrow_info['endAnchorPointId'], (str, type(None)))
 
     def simplify_data(self):
+        """
+        This method simplifies the raw JSON data into a more structured format.
+        """
         simplified_data = {}
         for unit_id, unit_info in self.raw_data['units'].items():
             simplified_data[unit_id] = {
@@ -99,10 +121,13 @@ class JSONGraphHandler:
                             break
                     if this_connection:
                         simplified_data[unit_id]['outputs'].append(this_connection)
-            
+
         return simplified_data
     
     def summary(self):
+        """
+        This method generates a summary of the units, connections, and parameters in the graph.
+        """
         print('Units:')
         for unit_id, unit_info in self.simplified_data.items():
             print(f'Unit ID: {unit_id}')
