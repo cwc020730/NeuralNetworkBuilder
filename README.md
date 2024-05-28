@@ -29,6 +29,16 @@ Try `npm start` until all the packages are installed correctly.
 
 `npm start` should start the app locally: `http://localhost:3000`.
 
+Start Backend:
+
+Use:
+```
+cd backend
+pip install -r requirements.txt
+python -m backend
+```
+The backend server should start locally: `http://localhost:5000`.
+
 ## Project Prototyping Components
 
 ### Front-End (React)
