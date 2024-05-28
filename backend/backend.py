@@ -5,6 +5,7 @@ The main file for the backend server.
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from json_graph_handler import JSONGraphHandler
+from execution_handler import ExecutionHandler
 
 app = Flask(__name__)
 CORS(app)
@@ -22,7 +23,9 @@ def receive_data():
     Function to receive data from the frontend and pass it to the JSONGraphHandler.
     """
     data = request.get_json()
-    JSONGraphHandler(data)
+    json_graph_handler = JSONGraphHandler(data)
+    execution_handler = ExecutionHandler(json_graph_handler.simplified_data)
+
     return jsonify({'status': 'Data received!'}), 200
 
 if __name__ == '__main__':
