@@ -3,11 +3,9 @@ The execution_handler.py file contains the ExecutionHandler class,
 which is responsible for executing the operations of the units on the canvas.
 """
 
-from unit_objects.input_unit_objects.random_input_unit import RandomInputUnit
 from flask import jsonify
-from app import app, socketio
-import torch
-import copy
+from .app import socketio
+from .unit_objects.input_unit_objects.random_input_unit import RandomInputUnit
 
 class ExecutionHandler:
     """
@@ -27,17 +25,8 @@ class ExecutionHandler:
         """
         Send unit data to the client via WebSocket.
         """
-        unit_data_copy = copy.deepcopy(unit_data)
-        for output_label, output_data in unit_data_copy['output'].items():
-            if isinstance(output_data["value"], torch.Tensor):
-                unit_data_copy['output'][output_label]["min"] = output_data["value"].min().item()
-                unit_data_copy['output'][output_label]["max"] = output_data["value"].max().item()
-                unit_data_copy['output'][output_label]["mean"] = output_data["value"].mean().item()
-                unit_data_copy['output'][output_label]["std"] = output_data["value"].std().item()
-                unit_data_copy['output'][output_label]["shape"] = output_data["value"].shape
-                unit_data_copy['output'][output_label]["value"] = output_data["value"].tolist()
-        socketio.emit('data_updated', {'data': unit_data_copy})
-        return jsonify({'unit_data': unit_data_copy})
+        socketio.emit('data_updated', {'data': unit_data})
+        return jsonify({'unit_data': unit_data})
 
     def execute_operations(self):
         """
@@ -46,6 +35,9 @@ class ExecutionHandler:
         for unit_id, unit_info in self.simplified_data.items():
             unit_object = self.create_unit_object(unit_id, unit_info)
             output = unit_object.execute()
+            for output_name, output_data in output.items():
+                output_data_json = output_data.to_json()
+                output[output_name] = output_data_json
             unit_data = {
                 'unit_id': unit_id,
                 'output': output

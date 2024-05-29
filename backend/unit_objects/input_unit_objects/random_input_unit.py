@@ -3,6 +3,7 @@ This file contains the RandomInputUnit class, which is a subclass of the InputUn
 """
 import torch
 from ..input_unit import InputUnit
+from ...data_objects.tensor_data import TensorData
 
 class RandomInputUnit(InputUnit):
     """
@@ -25,8 +26,7 @@ class RandomInputUnit(InputUnit):
         
         return {
             "Random Input": {
-                "type": "Tensor",
-                "value": torch.rand(self.input_shape)
+                TensorData(torch.rand(self.input_shape))
             }
         }
 

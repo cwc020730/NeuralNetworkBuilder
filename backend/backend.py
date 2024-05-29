@@ -3,10 +3,10 @@ The main file for the backend server.
 """
 
 from flask import jsonify, request
-from json_graph_handler import JSONGraphHandler
-from execution_handler import ExecutionHandler
+from .json_graph_handler import JSONGraphHandler
+from .execution_handler import ExecutionHandler
 
-from app import app, socketio
+from .app import app
 
 @app.route('/receive_data', methods=['POST'])
 def receive_data():
