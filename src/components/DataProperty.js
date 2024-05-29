@@ -1,10 +1,15 @@
 
-import React from "react";
+import { React, useContext } from "react";
+import { AppContext } from "./AppContext";
 
 const DataProperty = ({ data }) => {
+
+    const { selectedDataName } = useContext(AppContext);
+
     return (
         <div className="data-property">
-            PLACEHOLDER FOR DATA-PROPERTY COMPONENT
+            <div className="data-property-title">{selectedDataName}</div>
+            <div className="data-property-value">{data}</div>
         </div>
     );
 }

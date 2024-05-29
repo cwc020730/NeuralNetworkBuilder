@@ -15,14 +15,19 @@ class RandomInputUnit(InputUnit):
     """
     def __init__(self, unit_id, unit_info, input_shape):
         super().__init__(unit_id, unit_info)
-        self.input_shape = input_shape
+        # remove zeros from input_shape
+        self.input_shape = [x for x in input_shape if x != 0]
 
     def execute(self):
         """
         This method is used to execute the unit operation.
         """
+        
         return {
-            "Random Input": torch.rand(self.input_shape)
+            "Random Input": {
+                "type": "Tensor",
+                "value": torch.rand(self.input_shape)
+            }
         }
 
     def __repr__(self):

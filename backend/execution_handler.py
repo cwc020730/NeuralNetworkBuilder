@@ -29,8 +29,13 @@ class ExecutionHandler:
         """
         unit_data_copy = copy.deepcopy(unit_data)
         for output_label, output_data in unit_data_copy['output'].items():
-            if isinstance(output_data, torch.Tensor):
-                unit_data_copy['output'][output_label] = output_data.tolist()
+            if isinstance(output_data["value"], torch.Tensor):
+                unit_data_copy['output'][output_label]["min"] = output_data["value"].min().item()
+                unit_data_copy['output'][output_label]["max"] = output_data["value"].max().item()
+                unit_data_copy['output'][output_label]["mean"] = output_data["value"].mean().item()
+                unit_data_copy['output'][output_label]["std"] = output_data["value"].std().item()
+                unit_data_copy['output'][output_label]["shape"] = output_data["value"].shape
+                unit_data_copy['output'][output_label]["value"] = output_data["value"].tolist()
         socketio.emit('data_updated', {'data': unit_data_copy})
         return jsonify({'unit_data': unit_data_copy})
 

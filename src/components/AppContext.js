@@ -10,6 +10,7 @@ export const AppProvider = ({ children }) => {
   const [selectedUnitId, setSelectedUnitId] = useState(null);
   const [triggerRender, setTriggerRender] = useState(0);
   const [activeBottomArea, setActiveBottomArea] = useState('unit-info');
+  const [selectedDataName, setSelectedDataName] = useState(null);
 
   const [unitData, setUnitData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -79,7 +80,9 @@ export const AppProvider = ({ children }) => {
         loading,
         setLoading,
         error,
-        setError
+        setError,
+        selectedDataName,
+        setSelectedDataName,
       }
     }>
       {children}
