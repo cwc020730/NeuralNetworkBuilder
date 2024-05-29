@@ -33,9 +33,8 @@ Start Backend:
 
 Use:
 ```
-cd backend
 pip install -r requirements.txt
-python -m backend
+python -m backend.backend
 ```
 The backend server should start locally: `http://localhost:5000`.
 
