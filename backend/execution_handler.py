@@ -40,8 +40,7 @@ class ExecutionHandler:
                 output_data_json = output_data.to_json_dict()
                 output[output_name] = output_data_json
             unit_data = {
-                'unit_id': unit_id,
-                'output': output
+                unit_id: output
             }
             self.send_unit_data(unit_data)
 

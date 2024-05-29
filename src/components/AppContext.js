@@ -16,34 +16,32 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('http://localhost:5000/api/unit_data');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      setUnitData(data); // Store the fetched data in state
-      setLoading(false); // Set loading to false after data is fetched
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setError(error);
-      setLoading(false); // Set loading to false if there is an error
-    }
-  }, []);
-
   useEffect(() => {
-    // Fetch data when the component mounts
-    fetchData();
 
     // Set up WebSocket connection
     const socket = io('http://localhost:5000');
 
     socket.on('data_updated', (message) => {
+      // Extract the unitId and unitData from message.data
+      const [unitId, unitData] = Object.entries(message.data)[0];
+  
       // Update state with the new data
-      console.log('Data updated:', message.data)
-      setUnitData(message.data);
+      setUnitData((prevUnitData) => {
+          if (prevUnitData) {
+              // Create a new object with the existing data
+              const newUnitData = { ...prevUnitData };
+  
+              // Update the specific unit id entry with the new data
+              newUnitData[unitId] = unitData;
+  
+              return newUnitData;
+          } else {
+              // Replace unitData with the new data
+              return { [unitId]: unitData };
+          }
+      });
+  
+      console.log('Data updated:', message.data);
     });
 
     socket.on('connect', () => {
@@ -62,7 +60,7 @@ export const AppProvider = ({ children }) => {
     return () => {
       socket.disconnect();
     };
-  }, [fetchData]);
+  }, []);
 
   return (
     <AppContext.Provider value={
