@@ -25,6 +25,7 @@ class ExecutionHandler:
         """
         Send unit data to the client via WebSocket.
         """
+        print('Sending unit data to client...', unit_data)
         socketio.emit('data_updated', {'data': unit_data})
         return jsonify({'unit_data': unit_data})
 
@@ -36,7 +37,7 @@ class ExecutionHandler:
             unit_object = self.create_unit_object(unit_id, unit_info)
             output = unit_object.execute()
             for output_name, output_data in output.items():
-                output_data_json = output_data.to_json()
+                output_data_json = output_data.to_json_dict()
                 output[output_name] = output_data_json
             unit_data = {
                 'unit_id': unit_id,

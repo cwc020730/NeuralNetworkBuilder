@@ -22,7 +22,7 @@ class JSONGraphHandler:
         self,
         raw_data: dict
     ):
-        with open('../src/components/UnitList.json', 'r', encoding='utf-8') as f:
+        with open('./src/components/UnitList.json', 'r', encoding='utf-8') as f:
             unit_list = json.load(f)
         self.unit_list = unit_list
         self.raw_data = raw_data

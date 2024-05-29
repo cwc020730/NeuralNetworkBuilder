@@ -17,13 +17,13 @@ class TensorData:
     """
     def __init__(self, tensor: torch.Tensor):
         self.tensor = tensor
-        self.min = tensor.min().item()
-        self.max = tensor.max().item()
-        self.mean = tensor.mean().item()
-        self.std = tensor.std().item()
-        self.shape = tensor.shape
+        self.min = tensor.min().item() if tensor.numel() > 0 else None
+        self.max = tensor.max().item() if tensor.numel() > 0 else None
+        self.mean = tensor.mean().item() if tensor.numel() > 0 else None
+        self.std = tensor.std().item() if tensor.numel() > 0 else None
+        self.shape = list(tensor.shape)
 
-    def to_json(self):
+    def to_json_dict(self):
         """
         Convert the data to a JSON string.
 
@@ -39,7 +39,7 @@ class TensorData:
             "std": self.std,
             "shape": self.shape
         }
-        return json.dumps(data)
+        return data
 
     def __repr__(self):
         return f'TensorData({self.tensor})'

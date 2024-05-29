@@ -18,6 +18,8 @@ class RandomInputUnit(InputUnit):
         super().__init__(unit_id, unit_info)
         # remove zeros from input_shape
         self.input_shape = [x for x in input_shape if x != 0]
+        if len(self.input_shape) == 0:
+            self.input_shape = [0]
 
     def execute(self):
         """
@@ -25,9 +27,7 @@ class RandomInputUnit(InputUnit):
         """
         
         return {
-            "Random Input": {
-                TensorData(torch.rand(self.input_shape))
-            }
+            "Random Input": TensorData(torch.rand(self.input_shape))
         }
 
     def __repr__(self):
