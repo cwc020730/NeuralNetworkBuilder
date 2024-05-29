@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { io } from 'socket.io-client';
 
 // Create the context
 export const AppContext = createContext();
@@ -14,29 +15,53 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [triggerRefreshUnitData, setTriggerRefreshUnitData] = useState(0);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:5000/api/unit_data');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setUnitData(data); // Store the fetched data in state
+      setLoading(false); // Set loading to false after data is fetched
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError(error);
+      setLoading(false); // Set loading to false if there is an error
+    }
+  }, []);
 
   useEffect(() => {
-    // Fetch data from the API when the component mounts
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/unit_data');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setUnitData(data); // Store the fetched data in state
-        setLoading(false); // Set loading to false after data is fetched
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError(error);
-        setLoading(false); // Set loading to false if there is an error
-      }
-    };
-
+    // Fetch data when the component mounts
     fetchData();
-    setTriggerRefreshUnitData(0);
-  }, [triggerRefreshUnitData]);
+
+    // Set up WebSocket connection
+    const socket = io('http://localhost:5000');
+
+    socket.on('data_updated', (message) => {
+      // Update state with the new data
+      console.log('Data updated:', message.data)
+      setUnitData(message.data);
+    });
+
+    socket.on('connect', () => {
+      console.log('WebSocket connection established');
+    });
+
+    socket.on('disconnect', () => {
+      console.log('WebSocket connection closed');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('WebSocket connection error:', error);
+    });
+
+    // Clean up WebSocket connection on component unmount
+    return () => {
+      socket.disconnect();
+    };
+  }, [fetchData]);
 
   return (
     <AppContext.Provider value={
@@ -54,9 +79,7 @@ export const AppProvider = ({ children }) => {
         loading,
         setLoading,
         error,
-        setError,
-        triggerRefreshUnitData,
-        setTriggerRefreshUnitData
+        setError
       }
     }>
       {children}

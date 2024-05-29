@@ -2,6 +2,7 @@
 This file contains the Unit class, which is the parent class for all the unit objects
 on the canvas.
 """
+
 class Unit:
     """
     The parent class for all the unit objects on the canvas.

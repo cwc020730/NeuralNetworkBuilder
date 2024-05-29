@@ -21,7 +21,9 @@ class RandomInputUnit(InputUnit):
         """
         This method is used to execute the unit operation.
         """
-        return torch.rand(self.input_shape)
+        return {
+            "Random Input": torch.rand(self.input_shape)
+        }
 
     def __repr__(self):
         return f'RandomInputUnit({self.id})'

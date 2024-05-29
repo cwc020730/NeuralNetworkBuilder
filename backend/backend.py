@@ -2,20 +2,11 @@
 The main file for the backend server.
 """
 
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask import jsonify, request
 from json_graph_handler import JSONGraphHandler
 from execution_handler import ExecutionHandler
 
-app = Flask(__name__)
-CORS(app)
-
-@app.route('/api/message')
-def send_message():
-    """
-    Placeholder for the API endpoint that sends a message.
-    """
-    return jsonify({'message': 'Hello from Flask!'})
+from app import app, socketio
 
 @app.route('/receive_data', methods=['POST'])
 def receive_data():

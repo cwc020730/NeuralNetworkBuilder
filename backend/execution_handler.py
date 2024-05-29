@@ -4,6 +4,10 @@ which is responsible for executing the operations of the units on the canvas.
 """
 
 from unit_objects.input_unit_objects.random_input_unit import RandomInputUnit
+from flask import jsonify
+from app import app, socketio
+import torch
+import copy
 
 class ExecutionHandler:
     """
@@ -19,12 +23,30 @@ class ExecutionHandler:
         self.simplified_data = simplified_data
         self.execute_operations()
 
+    def send_unit_data(self, unit_data):
+        """
+        Send unit data to the client via WebSocket.
+        """
+        unit_data_copy = copy.deepcopy(unit_data)
+        for output_label, output_data in unit_data_copy['output'].items():
+            if isinstance(output_data, torch.Tensor):
+                unit_data_copy['output'][output_label] = output_data.tolist()
+        socketio.emit('data_updated', {'data': unit_data_copy})
+        return jsonify({'unit_data': unit_data_copy})
+
     def execute_operations(self):
         """
         This method executes the operations of the units on the canvas.
         """
         for unit_id, unit_info in self.simplified_data.items():
             unit_object = self.create_unit_object(unit_id, unit_info)
+            output = unit_object.execute()
+            unit_data = {
+                'unit_id': unit_id,
+                'output': output
+            }
+            self.send_unit_data(unit_data)
+
             print(f'Executing unit: {unit_object}')
             print(f'Output: {unit_object.execute()}')
 
