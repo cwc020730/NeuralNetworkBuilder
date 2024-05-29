@@ -12,6 +12,7 @@ const DataSelectionController = () => {
 
     // for each output_label in the selected unit, create a data selection item
     useEffect(() => {
+        setSelectedDataName(null);
         if (selectedUnitId) {
           setSelectedUnit(idToUnitMap.get(selectedUnitId));
         } else {

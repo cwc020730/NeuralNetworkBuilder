@@ -4,9 +4,10 @@ import { AppContext } from "./AppContext";
 
 const MainBottomAreaControlBar = () => {
 
-    const { activeBottomArea, setActiveBottomArea } = useContext(AppContext);
+    const { activeBottomArea, setActiveBottomArea, setSelectedDataName } = useContext(AppContext);
 
     function handleControlButtonClick(activeButton) {
+        setSelectedDataName(null);
         setActiveBottomArea(activeButton);
     }
 
