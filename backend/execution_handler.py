@@ -46,11 +46,14 @@ class ExecutionHandler:
             if unit_info['input_unit']:
                 input_unit_id = unit_id
                 break
+
+        # Input cache to store inputs for each unit
+        input_cache = {unit_id: [] for unit_id in self.simplified_data}
         
         def exec_traverse(unit_id, input_data):
             unit_info = self.simplified_data[unit_id]
             unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
-            output = unit_object.execute()
+            output = unit_object.execute(input_data)
             output_to_send = {}
             for output_name, output_data in output.items():
                 output_data_json = output_data.to_json_dict()
@@ -60,12 +63,17 @@ class ExecutionHandler:
             }
             self.send_unit_data(unit_data)
             print(f'Executing unit: {unit_object}')
-            print(f'Output: {unit_object.execute()}')
+            print(f'Output: {output}')
 
-            for next_unit_id in unit_info['outputs']:
-                exec_traverse(next_unit_id, output)
+            for connection in unit_info['outputs']:
+                input_for_next_unit = output[connection['name']]
+                next_unit_id = connection['connects_to']
+                input_cache[next_unit_id].append(input_for_next_unit)
+                # Check if all inputs for the next unit are ready
+                if len(input_cache[next_unit_id]) == len(self.simplified_data[next_unit_id]['inputs']):
+                    exec_traverse(next_unit_id, input_cache[next_unit_id])
         
-        exec_traverse(input_unit_id, EmptyData())
+        exec_traverse(input_unit_id, [EmptyData()])
 
     def summary(self):
         """

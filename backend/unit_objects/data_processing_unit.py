@@ -14,8 +14,6 @@ class DataProcessingUnit(Unit):
     """
     def __init__(self, unit_id, unit_info):
         super().__init__(unit_id, unit_info)
-        assert self.input_connections != [], 'DataProcessingUnit must have at least one input connection'
-        assert self.output_connections != [], 'DataProcessingUnit must have at least one output connection'
 
     def execute(self, input_data):
         """

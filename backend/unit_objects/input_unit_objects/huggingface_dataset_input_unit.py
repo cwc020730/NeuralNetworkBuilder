@@ -34,7 +34,7 @@ class HuggingFaceDatasetInputUnit(InputUnit):
         builder = load_dataset_builder(self.dataset_name)
         return builder.info.task_templates
 
-    def execute(self):
+    def execute(self, input_data):
         """
         This method is used to execute the unit operation.
 
