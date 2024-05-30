@@ -28,7 +28,9 @@ class HuggingfaceImageClassificationDatasetData(HuggingFaceDatasetData):
         """
         Convert the dataset data to a JSON dictionary.
         """
+        image_type = None
         if isinstance(self.images[0], PILImage):
+            image_type = 'PIL'
             width_range = (0, float('inf'))
             height_range = (0, float('inf'))
             for _, image in enumerate(self.images):
@@ -37,6 +39,7 @@ class HuggingfaceImageClassificationDatasetData(HuggingFaceDatasetData):
 
         data = {}
         data['task'] = 'image-classification'
+        data['image_type'] = image_type
         data['split'] = self.split
         data['width_range'] = list(width_range)
         data['height_range'] = list(height_range)
