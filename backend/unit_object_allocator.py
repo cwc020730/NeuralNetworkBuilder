@@ -4,11 +4,19 @@ This module is responsible for allocating units.
 
 from .unit_objects.input_unit_objects.random_input_unit import RandomInputUnit
 from .unit_objects.input_unit_objects.huggingface_dataset_input_unit import HuggingFaceDatasetInputUnit
+from .unit_objects.data_processing_unit_objects.dataset_split_unit import DatasetSplitUnit
 
 class UnitObjectAllocator:
     """
     The UnitObjectAllocator class is responsible for allocating units.
     """
+
+    UNIT_OBJ_MAP = {
+        'randomInput': RandomInputUnit,
+        'HF dataset input': HuggingFaceDatasetInputUnit,
+        'dataset split': DatasetSplitUnit
+    }
+
     def __init__(self):
         pass
 
@@ -25,9 +33,7 @@ class UnitObjectAllocator:
             Unit: An object of the appropriate unit type.
         """
         unit_type = unit_info['type']
-        if unit_type == 'randomInput':
-            return RandomInputUnit(unit_id, unit_info)
-        elif unit_type == 'HF dataset input':
-            return HuggingFaceDatasetInputUnit(unit_id, unit_info)
+        if unit_type in UnitObjectAllocator.UNIT_OBJ_MAP:
+            return UnitObjectAllocator.UNIT_OBJ_MAP[unit_type](unit_id, unit_info)
         else:
             raise ValueError(f'Invalid unit type: {unit_type}')
