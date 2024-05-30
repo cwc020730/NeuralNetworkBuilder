@@ -3,6 +3,7 @@ This module is responsible for allocating units.
 """
 
 from .unit_objects.input_unit_objects.random_input_unit import RandomInputUnit
+from .unit_objects.input_unit_objects.huggingface_dataset_input_unit import HuggingFaceDatasetInputUnit
 
 class UnitObjectAllocator:
     """
@@ -27,5 +28,7 @@ class UnitObjectAllocator:
         if unit_type == 'randomInput':
             shape = tuple([int(dim) for dim in unit_info['parameters']['dimension']['value']])
             return RandomInputUnit(unit_id, unit_info, shape)
+        elif unit_type == 'HF dataset input':
+            return HuggingFaceDatasetInputUnit(unit_id, unit_info)
         else:
             raise ValueError(f'Invalid unit type: {unit_type}')

@@ -10,39 +10,26 @@ class HuggingFaceDatasetData(DatasetData):
     The HuggingFaceDatasetData class represents a dataset from Hugging Face.
     """
     
-    def __init__(self, dataset, split, feature_columns, label_column=None):
+    def __init__(self, dataset, split):
         """
         Initialize the HuggingFaceDatasetData object.
 
         Args:
             dataset (Dataset or DatasetDict): The Hugging Face dataset.
-            feature_columns (list): The list of feature columns to use.
-            label_column (str, optional): The label column. Defaults to None.
+            split (str): The split of the dataset.
         """
         if isinstance(dataset, DatasetDict):
             dataset = dataset[split]
 
-        data = dataset[feature_columns]
-        labels = dataset[label_column] if label_column else None
+        self.split = split
 
-        super().__init__(data, labels)
-        self.feature_columns = feature_columns
-        self.label_column = label_column
-        self.dataset = dataset
+        super().__init__(dataset)
 
     def to_json_dict(self):
         """
         Convert the Hugging Face dataset data to a JSON dictionary.
-
-        Returns:
-            dict: A JSON dictionary.
         """
-        data_dict = super().to_json_dict()
-        data_dict.update({
-            "feature_columns": self.feature_columns,
-            "label_column": self.label_column
-        })
-        return data_dict
+        pass
 
     def __repr__(self):
-        return f'HuggingFaceDatasetData(size={self.size}, feature_columns={self.feature_columns}, label_column={self.label_column})'
+        return f'HuggingFaceDatasetData(split={self.split})'
