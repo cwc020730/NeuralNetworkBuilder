@@ -26,8 +26,7 @@ class UnitObjectAllocator:
         """
         unit_type = unit_info['type']
         if unit_type == 'randomInput':
-            shape = tuple([int(dim) for dim in unit_info['parameters']['dimension']['value']])
-            return RandomInputUnit(unit_id, unit_info, shape)
+            return RandomInputUnit(unit_id, unit_info)
         elif unit_type == 'HF dataset input':
             return HuggingFaceDatasetInputUnit(unit_id, unit_info)
         else:

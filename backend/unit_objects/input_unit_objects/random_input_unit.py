@@ -14,10 +14,11 @@ class RandomInputUnit(InputUnit):
         unit_id (str): The unique identifier for the unit.
         unit_info (dict): A dictionary containing information about the unit.
     """
-    def __init__(self, unit_id, unit_info, input_shape):
+    def __init__(self, unit_id, unit_info):
         super().__init__(unit_id, unit_info)
+        shape = tuple([int(dim) for dim in unit_info['parameters']['dimension']['value']])
         # remove zeros from input_shape
-        self.input_shape = [x for x in input_shape if x != 0]
+        self.input_shape = [x for x in shape if x != 0]
         if len(self.input_shape) == 0:
             self.input_shape = [0]
 
