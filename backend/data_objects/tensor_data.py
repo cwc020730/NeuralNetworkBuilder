@@ -3,7 +3,6 @@ This file contains the class definition for the TensorData object.
 """
 
 import torch
-import json
 
 class TensorData:
     """
