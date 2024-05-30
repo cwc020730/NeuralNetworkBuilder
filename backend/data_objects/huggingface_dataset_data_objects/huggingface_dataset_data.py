@@ -1,8 +1,7 @@
 """
 The huggingface_dataset_data module contains the HuggingFaceDatasetData class.
 """
-import torch
-import json
+
 from datasets import Dataset, DatasetDict
 from ..dataset_data import DatasetData
 
@@ -11,7 +10,7 @@ class HuggingFaceDatasetData(DatasetData):
     The HuggingFaceDatasetData class represents a dataset from Hugging Face.
     """
     
-    def __init__(self, dataset, feature_columns, label_column=None):
+    def __init__(self, dataset, split, feature_columns, label_column=None):
         """
         Initialize the HuggingFaceDatasetData object.
 
@@ -21,7 +20,7 @@ class HuggingFaceDatasetData(DatasetData):
             label_column (str, optional): The label column. Defaults to None.
         """
         if isinstance(dataset, DatasetDict):
-            dataset = dataset['train']  # Use the train split by default
+            dataset = dataset[split]
 
         data = dataset[feature_columns]
         labels = dataset[label_column] if label_column else None

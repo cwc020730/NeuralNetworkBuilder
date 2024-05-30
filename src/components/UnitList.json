@@ -63,6 +63,11 @@
                 "type": "string",
                 "description": "Dataset to input.",
                 "default": "mnist"
+            },
+            "split": {
+                "type": "string",
+                "description": "Split of the dataset.",
+                "default": "train"
             }
         }
     },
