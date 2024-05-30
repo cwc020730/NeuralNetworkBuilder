@@ -17,7 +17,7 @@ class DataProcessingUnit(Unit):
         assert self.input_connections != [], 'DataProcessingUnit must have at least one input connection'
         assert self.output_connections != [], 'DataProcessingUnit must have at least one output connection'
 
-    def execute(self):
+    def execute(self, input_data):
         """
         This method is used to execute the unit operation.
 

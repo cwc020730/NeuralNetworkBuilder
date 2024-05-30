@@ -26,6 +26,12 @@ class ExecutionHandler:
     def send_unit_data(self, unit_data):
         """
         Send unit data to the client via WebSocket.
+
+        Args:
+            unit_data (dict): The data to be sent to the client.
+
+        Returns:
+            dict: The unit data.
         """
         print('Sending unit data to client...', unit_data)
         socketio.emit('data_updated', {'data': unit_data})

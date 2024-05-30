@@ -28,11 +28,11 @@ class Unit:
         self.parameters = unit_info['parameters']
 
     # abstract method
-    def execute(self):
+    def execute(self, input_data):
         """
         This method is used to execute the unit operation.
         """
-        pass
+        raise NotImplementedError
 
     def __repr__(self):
         return f'Unit ID: {self.id}'
