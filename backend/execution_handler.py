@@ -33,7 +33,8 @@ class ExecutionHandler:
         Returns:
             dict: The unit data.
         """
-        print('Sending unit data to client...', unit_data)
+        if len(str(unit_data)) < 300:
+            print('Sending unit data to client...', unit_data)
         socketio.emit('data_updated', {'data': unit_data})
         return jsonify({'unit_data': unit_data})
 

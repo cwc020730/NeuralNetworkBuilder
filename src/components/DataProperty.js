@@ -31,6 +31,8 @@ const DataProperty = () => {
                         sizestr = ` (${size} elements)`;
                     }
 
+                    const shortenedJsonValue = jsonValue.length > 4001 ? jsonValue.substring(0, 2000) + "..." + jsonValue.substring(jsonValue.length - 2000) : jsonValue;
+
                     return (
                         <div className="data-property-kv-pair" key={key}>
                             <div className="data-property-kv-pair-k">
@@ -44,7 +46,7 @@ const DataProperty = () => {
                                                 className='data-property-kv-pair-v-btn-collapse' 
                                                 onClick={() => toggleExpand(key)}>
                                             </button>
-                                            <pre>{jsonValue}</pre>
+                                            <pre>{shortenedJsonValue}</pre>
                                         </>
                                     ) : (
                                         <>
