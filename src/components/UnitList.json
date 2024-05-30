@@ -71,48 +71,12 @@
             }
         }
     },
-    "add": {
-        "primary_label": "add",
-        "in_unit_label": "ADD",
+    "dataset split": {
+        "primary_label": "dataset split",
+        "in_unit_label": "DSSPLT",
         "in_unit_label_color": "black",
-        "category": "FUNCTION - MATH",
-        "description": "Sum two or more numbers.",
-        "color": "white",
-        "image": null,
-        "input": {
-            "input_cnt": {
-                "default": 2,
-                "variable": true
-            },
-            "input_labels": [
-                "Addend 1",
-                "Addend 2",
-                "*var*Addend {n}"
-            ]
-        },
-        "output": {
-            "output_cnt": {
-                "default": 1,
-                "variable": false
-            },
-            "output_labels": [
-                "Sum"
-            ]
-        },
-        "parameters": {
-            "input_cnt": {
-                "type": "integer",
-                "description": "Number of inputs to sum.",
-                "default": 2
-            }
-        }
-    },
-    "split": {
-        "primary_label": "split",
-        "in_unit_label": "SPLIT",
-        "in_unit_label_color": "black",
-        "category": "FUNCTION - DATA",
-        "description": "Split the input into multiple identical outputs.",
+        "category": "DATA",
+        "description": "Split a dataset into features and labels.",
         "color": "white",
         "image": null,
         "input": {
@@ -121,26 +85,21 @@
                 "variable": false
             },
             "input_labels": [
-                "Input"
+                "Dataset"
             ]
         },
         "output": {
             "output_cnt": {
                 "default": 2,
-                "variable": true
+                "variable": false
             },
             "output_labels": [
-                "Output 1",
-                "Output 2",
-                "*var*Output {n}"
+                "Features",
+                "Labels"
             ]
         },
         "parameters": {
-            "output_cnt": {
-                "type": "integer",
-                "description": "Number of outputs to split into.",
-                "default": 2
-            }
+            
         }
     }
 }
