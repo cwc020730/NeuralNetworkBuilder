@@ -3,8 +3,9 @@ This file contains the class definition for the TensorData object.
 """
 
 import torch
+from .data import DataObject
 
-class TensorData:
+class TensorData(DataObject):
     """
     The TensorData class represents a tensor data object.
 

@@ -2,7 +2,9 @@
 The dataset_data module contains the DatasetData class.
 """
 
-class DatasetData:
+from .data import DataObject
+
+class DatasetData(DataObject):
     """
     The DatasetData class serves as a base class for different types of datasets.
     """
@@ -20,7 +22,7 @@ class DatasetData:
         """
         Convert the dataset data to a JSON dictionary.
         """
-        pass
+        raise NotImplementedError
 
     def __repr__(self):
         return 'DatasetData()'
