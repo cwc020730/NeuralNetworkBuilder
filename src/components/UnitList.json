@@ -33,12 +33,12 @@
             }
         }
     },
-    "dataset input": {
-        "primary_label": "dataset input",
-        "in_unit_label": "DSINP",
+    "HF dataset input": {
+        "primary_label": "HF dataset input",
+        "in_unit_label": "HFDSINP",
         "in_unit_label_color": "black",
         "category": "INPUT",
-        "description": "Input a dataset.",
+        "description": "Input a huggingface dataset.",
         "color": "#FADADD",
         "image": null,
         "input": {

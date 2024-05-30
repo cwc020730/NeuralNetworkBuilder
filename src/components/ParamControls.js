@@ -52,7 +52,19 @@ const ParamControls = () => {
                     <div className='param-value-list-end'>]</div>
                 </div>
             );
-        } else {
+        } 
+        else if (type === 'string') {
+            // handles string, className should be param-value-string
+            return (
+                <input
+                    className='param-value-string'
+                    type='text'
+                    value={value}
+                    onChange={(e) => handleInputChange(param, 0, e.target.value)}
+                />
+            );
+        }
+        else {
             return (
                 <input
                     className='param-value'

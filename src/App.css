@@ -616,8 +616,22 @@
   font-size: 12px;
 }
 
-.param-value{
+.param-value {
   max-width: 30px;
+  font-size: 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px rgba(255, 255, 255, 0.3) solid;
+  color: #fff;
+  outline: none;
+  text-align: center;
+  margin-left: 17.5px;
+  margin-right: 2.5px;
+  padding: 2px 0 0 0;
+}
+
+.param-value-string {
+  max-width: 90px;
   font-size: 12px;
   background: transparent;
   border: none;
