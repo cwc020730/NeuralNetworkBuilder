@@ -4,6 +4,7 @@ which is responsible for executing the operations of the units on the canvas.
 """
 
 from flask import jsonify
+from .unit_object_allocator import UnitObjectAllocator
 from .app import socketio
 from .unit_objects.input_unit_objects.random_input_unit import RandomInputUnit
 
@@ -34,7 +35,7 @@ class ExecutionHandler:
         This method executes the operations of the units on the canvas.
         """
         for unit_id, unit_info in self.simplified_data.items():
-            unit_object = self.create_unit_object(unit_id, unit_info)
+            unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
             output = unit_object.execute()
             for output_name, output_data in output.items():
                 output_data_json = output_data.to_json_dict()
@@ -46,24 +47,6 @@ class ExecutionHandler:
 
             print(f'Executing unit: {unit_object}')
             print(f'Output: {unit_object.execute()}')
-
-    def create_unit_object(self, unit_id: str, unit_info: dict):
-        """
-        This method creates an object of the appropriate unit type based on the unit information.
-
-        Args:
-            unit_id (str): The unique identifier for the unit.
-            unit_info (dict): A dictionary containing information about the unit.
-
-        Returns:
-            Unit: An object of the appropriate unit type.
-        """
-        unit_type = unit_info['type']
-        if unit_type == 'randomInput':
-            shape = tuple([int(dim) for dim in unit_info['parameters']['dimension']['value']])
-            return RandomInputUnit(unit_id, unit_info, shape)
-        else:
-            raise ValueError(f'Invalid unit type: {unit_type}')
 
     def summary(self):
         """
