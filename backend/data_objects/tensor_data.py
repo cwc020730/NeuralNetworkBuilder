@@ -40,6 +40,15 @@ class TensorData(DataObject):
             "shape": self.shape
         }
         return data
+    
+    def get_data(self):
+        """
+        Get the data from the data object.
+
+        Returns:
+            torch.Tensor: The tensor data.
+        """
+        return self.tensor
 
     def __repr__(self):
         return f'TensorData({self.tensor})'

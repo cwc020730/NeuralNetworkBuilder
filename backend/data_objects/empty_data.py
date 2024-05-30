@@ -18,6 +18,12 @@ class EmptyData(DataObject):
         Convert the data object to a JSON dictionary.
         """
         return {}
+    
+    def get_data(self):
+        """
+        Get the data from the data object.
+        """
+        return None
 
     def __repr__(self):
         return 'EmptyData()'

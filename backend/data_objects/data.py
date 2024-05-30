@@ -15,6 +15,12 @@ class DataObject:
         Convert the data object to a JSON dictionary.
         """
         raise NotImplementedError
+    
+    def get_data(self):
+        """
+        Get the data from the data object.
+        """
+        raise NotImplementedError
 
     def __repr__(self):
         raise NotImplementedError

@@ -33,6 +33,12 @@ class HuggingfaceDatasetColumnData(DataObject):
         data['column_data_type'] = self.column_data_type
         data['size'] = self.size
         return data
+    
+    def get_data(self):
+        """
+        Get the data from the dataset data object.
+        """
+        return self.column_data
 
     def __repr__(self):
         return f'HuggingfaceDatasetColumnData(column_name={self.column_name})'

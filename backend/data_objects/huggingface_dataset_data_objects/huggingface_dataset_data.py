@@ -29,7 +29,13 @@ class HuggingFaceDatasetData(DatasetData):
         """
         Convert the Hugging Face dataset data to a JSON dictionary.
         """
-        pass
+        raise NotImplementedError
+    
+    def get_data(self):
+        """
+        Get the data from the Hugging Face dataset data object.
+        """
+        return self.dataset
 
     def __repr__(self):
         return f'HuggingFaceDatasetData(split={self.split})'

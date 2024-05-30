@@ -23,6 +23,12 @@ class DatasetData(DataObject):
         Convert the dataset data to a JSON dictionary.
         """
         raise NotImplementedError
+    
+    def get_data(self):
+        """
+        Get the data from the dataset data object.
+        """
+        return self.dataset
 
     def __repr__(self):
         return 'DatasetData()'

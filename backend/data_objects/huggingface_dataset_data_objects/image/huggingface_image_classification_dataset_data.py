@@ -55,6 +55,12 @@ class HuggingfaceImageClassificationDatasetData(HuggingFaceDatasetData):
         data['height_range'] = list(height_range)
         data['image_count'] = len(self.images)
         return data
+    
+    def get_data(self):
+        """
+        Get the data from the dataset data object.
+        """
+        return self.dataset
 
     def __repr__(self):
         return f'HuggingfaceImageClassificationDatasetData(split={self.split}, image_column={self.image_column}, label_column={self.label_column})'
