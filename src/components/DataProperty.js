@@ -20,7 +20,7 @@ const DataProperty = () => {
                     const value = data[key];
                     const jsonValue = JSON.stringify(value, null, 2);
                     const isExpanded = expandedKeys[key];
-                    const isLong = jsonValue.length > 30;
+                    const isLong = jsonValue.length > 35;
 
                     let sizestr = "";
                     if (key === "value" && isLong && Array.isArray(value) && data["shape"]) {
