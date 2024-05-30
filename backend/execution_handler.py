@@ -63,7 +63,6 @@ class ExecutionHandler:
             }
             self.send_unit_data(unit_data)
             print(f'Executing unit: {unit_object}')
-            print(f'Output: {output}')
 
             for connection in unit_info['outputs']:
                 input_for_next_unit = output[connection['name']]

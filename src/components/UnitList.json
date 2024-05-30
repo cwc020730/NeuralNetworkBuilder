@@ -101,5 +101,35 @@
         "parameters": {
             
         }
+    },
+    "int to one-hot": {
+        "primary_label": "int to one-hot",
+        "in_unit_label": "INT2OH",
+        "in_unit_label_color": "black",
+        "category": "DATA",
+        "description": "Convert list of integer to a one-hot tensor.",
+        "color": "white",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Integer"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "One-hot tensor"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }
