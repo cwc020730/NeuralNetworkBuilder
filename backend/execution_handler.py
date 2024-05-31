@@ -6,8 +6,7 @@ which is responsible for executing the operations of the units on the canvas.
 from flask import jsonify
 from .unit_object_allocator import UnitObjectAllocator
 from .app import socketio
-from .unit_objects.input_unit_objects.random_input_unit import RandomInputUnit
-from .data_objects.empty_data import EmptyData
+from . import EmptyData
 
 class ExecutionHandler:
     """
