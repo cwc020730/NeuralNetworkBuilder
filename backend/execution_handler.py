@@ -3,6 +3,7 @@ The execution_handler.py file contains the ExecutionHandler class,
 which is responsible for executing the operations of the units on the canvas.
 """
 
+import time
 from torch.utils.data import DataLoader
 from .unit_object_allocator import UnitObjectAllocator
 from .app import send_unit_data
@@ -62,7 +63,9 @@ class ExecutionHandler:
                 criterion = loss_function_unit_object.get_loss_func()
                 for epoch in range(num_epochs):
                     running_loss = 0.0
+                    avg_time = 0.0
                     for i, (inputs, labels) in enumerate(dataloader, 0):
+                        start_time = time.time()
                         inputs, labels = inputs.to(device), labels.to(device)
                         optimizer.zero_grad()
                         output = unit_object(inputs)
@@ -71,6 +74,13 @@ class ExecutionHandler:
                         optimizer.step()
 
                         running_loss += loss.item()
+                        end_time = time.time()
+                        avg_time += end_time - start_time
+                        if i % 100 == 99:
+                            unit_object.toggle_send_data()
+                            print(f'Epoch {epoch + 1}, batch {i + 1}, loss: {loss.item()}')
+                            print(f'Avg time: {avg_time / 100}')
+                            avg_time = 0.0
                     print(f'Epoch {epoch + 1}, loss: {running_loss}')
                 output_connections = unit_object.end_unit_connections
             else:

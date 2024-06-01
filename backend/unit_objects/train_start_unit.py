@@ -23,15 +23,22 @@ class TrainStartUnit(Unit, nn.Module):
         unit_info (dict): The information of the unit.
         all_units_data (dict): The data of all the units.
     """
-    def __init__(self, unit_id: str, unit_info: dict, all_units_data: dict):
+    def __init__(self, unit_id: str, unit_info: dict, all_units_data: dict, enable_send_data: bool = True):
         Unit.__init__(self, unit_id, unit_info)
         nn.Module.__init__(self)
         self.all_units_data = all_units_data
         self.end_unit_connections = None
-        self.epochs = unit_info['parameters']['epochs']['value']
+        self.epochs = int(unit_info['parameters']['epochs']['value'])
         self.device = unit_info['parameters']['device']['value']
         self.unit_id_to_module = {}
         self.register_modules()
+        self.enable_send_data = enable_send_data
+
+    def toggle_send_data(self):
+        """
+        This method toggles the send data attribute.
+        """
+        self.enable_send_data = True
 
     def get_training_config(self):
         """
@@ -83,7 +90,8 @@ class TrainStartUnit(Unit, nn.Module):
                 nonlocal end_unit_output
                 end_unit_output = module_unit_object.execute(input_data)
                 self.end_unit_connections = unit_info['outputs']
-                send_unit_data({unit_id: {"Model output": end_unit_output["Model output"].to_json_dict()}})
+                if self.enable_send_data:
+                    send_unit_data({unit_id: {"Model output": end_unit_output["Model output"].to_json_dict()}})
                 # print(f'Executing unit: {module_unit_object}')
                 return
             output = module_unit_object(input_data)
@@ -94,7 +102,8 @@ class TrainStartUnit(Unit, nn.Module):
             unit_data = {
                 unit_id: output_to_send
             }
-            send_unit_data(unit_data)
+            if self.enable_send_data:
+                send_unit_data(unit_data)
             # print(f'Executing unit: {module_unit_object}')
 
             for connection in unit_info['outputs']:
@@ -116,7 +125,8 @@ class TrainStartUnit(Unit, nn.Module):
             "Data": TensorData(x).to_json_dict(),
             "Optimizer connector": optimizer_unit_id
         }
-        send_unit_data({self.id: self_data_to_send})
+        if self.enable_send_data:
+            send_unit_data({self.id: self_data_to_send})
         # get the next unit id and input name to connect
         self_info = self.all_units_data[self.id]
         self_outputs = self_info['outputs']
@@ -128,7 +138,7 @@ class TrainStartUnit(Unit, nn.Module):
                 break
             
         x = end_unit_output
-        
+        self.enable_send_data = False
         return x
 
     def execute(self, input_data: dict) -> dict:
