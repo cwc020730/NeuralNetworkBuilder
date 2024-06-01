@@ -440,5 +440,35 @@
         "parameters": {
             
         }
+    },
+    "relu": {
+        "primary_label": "relu",
+        "in_unit_label": "RELU",
+        "in_unit_label_color": "black",
+        "category": "MODEL",
+        "description": "ReLU activation function.",
+        "color": "#FFDFBA",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Input"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Output"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }

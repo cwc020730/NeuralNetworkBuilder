@@ -13,7 +13,8 @@ from . import (
     SGDUnit,
     CrossEntropyLossUnit,
     FlattenUnit,
-    LinearUnit
+    LinearUnit,
+    ReLUUnit
 )
 
 class UnitObjectAllocator:
@@ -33,6 +34,7 @@ class UnitObjectAllocator:
         "cross entropy loss": CrossEntropyLossUnit,
         "linear": LinearUnit,
         "flatten": FlattenUnit,
+        "relu": ReLUUnit,
     }
 
     def __init__(self):
