@@ -17,5 +17,6 @@ from .unit_objects import (
     InputUnit,
     DataProcessingUnit,
     ToTensorUnit,
-    ModelEndUnit
+    ModelEndUnit,
+    ToDataloaderUnit,
 )

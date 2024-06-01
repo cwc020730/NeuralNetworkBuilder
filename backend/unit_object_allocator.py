@@ -8,7 +8,8 @@ from . import (
     DatasetSplitUnit,
     IntegerToOneHotUnit,
     ToTensorUnit,
-    ModelEndUnit
+    ModelEndUnit,
+    ToDataloaderUnit
 )
 
 class UnitObjectAllocator:
@@ -22,7 +23,8 @@ class UnitObjectAllocator:
         'dataset split': DatasetSplitUnit,
         'int to one-hot': IntegerToOneHotUnit,
         'to tensor': ToTensorUnit,
-        'model end': ModelEndUnit
+        'model end': ModelEndUnit,
+        'to dataloader': ToDataloaderUnit
     }
 
     def __init__(self):
