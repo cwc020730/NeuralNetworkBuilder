@@ -27,6 +27,19 @@ class TrainStartUnit(Unit, nn.Module):
         nn.Module.__init__(self)
         self.all_units_data = all_units_data
         self.end_unit_connections = None
+        self.epochs = unit_info['parameters']['epochs']
+        self.batch_dim_index = unit_info['parameters']['batch_dim_index']
+        self.batch_size = unit_info['parameters']['batch_size']
+        self.device = unit_info['parameters']['device']
+
+    def get_training_config(self):
+        """
+        Get the training configuration.
+
+        Returns:
+            dict: The training configuration.
+        """
+        return (self.epochs, self.batch_dim_index, self.batch_size, self.device)
 
     def forward(self, x):
         """

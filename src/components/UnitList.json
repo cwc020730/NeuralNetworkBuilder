@@ -195,6 +195,11 @@
                 "description": "Number of epochs to train.",
                 "default": 1
             },
+            "batch_dim_index": {
+                "type": "int",
+                "description": "Index of the batch dimension.",
+                "default": 0
+            },
             "batch_size": {
                 "type": "int",
                 "description": "Batch size.",
@@ -293,6 +298,41 @@
         },
         "parameters": {
             
+        }
+    },
+    "to dataloader": {
+        "primary_label": "to dataloader",
+        "in_unit_label": "TODL",
+        "in_unit_label_color": "black",
+        "category": "DATA",
+        "description": "Convert dataset to dataloader.",
+        "color": "white",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 2,
+                "variable": false
+            },
+            "input_labels": [
+                "Features",
+                "Labels"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Dataloader"
+            ]
+        },
+        "parameters": {
+            "batch_size": {
+                "type": "int",
+                "description": "Batch size.",
+                "default": 1
+            }
         }
     }
 }

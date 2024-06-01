@@ -40,8 +40,13 @@ class ExecutionHandler:
             # Check if the unit is a train start unit
             if unit_info['type'] == 'train start':
                 unit_object = TrainStartUnit(unit_id, unit_info, self.simplified_data)
-                output = unit_object(input_data)
-                output_connections = unit_object.end_unit_connections
+                epochs, batch_dim_index, batch_size, device = unit_object.get_training_config()
+                # set training device
+                unit_object.to(device)
+                input_data.get_data().to(device)
+                for epoch in range(epochs):
+                    output = unit_object(input_data)
+                    output_connections = unit_object.end_unit_connections
             else:
                 unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
                 output = unit_object.execute(input_data)
