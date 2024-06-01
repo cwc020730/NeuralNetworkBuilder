@@ -161,5 +161,108 @@
         "parameters": {
             
         }
+    },
+    "train start": {
+        "primary_label": "train start",
+        "in_unit_label": "TRAINSTART",
+        "in_unit_label_color": "black",
+        "category": "MARKER",
+        "description": "Indicate the start of training a model.",
+        "color": "#ADD8E6",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Data"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 2,
+                "variable": false
+            },
+            "output_labels": [
+                "Data",
+                "Optimizer connector"
+            ]
+        },
+        "parameters": {
+            "epochs": {
+                "type": "int",
+                "description": "Number of epochs to train.",
+                "default": 1
+            },
+            "batch_size": {
+                "type": "int",
+                "description": "Batch size.",
+                "default": 1
+            },
+            "device": {
+                "type": "string",
+                "description": "Device to train on.",
+                "default": "gpu"
+            }
+        }
+    },
+    "SGD": {
+        "primary_label": "SGD",
+        "in_unit_label": "SGD",
+        "in_unit_label_color": "black",
+        "category": "OPTIMIZER",
+        "description": "Stochastic Gradient Descent optimizer.",
+        "color": "#D8BFD8",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Train start connector"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 0,
+                "variable": false
+            },
+            "output_labels": [
+            ]
+        },
+        "parameters": {
+            "lr": {
+                "type": "float",
+                "description": "Learning rate.",
+                "default": 0.01
+            },
+            "momentum": {
+                "type": "float",
+                "description": "Momentum.",
+                "default": 0
+            },
+            "dampening": {
+                "type": "float",
+                "description": "Dampening.",
+                "default": 0
+            },
+            "wgt_decay": {
+                "type": "float",
+                "description": "Weight decay.",
+                "default": 0
+            },
+            "nesterov": {
+                "type": "bool",
+                "description": "Nesterov.",
+                "default": false
+            },
+            "maximize": {
+                "type": "bool",
+                "description": "Maximize.",
+                "default": false
+            }
+        }
     }
 }
