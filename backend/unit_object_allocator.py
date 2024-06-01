@@ -11,7 +11,9 @@ from . import (
     ModelEndUnit,
     ToDataloaderUnit,
     SGDUnit,
-    CrossEntropyLossUnit
+    CrossEntropyLossUnit,
+    FlattenUnit,
+    LinearUnit
 )
 
 class UnitObjectAllocator:
@@ -28,7 +30,9 @@ class UnitObjectAllocator:
         'model end': ModelEndUnit,
         'to dataloader': ToDataloaderUnit,
         "SGD": SGDUnit,
-        "cross entropy loss": CrossEntropyLossUnit
+        "cross entropy loss": CrossEntropyLossUnit,
+        "linear": LinearUnit,
+        "flatten": FlattenUnit,
     }
 
     def __init__(self):

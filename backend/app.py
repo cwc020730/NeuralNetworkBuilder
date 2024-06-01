@@ -20,9 +20,9 @@ def send_unit_data(unit_data):
     Returns:
         dict: The unit data.
     """
-    if len(str(unit_data)) < 300:
-        print('Sending unit data to client...', unit_data)
-    else:
-        print('Sending unit data to client...')
+    # if len(str(unit_data)) < 300:
+    #     print('Sending unit data to client...', unit_data)
+    # else:
+    #     print('Sending unit data to client...')
     socketio.emit('data_updated', {'data': unit_data})
     return jsonify({'unit_data': unit_data})

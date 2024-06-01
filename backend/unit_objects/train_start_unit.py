@@ -7,6 +7,7 @@ from . import Unit
 from .model_end_unit import ModelEndUnit
 from ..app import send_unit_data
 from ..unit_object_allocator import UnitObjectAllocator
+from ..data_objects import TensorData
 
 class TrainStartUnit(Unit, nn.Module):
     """
@@ -29,6 +30,8 @@ class TrainStartUnit(Unit, nn.Module):
         self.end_unit_connections = None
         self.epochs = unit_info['parameters']['epochs']['value']
         self.device = unit_info['parameters']['device']['value']
+        self.unit_id_to_module = {}
+        self.register_modules()
 
     def get_training_config(self):
         """
@@ -38,6 +41,29 @@ class TrainStartUnit(Unit, nn.Module):
             dict: The training configuration.
         """
         return (self.epochs, self.device)
+    
+    def register_modules(self):
+        """
+        This method preregisters the modules in the model.
+        """
+        def traverse(unit_id):
+            unit_info = self.all_units_data[unit_id]
+            if unit_id != self.id:
+                module_unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
+                if isinstance(module_unit_object, ModelEndUnit):
+                    return
+                # register the module object
+                assert isinstance(module_unit_object, nn.Module), f"Module object must be an instance of nn.Module, got {type(module_unit_object)}"
+                if unit_id not in self._modules:
+                    self.add_module(unit_id, module_unit_object)
+                    print(f'Registered module: {module_unit_object}')
+                self.unit_id_to_module[unit_id] = module_unit_object
+            for connection in unit_info['outputs']:
+                if connection['name'] == "Optimizer connector":
+                    continue
+                traverse(connection['connects_to'])
+        traverse(self.id)
+        print(f"Registered modules: {self._modules}")
 
     def forward(self, x):
         """
@@ -49,17 +75,17 @@ class TrainStartUnit(Unit, nn.Module):
 
         def traverse(unit_id, input_data):
             unit_info = self.all_units_data[unit_id]
-            module_unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
+            if unit_id in self.unit_id_to_module:
+                module_unit_object = self.unit_id_to_module[unit_id]
+            else:
+                module_unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
             if isinstance(module_unit_object, ModelEndUnit):
                 nonlocal end_unit_output
                 end_unit_output = module_unit_object.execute(input_data)
                 self.end_unit_connections = unit_info['outputs']
                 send_unit_data({unit_id: {"Model output": end_unit_output["Model output"].to_json_dict()}})
-                print(f'Executing unit: {module_unit_object}')
+                # print(f'Executing unit: {module_unit_object}')
                 return
-            # register the module object
-            assert isinstance(module_unit_object, nn.Module)
-            self.add_module(unit_id, module_unit_object)
             output = module_unit_object(input_data)
             output_to_send = {}
             for output_name, output_data in output.items():
@@ -69,7 +95,7 @@ class TrainStartUnit(Unit, nn.Module):
                 unit_id: output_to_send
             }
             send_unit_data(unit_data)
-            print(f'Executing unit: {module_unit_object}')
+            # print(f'Executing unit: {module_unit_object}')
 
             for connection in unit_info['outputs']:
                 input_for_next_unit = output[connection['name']]
@@ -87,7 +113,7 @@ class TrainStartUnit(Unit, nn.Module):
                 optimizer_unit_id = connection['connects_to']
                 break
         self_data_to_send = {
-            "Data": x["Data"].to_json_dict(),
+            "Data": TensorData(x).to_json_dict(),
             "Optimizer connector": optimizer_unit_id
         }
         send_unit_data({self.id: self_data_to_send})
@@ -97,8 +123,8 @@ class TrainStartUnit(Unit, nn.Module):
         for connection in self_outputs:
             if connection['name'] == "Data":
                 end_name = connection['end_name']
-                data = x['Data']
-                traverse(connection['connects_to'], {end_name: data})
+                data = x
+                traverse(connection['connects_to'], {end_name: TensorData(data)})
                 break
             
         x = end_unit_output
@@ -112,4 +138,4 @@ class TrainStartUnit(Unit, nn.Module):
         raise AssertionError('This method should not be called.')
     
     def __repr__(self):
-        return f'TrainStartUnit ID: {self.id}'
+        return nn.Module.__repr__(self)

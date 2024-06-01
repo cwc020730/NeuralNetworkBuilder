@@ -35,3 +35,6 @@ class ModelLayerUnit(Unit, nn.Module):
     
     def execute(self, input_data):
         raise AssertionError('ModelLayerUnit should not be executed directly')
+    
+    def __repr__(self):
+        return nn.Module.__repr__(self)

@@ -25,7 +25,7 @@ class Unit:
         self.is_input_unit = unit_info['input_unit']
         self.input_connections = unit_info['inputs']
         self.output_connections = unit_info['outputs']
-        self.parameters = unit_info['parameters']
+        self.unit_parameters = unit_info['parameters']
 
     # abstract method
     def execute(self, input_data):

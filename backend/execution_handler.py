@@ -59,14 +59,14 @@ class ExecutionHandler:
                 loss_function_unit_info = self.simplified_data[curr_loss_func_unit_id]
                 loss_function_unit_object = UnitObjectAllocator.create_unit_object(curr_loss_func_unit_id, loss_function_unit_info)
                 optimizer = optimizer_unit_object.get_optimizer(unit_object)
-                criterion = loss_function_unit_object.get_loss_function()
+                criterion = loss_function_unit_object.get_loss_func()
                 for epoch in range(num_epochs):
                     running_loss = 0.0
                     for i, (inputs, labels) in enumerate(dataloader, 0):
                         inputs, labels = inputs.to(device), labels.to(device)
                         optimizer.zero_grad()
                         output = unit_object(inputs)
-                        loss = criterion(output, labels)
+                        loss = criterion(output["Model output"].get_data(), labels)
                         loss.backward()
                         optimizer.step()
 
@@ -106,7 +106,7 @@ class ExecutionHandler:
                         unit_id: output_to_send
                     }
                     send_unit_data(unit_data)
-            print(f'Executing unit: {unit_object}')
+            # print(f'Executing unit: {unit_object}')
 
             for connection in output_connections:
                 input_for_next_unit = output[connection['name']]

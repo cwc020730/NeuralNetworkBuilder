@@ -23,7 +23,7 @@ class OptimizerUnit(Unit):
     def execute(self, input_data):
         raise AssertionError('Execute method should not be called for OptimizerUnit')
 
-    def get_optimizer(self):
+    def get_optimizer(self, model):
         """
         Get the optimizer.
 

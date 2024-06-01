@@ -4,6 +4,7 @@ This module contains the FlattenUnit class, which is a subclass of the ModelLaye
 
 import torch.nn as nn
 from ..model_layer_unit import ModelLayerUnit
+from ...data_objects import TensorData
 
 class FlattenUnit(ModelLayerUnit):
     """
@@ -26,9 +27,12 @@ class FlattenUnit(ModelLayerUnit):
         Forward pass of the flatten layer.
 
         Args:
-            input_data (torch.Tensor): The input data.
+            input_data (dict): The input data.
 
         Returns:
             torch.Tensor: The output data.
         """
-        return self.flatten(input_data)
+        input_data_tensor = input_data['Input'].get_data()
+        return {
+            "Output": TensorData(self.flatten(input_data_tensor))
+        }
