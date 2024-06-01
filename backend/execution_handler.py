@@ -5,7 +5,7 @@ which is responsible for executing the operations of the units on the canvas.
 
 from flask import jsonify
 from .unit_object_allocator import UnitObjectAllocator
-from .app import socketio
+from .app import socketio, send_unit_data
 from . import EmptyData
 
 class ExecutionHandler:
@@ -21,21 +21,6 @@ class ExecutionHandler:
     def __init__(self, simplified_data: dict):
         self.simplified_data = simplified_data
         self.execute_operations()
-
-    def send_unit_data(self, unit_data):
-        """
-        Send unit data to the client via WebSocket.
-
-        Args:
-            unit_data (dict): The data to be sent to the client.
-
-        Returns:
-            dict: The unit data.
-        """
-        if len(str(unit_data)) < 300:
-            print('Sending unit data to client...', unit_data)
-        socketio.emit('data_updated', {'data': unit_data})
-        return jsonify({'unit_data': unit_data})
 
     def execute_operations(self):
         """
@@ -61,7 +46,7 @@ class ExecutionHandler:
             unit_data = {
                 unit_id: output_to_send
             }
-            self.send_unit_data(unit_data)
+            send_unit_data(unit_data)
             print(f'Executing unit: {unit_object}')
 
             for connection in unit_info['outputs']:
