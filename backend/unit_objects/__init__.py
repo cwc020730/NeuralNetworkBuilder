@@ -11,6 +11,7 @@ from .input_unit_objects import (
 )
 from .model_layer_unit_objects import (
     LinearUnit,
+    FlattenUnit
 )
 from .optimizer_unit_objects import (
     SGDUnit

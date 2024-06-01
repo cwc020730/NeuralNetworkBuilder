@@ -22,4 +22,5 @@ from .unit_objects import (
     SGDUnit,
     CrossEntropyLossUnit,
     LinearUnit,
+    FlattenUnit
 )

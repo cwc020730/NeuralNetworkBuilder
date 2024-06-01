@@ -47,7 +47,6 @@ class ExecutionHandler:
                 num_epochs, device = unit_object.get_training_config()
                 # set training device
                 unit_object.to(device)
-                input_data.get_data().to(device)
                 # find optimizer
                 optimizer_unit_id = None
                 for connection in unit_object.output_connections:
@@ -64,6 +63,7 @@ class ExecutionHandler:
                 for epoch in range(num_epochs):
                     running_loss = 0.0
                     for i, (inputs, labels) in enumerate(dataloader, 0):
+                        inputs, labels = inputs.to(device), labels.to(device)
                         optimizer.zero_grad()
                         output = unit_object(inputs)
                         loss = criterion(output, labels)

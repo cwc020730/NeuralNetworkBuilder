@@ -32,3 +32,6 @@ class ModelLayerUnit(Unit, nn.Module):
             torch.Tensor: The output data.
         """
         raise NotImplementedError('Forward method must be implemented for ModelLayerUnit')
+    
+    def execute(self, input_data):
+        raise AssertionError('ModelLayerUnit should not be executed directly')

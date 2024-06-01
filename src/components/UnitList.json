@@ -410,5 +410,35 @@
                 "default": true
             }
         }
+    },
+    "flatten": {
+        "primary_label": "flatten",
+        "in_unit_label": "FLATTEN",
+        "in_unit_label_color": "black",
+        "category": "MODEL",
+        "description": "Flatten layer.",
+        "color": "#20B2AA",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Input"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Output"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }

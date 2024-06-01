@@ -27,8 +27,8 @@ class TrainStartUnit(Unit, nn.Module):
         nn.Module.__init__(self)
         self.all_units_data = all_units_data
         self.end_unit_connections = None
-        self.epochs = unit_info['parameters']['epochs']
-        self.device = unit_info['parameters']['device']
+        self.epochs = unit_info['parameters']['epochs']['value']
+        self.device = unit_info['parameters']['device']['value']
 
     def get_training_config(self):
         """
