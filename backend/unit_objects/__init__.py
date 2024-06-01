@@ -9,6 +9,9 @@ from .input_unit_objects import (
     HuggingFaceDatasetInputUnit,
     RandomInputUnit
 )
+from .model_layer_unit_objects import (
+    LinearUnit,
+)
 from .optimizer_unit_objects import (
     SGDUnit
 )

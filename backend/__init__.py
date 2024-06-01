@@ -21,4 +21,5 @@ from .unit_objects import (
     ToDataloaderUnit,
     SGDUnit,
     CrossEntropyLossUnit,
+    LinearUnit,
 )

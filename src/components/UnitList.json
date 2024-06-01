@@ -366,5 +366,49 @@
         "parameters": {
             
         }
+    },
+    "linear": {
+        "primary_label": "linear",
+        "in_unit_label": "LINEAR",
+        "in_unit_label_color": "black",
+        "category": "MODEL",
+        "description": "Linear layer.",
+        "color": "#20B2AA",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Input"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Output"
+            ]
+        },
+        "parameters": {
+            "in_features": {
+                "type": "int",
+                "description": "Number of input features.",
+                "default": 1
+            },
+            "out_features": {
+                "type": "int",
+                "description": "Number of output features.",
+                "default": 1
+            },
+            "bias": {
+                "type": "bool",
+                "description": "Bias.",
+                "default": true
+            }
+        }
     }
 }
