@@ -30,7 +30,7 @@ class IntegerToOneHotUnit(DataProcessingUnit):
         Returns:
             torch.Tensor: A tensor containing the one-hot encoded vectors.
         """
-        input_data = input_data_raw[0].get_data()
+        input_data = input_data_raw["Integers"].get_data()
         onehot = torch.nn.functional.one_hot(torch.tensor(input_data))
         onehot = onehot.to(torch.float32)
         return {

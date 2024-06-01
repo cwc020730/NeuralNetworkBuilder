@@ -48,7 +48,7 @@ class ExecutionHandler:
                 break
 
         # Input cache to store inputs for each unit
-        input_cache = {unit_id: [] for unit_id in self.simplified_data}
+        input_cache = {unit_id: {} for unit_id in self.simplified_data}
         
         def exec_traverse(unit_id, input_data):
             unit_info = self.simplified_data[unit_id]
@@ -64,16 +64,16 @@ class ExecutionHandler:
             self.send_unit_data(unit_data)
             print(f'Executing unit: {unit_object}')
 
-            # TODO: Adjust the code to use a dict of name: data instead of a list
             for connection in unit_info['outputs']:
                 input_for_next_unit = output[connection['name']]
                 next_unit_id = connection['connects_to']
-                input_cache[next_unit_id].append(input_for_next_unit)
+                next_unit_input_name_to_connect = connection['end_name']
+                input_cache[next_unit_id][next_unit_input_name_to_connect] = input_for_next_unit
                 # Check if all inputs for the next unit are ready
                 if len(input_cache[next_unit_id]) == len(self.simplified_data[next_unit_id]['inputs']):
                     exec_traverse(next_unit_id, input_cache[next_unit_id])
         
-        exec_traverse(input_unit_id, [EmptyData()])
+        exec_traverse(input_unit_id, {'null': EmptyData()})
 
     def summary(self):
         """

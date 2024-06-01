@@ -35,7 +35,7 @@ class ToTensorUnit(DataProcessingUnit):
             torch.Tensor: The input data converted to a tensor.
         """
         transform = transforms.ToTensor()
-        input_data = input_data[0].get_data()
+        input_data = input_data["Input data"].get_data()
         if isinstance(input_data, list):
             if not all(isinstance(data, PILImage) for data in input_data):
                 raise ValueError("All elements in the list must be of type PILImage")

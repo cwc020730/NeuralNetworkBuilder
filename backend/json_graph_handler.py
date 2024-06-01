@@ -92,6 +92,11 @@ class JSONGraphHandler:
         This method simplifies the raw JSON data into a more structured format.
         """
         simplified_data = {}
+        id_to_connection_point = {}
+        # fill id to connection point
+        for unit_id, unit_info in self.raw_data['units'].items():
+            for connection_point in unit_info['unitInfo']['connectionPoints']:
+                id_to_connection_point[connection_point['id']] = connection_point
         for unit_id, unit_info in self.raw_data['units'].items():
             simplified_data[unit_id] = {
                 'type': unit_info['unitInfo']['type'],
@@ -108,6 +113,7 @@ class JSONGraphHandler:
                         if self.raw_data['arrows'][arrow_id]['endAnchorPointId'] == connection_point['id']:
                             this_connection['name'] = connection_point['label']
                             this_connection['connects_to'] = self.raw_data['arrows'][arrow_id]['startUnitId']
+                            this_connection['end_name'] = id_to_connection_point[self.raw_data['arrows'][arrow_id]['startAnchorPointId']]['label']
                             break
                     if this_connection:
                         simplified_data[unit_id]['inputs'].append(this_connection)
@@ -118,6 +124,7 @@ class JSONGraphHandler:
                         if self.raw_data['arrows'][arrow_id]['startAnchorPointId'] == connection_point['id']:
                             this_connection['name'] = connection_point['label']
                             this_connection['connects_to'] = self.raw_data['arrows'][arrow_id]['endUnitId']
+                            this_connection['end_name'] = id_to_connection_point[self.raw_data['arrows'][arrow_id]['endAnchorPointId']]['label']
                             break
                     if this_connection:
                         simplified_data[unit_id]['outputs'].append(this_connection)

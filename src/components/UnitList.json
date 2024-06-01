@@ -116,7 +116,7 @@
                 "variable": false
             },
             "input_labels": [
-                "Integer"
+                "Integers"
             ]
         },
         "output": {

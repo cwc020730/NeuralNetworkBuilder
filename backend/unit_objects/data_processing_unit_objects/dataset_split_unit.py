@@ -30,7 +30,7 @@ class DatasetSplitUnit(DataProcessingUnit):
         Returns:
             dict: A dictionary containing the output data.
         """
-        dataset = input_data[0]
+        dataset = input_data["Dataset"]
         if isinstance(dataset, HuggingfaceImageClassificationDatasetData):
             return {
                 "Features": HuggingfaceDatasetColumnData(dataset.image_column, dataset.images, dataset.image_type),
