@@ -31,7 +31,7 @@ const DataProperty = () => {
                         sizestr = ` (${size} elements)`;
                     }
 
-                    const shortenedJsonValue = jsonValue.length > 4001 ? jsonValue.substring(0, 2000) + "..." + jsonValue.substring(jsonValue.length - 2000) : jsonValue;
+                    const shortenedJsonValue = jsonValue.length > 4001 ? jsonValue.substring(0, 2000) + "...(skipped large data)" + jsonValue.substring(jsonValue.length - 2000) : jsonValue;
 
                     return (
                         <div className="data-property-kv-pair" key={key}>

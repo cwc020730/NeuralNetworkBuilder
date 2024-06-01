@@ -6,7 +6,8 @@ from . import (
     RandomInputUnit,
     HuggingFaceDatasetInputUnit,
     DatasetSplitUnit,
-    IntegerToOneHotUnit
+    IntegerToOneHotUnit,
+    ToTensorUnit
 )
 
 class UnitObjectAllocator:
@@ -18,7 +19,8 @@ class UnitObjectAllocator:
         'randomInput': RandomInputUnit,
         'HF dataset input': HuggingFaceDatasetInputUnit,
         'dataset split': DatasetSplitUnit,
-        'int to one-hot': IntegerToOneHotUnit
+        'int to one-hot': IntegerToOneHotUnit,
+        'to tensor': ToTensorUnit
     }
 
     def __init__(self):

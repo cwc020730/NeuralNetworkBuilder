@@ -15,5 +15,6 @@ from .unit_objects import (
     RandomInputUnit,
     Unit,
     InputUnit,
-    DataProcessingUnit
+    DataProcessingUnit,
+    ToTensorUnit
 )

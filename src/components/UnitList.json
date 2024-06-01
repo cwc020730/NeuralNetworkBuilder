@@ -131,5 +131,35 @@
         "parameters": {
             
         }
+    },
+    "to tensor": {
+        "primary_label": "to tensor",
+        "in_unit_label": "TOTENSOR",
+        "in_unit_label_color": "black",
+        "category": "DATA",
+        "description": "Convert array or image to tensor.",
+        "color": "white",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Input data"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Tensor"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }

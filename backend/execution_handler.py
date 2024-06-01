@@ -64,6 +64,7 @@ class ExecutionHandler:
             self.send_unit_data(unit_data)
             print(f'Executing unit: {unit_object}')
 
+            # TODO: Adjust the code to use a dict of name: data instead of a list
             for connection in unit_info['outputs']:
                 input_for_next_unit = output[connection['name']]
                 next_unit_id = connection['connects_to']

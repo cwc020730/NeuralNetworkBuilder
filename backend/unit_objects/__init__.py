@@ -1,7 +1,8 @@
 
 from .data_processing_unit_objects import (
     DatasetSplitUnit,
-    IntegerToOneHotUnit
+    IntegerToOneHotUnit,
+    ToTensorUnit
 )
 from .input_unit_objects import (
     HuggingFaceDatasetInputUnit,
