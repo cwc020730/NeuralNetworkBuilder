@@ -47,7 +47,7 @@ class ToTensorUnit(DataProcessingUnit):
             # Check if all elements are integers
             elif all(isinstance(data, int) for data in input_data):
                 return {
-                    "Tensor": TensorData(torch.tensor(input_data, dtype=torch.int32))
+                    "Tensor": TensorData(torch.tensor(input_data, dtype=torch.long))
                 }
         elif isinstance(input_data, (PILImage, np.ndarray)):
             return {

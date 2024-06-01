@@ -23,7 +23,7 @@ class TensorData(DataObject):
             self.mean = tensor.mean().item() if tensor.numel() > 0 else None
             self.std = tensor.std().item() if tensor.numel() > 0 else None
             self.shape = list(tensor.shape)
-        elif self.tensor.dtype == torch.int32:
+        elif self.tensor.dtype == torch.long:
             self.min = tensor.min().item() if tensor.numel() > 0 else None
             self.max = tensor.max().item() if tensor.numel() > 0 else None
             self.mean = None
