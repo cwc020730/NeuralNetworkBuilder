@@ -17,11 +17,18 @@ class TensorData(DataObject):
     """
     def __init__(self, tensor: torch.Tensor):
         self.tensor = tensor
-        self.min = tensor.min().item() if tensor.numel() > 0 else None
-        self.max = tensor.max().item() if tensor.numel() > 0 else None
-        self.mean = tensor.mean().item() if tensor.numel() > 0 else None
-        self.std = tensor.std().item() if tensor.numel() > 0 else None
-        self.shape = list(tensor.shape)
+        if self.tensor.dtype == torch.float32:
+            self.min = tensor.min().item() if tensor.numel() > 0 else None
+            self.max = tensor.max().item() if tensor.numel() > 0 else None
+            self.mean = tensor.mean().item() if tensor.numel() > 0 else None
+            self.std = tensor.std().item() if tensor.numel() > 0 else None
+            self.shape = list(tensor.shape)
+        elif self.tensor.dtype == torch.int32:
+            self.min = tensor.min().item() if tensor.numel() > 0 else None
+            self.max = tensor.max().item() if tensor.numel() > 0 else None
+            self.mean = None
+            self.std = None
+            self.shape = list(tensor.shape)
 
     def _reduce_dimension(self, tensor: torch.Tensor, max_size=1000):
         """

@@ -37,13 +37,18 @@ class ToTensorUnit(DataProcessingUnit):
         transform = transforms.ToTensor()
         input_data = input_data["Input data"].get_data()
         if isinstance(input_data, list):
-            if not all(isinstance(data, PILImage) for data in input_data):
-                raise ValueError("All elements in the list must be of type PILImage")
-            list_of_tensor = [transform(data) for data in input_data]
-            tensor = torch.stack(list_of_tensor)
-            return {
-                "Tensor": TensorData(tensor)
-            }
+            # Check if all elements are PIL images
+            if all(isinstance(data, PILImage) for data in input_data):
+                list_of_tensor = [transform(data) for data in input_data]
+                tensor = torch.stack(list_of_tensor)
+                return {
+                    "Tensor": TensorData(tensor)
+                }
+            # Check if all elements are integers
+            elif all(isinstance(data, int) for data in input_data):
+                return {
+                    "Tensor": TensorData(torch.tensor(input_data, dtype=torch.int32))
+                }
         elif isinstance(input_data, (PILImage, np.ndarray)):
             return {
                 "Tensor": TensorData(transform(input_data))
