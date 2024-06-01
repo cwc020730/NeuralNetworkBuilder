@@ -19,4 +19,6 @@ from .unit_objects import (
     ToTensorUnit,
     ModelEndUnit,
     ToDataloaderUnit,
+    SGDUnit,
+    CrossEntropyLossUnit,
 )

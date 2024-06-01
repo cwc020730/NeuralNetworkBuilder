@@ -9,7 +9,9 @@ from . import (
     IntegerToOneHotUnit,
     ToTensorUnit,
     ModelEndUnit,
-    ToDataloaderUnit
+    ToDataloaderUnit,
+    SGDUnit,
+    CrossEntropyLossUnit
 )
 
 class UnitObjectAllocator:
@@ -24,7 +26,9 @@ class UnitObjectAllocator:
         'int to one-hot': IntegerToOneHotUnit,
         'to tensor': ToTensorUnit,
         'model end': ModelEndUnit,
-        'to dataloader': ToDataloaderUnit
+        'to dataloader': ToDataloaderUnit,
+        "SGD": SGDUnit,
+        "cross entropy loss": CrossEntropyLossUnit
     }
 
     def __init__(self):

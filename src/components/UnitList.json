@@ -335,5 +335,36 @@
                 "default": true
             }
         }
+    },
+    "cross entropy loss": {
+        "primary_label": "cross entropy loss",
+        "in_unit_label": "CELOSS",
+        "in_unit_label_color": "black",
+        "category": "LOSS",
+        "description": "Cross entropy loss.",
+        "color": "#FFA07A",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 2,
+                "variable": false
+            },
+            "input_labels": [
+                "Model output",
+                "Labels"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Loss"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }

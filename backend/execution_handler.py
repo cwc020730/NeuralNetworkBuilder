@@ -59,13 +59,13 @@ class ExecutionHandler:
                 optimizer_unit_object = UnitObjectAllocator.create_unit_object(optimizer_unit_id, optimizer_unit_info)
                 loss_function_unit_info = self.simplified_data[curr_loss_func_unit_id]
                 loss_function_unit_object = UnitObjectAllocator.create_unit_object(curr_loss_func_unit_id, loss_function_unit_info)
-                optimizer = optimizer_unit_object.get_optimizer()
+                optimizer = optimizer_unit_object.get_optimizer(unit_object)
                 criterion = loss_function_unit_object.get_loss_function()
                 for epoch in range(num_epochs):
                     running_loss = 0.0
                     for i, (inputs, labels) in enumerate(dataloader, 0):
                         optimizer.zero_grad()
-                        output = unit_object(input_data)
+                        output = unit_object(inputs)
                         loss = criterion(output, labels)
                         loss.backward()
                         optimizer.step()
