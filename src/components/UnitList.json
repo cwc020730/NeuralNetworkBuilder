@@ -264,5 +264,35 @@
                 "default": false
             }
         }
+    },
+    "model end": {
+        "primary_label": "model end",
+        "in_unit_label": "MODELEND",
+        "in_unit_label_color": "black",
+        "category": "MARKER",
+        "description": "Indicate the end of a model.",
+        "color": "#ADD8E6",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Model output"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Model output"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }

@@ -3,10 +3,10 @@ The execution_handler.py file contains the ExecutionHandler class,
 which is responsible for executing the operations of the units on the canvas.
 """
 
-from flask import jsonify
 from .unit_object_allocator import UnitObjectAllocator
-from .app import socketio, send_unit_data
+from .app import send_unit_data
 from . import EmptyData
+from .unit_objects.train_start_unit import TrainStartUnit
 
 class ExecutionHandler:
     """
@@ -37,19 +37,26 @@ class ExecutionHandler:
         
         def exec_traverse(unit_id, input_data):
             unit_info = self.simplified_data[unit_id]
-            unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
-            output = unit_object.execute(input_data)
-            output_to_send = {}
-            for output_name, output_data in output.items():
-                output_data_json = output_data.to_json_dict()
-                output_to_send[output_name] = output_data_json
-            unit_data = {
-                unit_id: output_to_send
-            }
-            send_unit_data(unit_data)
+            # Check if the unit is a train start unit
+            if unit_info['type'] == 'train start':
+                unit_object = TrainStartUnit(unit_id, unit_info, self.simplified_data)
+                output = unit_object(input_data)
+                output_connections = unit_object.end_unit_connections
+            else:
+                unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
+                output = unit_object.execute(input_data)
+                output_connections = unit_info['outputs']
+                output_to_send = {}
+                for output_name, output_data in output.items():
+                    output_data_json = output_data.to_json_dict()
+                    output_to_send[output_name] = output_data_json
+                unit_data = {
+                    unit_id: output_to_send
+                }
+                send_unit_data(unit_data)
             print(f'Executing unit: {unit_object}')
 
-            for connection in unit_info['outputs']:
+            for connection in output_connections:
                 input_for_next_unit = output[connection['name']]
                 next_unit_id = connection['connects_to']
                 next_unit_input_name_to_connect = connection['end_name']
