@@ -195,15 +195,10 @@
                 "description": "Number of epochs to train.",
                 "default": 1
             },
-            "batch_size": {
-                "type": "int",
-                "description": "Batch size.",
-                "default": 1
-            },
             "device": {
                 "type": "string",
                 "description": "Device to train on.",
-                "default": "gpu"
+                "default": "cuda"
             }
         }
     },
@@ -356,11 +351,12 @@
         },
         "output": {
             "output_cnt": {
-                "default": 1,
+                "default": 2,
                 "variable": false
             },
             "output_labels": [
-                "Loss"
+                "Loss",
+                "Accuracy"
             ]
         },
         "parameters": {
