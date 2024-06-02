@@ -64,6 +64,7 @@ class ExecutionHandler:
                 for epoch in range(num_epochs):
                     running_loss = 0.0
                     avg_time = 0.0
+                    total_accuracy = 0.0
                     for i, (inputs, labels) in enumerate(dataloader, 0):
                         start_time = time.time()
                         inputs, labels = inputs.to(device), labels.to(device)
@@ -71,6 +72,7 @@ class ExecutionHandler:
                         output = unit_object(inputs)
                         loss = criterion(output["Model output"].get_data(), labels)
                         loss.backward()
+                        total_accuracy += loss_function_unit_object.get_accuracy(output["Model output"].get_data(), labels)
                         optimizer.step()
 
                         running_loss += loss.item()
@@ -81,7 +83,7 @@ class ExecutionHandler:
                             print(f'Epoch {epoch + 1}, batch {i + 1}, loss: {loss.item()}')
                             print(f'Avg time: {avg_time / 100}')
                             avg_time = 0.0
-                    print(f'Epoch {epoch + 1}, loss: {running_loss}')
+                    print(f'Epoch {epoch + 1}, total accuracy: {total_accuracy / len(dataloader)}')
                 output_connections = unit_object.end_unit_connections
             else:
                 unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)

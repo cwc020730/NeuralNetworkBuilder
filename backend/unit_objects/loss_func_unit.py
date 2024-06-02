@@ -28,3 +28,16 @@ class LossFuncUnit(Unit):
             torch.nn.Module: The loss function.
         """
         return self.loss_func
+    
+    def get_accuracy(self, actual, expected):
+        """
+        Get the accuracy of the model.
+
+        Args:
+            actual (torch.Tensor): The actual output.
+            expected (torch.Tensor): The expected output.
+
+        Returns:
+            float: The accuracy of the model.
+        """
+        raise NotImplementedError('This method should be implemented by the subclass')
