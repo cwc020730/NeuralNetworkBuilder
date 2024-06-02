@@ -7,7 +7,7 @@ import time
 from torch.utils.data import DataLoader
 from .unit_object_allocator import UnitObjectAllocator
 from .app import send_unit_data
-from . import EmptyData
+from . import EmptyData, AccuracyData, LossData
 from .unit_objects.train_start_unit import TrainStartUnit
 
 class ExecutionHandler:
@@ -61,6 +61,8 @@ class ExecutionHandler:
                 loss_function_unit_object = UnitObjectAllocator.create_unit_object(curr_loss_func_unit_id, loss_function_unit_info)
                 optimizer = optimizer_unit_object.get_optimizer(unit_object)
                 criterion = loss_function_unit_object.get_loss_func()
+                acc_data = AccuracyData([])
+                loss_data = LossData([])
                 for epoch in range(num_epochs):
                     running_loss = 0.0
                     avg_time = 0.0
@@ -83,6 +85,14 @@ class ExecutionHandler:
                             print(f'Epoch {epoch + 1}, batch {i + 1}, loss: {loss.item()}')
                             print(f'Avg time: {avg_time / 100}')
                             avg_time = 0.0
+                    loss_data.add_loss(running_loss / len(dataloader))
+                    acc_data.add_accuracy(total_accuracy / len(dataloader))
+                    send_unit_data({
+                        curr_loss_func_unit_id: {
+                            'Loss': loss_data.to_json_dict(),
+                            'Accuracy': acc_data.to_json_dict()
+                        }
+                    })
                     print(f'Epoch {epoch + 1}, total accuracy: {total_accuracy / len(dataloader)}')
                 output_connections = unit_object.end_unit_connections
             else:

@@ -6,7 +6,10 @@ from .data_objects import (
     DataObject,
     DatasetData,
     EmptyData,
-    TensorData
+    TensorData,
+    TrainingData,
+    AccuracyData,
+    LossData
 )
 from .unit_objects import (
     DatasetSplitUnit,
