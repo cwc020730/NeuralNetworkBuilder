@@ -7,6 +7,12 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from . import HuggingfaceImageClassificationDatasetData
 
+plt.rcParams['text.color'] = 'white'
+plt.rcParams['axes.labelcolor'] = 'white'
+plt.rcParams['xtick.color'] = 'white'
+plt.rcParams['ytick.color'] = 'white'
+plt.rcParams['axes.titlecolor'] = 'white'
+
 class DataImageBuilder:
     """
     The DataImageBuilder class builds images for data objects.
@@ -30,15 +36,21 @@ class DataImageBuilder:
         """
         if isinstance(self.data_object, HuggingfaceImageClassificationDatasetData):
             dataset = self.data_object.get_data()
-            # Sample 10 images from the dataset
-            sampled_data = dataset.shuffle(seed=42).select(range(10))
+            # Sample 4 images from the dataset
+            sampled_data = dataset.shuffle(seed=42).select(range(5))
 
-            fig, axes = plt.subplots(2, 5, figsize=(12, 5))
+            fig, axes = plt.subplots(1, 5, figsize=(12, 3))
 
             for i, data in enumerate(sampled_data):
-                ax = axes[i // 5, i % 5]
+                ax = axes[i]
                 ax.imshow(data['image'], cmap='gray')
-                ax.set_title(f"Label: {data['label']}")
+                # Place the label below the image
+                if self.data_object.label_mapping is not None:
+                    label = self.data_object.label_mapping[data['label']]
+                else:
+                    label = data[self.data_object.label_column]
+                ax.text(0.5, -0.15, f"{label}",
+                    size=12, ha='center', transform=ax.transAxes)
                 ax.axis('off')
 
             # set transparent background
@@ -47,7 +59,6 @@ class DataImageBuilder:
             for ax in axes.flatten():
                 ax.patch.set_alpha(0.0)
 
-            plt.title('Sample Images')
             plt.tight_layout()
         else:
             return None

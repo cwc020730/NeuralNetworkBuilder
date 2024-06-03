@@ -5,6 +5,7 @@ which is a data object class that represents a Huggingface image classification 
 
 from PIL.Image import Image as PILImage
 from ..huggingface_dataset_data import HuggingFaceDatasetData
+from datasets import ClassLabel
 
 class HuggingfaceImageClassificationDatasetData(HuggingFaceDatasetData):
     """
@@ -23,6 +24,7 @@ class HuggingfaceImageClassificationDatasetData(HuggingFaceDatasetData):
         self.label_column = label_column
         self.images = self.dataset[self.image_column]
         self.labels = self.dataset[self.label_column]
+        self.label_mapping = None
         self.image_type = None
         self.label_type = None
         self.get_image_label_types()
@@ -34,6 +36,11 @@ class HuggingfaceImageClassificationDatasetData(HuggingFaceDatasetData):
         # get the exact name of the image and label types
         self.label_type = str(type(self.labels[0]))[8:-2]
         self.image_type = str(type(self.images[0]))[8:-2]
+
+        # Check if labels are ClassLabel type and get the label mapping
+        label_feature = self.dataset.features[self.label_column]
+        if isinstance(label_feature, ClassLabel):
+            self.label_mapping = label_feature.names
 
     def to_json_dict(self):
         """
