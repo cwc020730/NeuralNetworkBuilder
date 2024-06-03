@@ -345,6 +345,21 @@
     transform: rotate(-90deg);
 }
 
+.data-panel-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #505050;
+  color: #fff;
+  height: 150px;
+  border-left: 1px rgba(255, 255, 255, 0.3) solid;
+}
+
+.data-panel-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .unit-param-info-area {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;

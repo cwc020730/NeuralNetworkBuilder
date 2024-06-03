@@ -30,7 +30,7 @@ const DataPanelImageContainer = () => {
     return (
         <div className="data-panel-image-container">
             {imageData ? (
-                <img src={imageData} alt={`${selectedUnitId} ${selectedDataName}`} />
+                <img className="data-panel-image" src={imageData} alt={`${selectedUnitId} ${selectedDataName}`} />
             ) : (
                 <></>
             )}
