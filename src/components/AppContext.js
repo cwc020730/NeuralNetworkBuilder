@@ -16,6 +16,8 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [imageDataMap, setImageDataMap] = useState(new Map());
+
   useEffect(() => {
 
     // Set up WebSocket connection
@@ -81,6 +83,8 @@ export const AppProvider = ({ children }) => {
         setError,
         selectedDataName,
         setSelectedDataName,
+        imageDataMap,
+        setImageDataMap
       }
     }>
       {children}

@@ -5,8 +5,7 @@ import io from "socket.io-client";
 const socket = io("http://localhost:5000");
 
 const DataPanelImageContainer = () => {
-    const { selectedUnitId, selectedDataName } = useContext(AppContext);
-    const [imageDataMap, setImageDataMap] = useState(new Map());
+    const { selectedUnitId, selectedDataName, imageDataMap, setImageDataMap } = useContext(AppContext);
     const imageDataMapRef = useRef(imageDataMap);
 
     useEffect(() => {
@@ -24,13 +23,10 @@ const DataPanelImageContainer = () => {
         };
     }, []);
 
-    const key = `${selectedUnitId}/${selectedDataName}`;
-    const imageData = imageDataMap.get(key);
-
     return (
         <div className="data-panel-image-container">
-            {imageData ? (
-                <img className="data-panel-image" src={imageData} alt={`${selectedUnitId} ${selectedDataName}`} />
+            {imageDataMap.get(`${selectedUnitId}/${selectedDataName}`) ? (
+                <img className="data-panel-image" src={imageDataMap.get(`${selectedUnitId}/${selectedDataName}`)} alt={`${selectedUnitId} ${selectedDataName}`} />
             ) : (
                 <></>
             )}
