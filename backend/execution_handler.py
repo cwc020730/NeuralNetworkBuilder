@@ -5,8 +5,9 @@ which is responsible for executing the operations of the units on the canvas.
 
 import time
 from torch.utils.data import DataLoader
+from .data_image_builder import DataImageBuilder
 from .unit_object_allocator import UnitObjectAllocator
-from .app import send_unit_data
+from .app import send_unit_data, send_image
 from . import EmptyData, AccuracyData, LossData
 from .unit_objects.train_start_unit import TrainStartUnit
 
@@ -98,6 +99,10 @@ class ExecutionHandler:
             else:
                 unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
                 output = unit_object.execute(input_data)
+                # add the image to the data panel
+                for output_name, output_data in output.items():
+                    buf = DataImageBuilder(output_data).build_image()
+                    send_image(unit_id, output_name, buf)
                 output_connections = unit_info['outputs']
                 # handles the special dataloader case
                 if unit_info['type'] == 'to dataloader':

@@ -2,6 +2,7 @@
 The main file for the backend server.
 """
 
+import os
 from flask import jsonify, request
 from .json_graph_handler import JSONGraphHandler
 from .execution_handler import ExecutionHandler

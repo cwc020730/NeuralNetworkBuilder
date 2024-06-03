@@ -6,6 +6,7 @@ import IOInfo from "./IOInfo";
 import ParamControls from "./ParamControls";
 import DataSelectionController from "./DataSelectionController";
 import DataProperty from "./DataProperty";
+import DataPanelImageContainer from "./DataPanelImageContainer";
 import { AppContext } from "./AppContext";
 
 const MainBottomArea = () => {
@@ -25,7 +26,7 @@ const MainBottomArea = () => {
         <div className="data-panel">
             <DataSelectionController />
             <DataProperty />
-            <div></div>
+            <DataPanelImageContainer />
         </div>
     );
 
