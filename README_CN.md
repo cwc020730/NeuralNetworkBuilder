@@ -49,8 +49,10 @@ python -m backend.backend
 
 ## 贡献
 
-任何形式的贡献都可以。
+任何形式的贡献都可以。欢迎任何的联系和讨论。
 
 ## 联系方式
 
+QQ: 1766797600
+Discord用户名: hh4939
 邮箱: xxzhangjinghexx@gmail.com
