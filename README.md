@@ -45,11 +45,11 @@ You may use File -> Import on `http://localhost:3000` and select `examples/simpl
 Click the Run button to start training the neural network.
 Currently all the training status will be shown on the terminal where you start `python -m backend.backend`.
 
-After each training epoch, the data (loss and accuracy) in CELOSS unit will be refreshed and a graph will appear.
+After each training epoch, the data (loss and accuracy) in CELOSS unit will be refreshed and a graph showing the changes will appear.
 
 ## Contribution
 
-Welcome any contributions, feedbacks, or inputs. Submit issue or pull requests to contribute.
+Welcome any contributions, feedbacks, discussions, or inputs. Submit issue or pull requests to contribute.
 
 ## Contacts
 
