@@ -53,6 +53,6 @@ python -m backend.backend
 
 ## 联系方式
 
-QQ: 1766797600
-Discord用户名: hh4939
-邮箱: xxzhangjinghexx@gmail.com
+- QQ: 1766797600
+- Discord用户名: hh4939
+- 邮箱: xxzhangjinghexx@gmail.com

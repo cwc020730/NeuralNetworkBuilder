@@ -53,6 +53,6 @@ Welcome any contributions, feedbacks, or inputs. Submit issue or pull requests t
 
 ## Contacts
 
-Discord Username: hh4939
-Email: xxzhangjinghexx@gmail.com
-QQ: 1766797600
+- Discord Username: hh4939
+- Email: xxzhangjinghexx@gmail.com
+- QQ: 1766797600
