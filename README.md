@@ -2,6 +2,10 @@
 
 Create flowcharts of neural networks and convert the flowcharts into PyTorch for inferencing/training.
 
+## Languages
+- [English](README_EN.md)
+- [中文](README_CN.md)
+
 ## How to run the project
 
 Clone this repository
@@ -51,7 +55,3 @@ Welcome any contributions, feedbacks, or inputs. Submit issue or pull requests t
 ## Contacts
 
 Email: xxzhangjinghexx@gmail.com
-
-## Languages
-- [English](README_EN.md)
-- [中文](README_CN.md)
