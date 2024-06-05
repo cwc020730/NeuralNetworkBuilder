@@ -14,10 +14,9 @@ git clone https://github.com/cwc020730/NeuralNetworkBuilder.git
 ```
 
 Install [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/)
+Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installation/)
 
 Make sure the directory of `npm`, `pip` and `python` executables are in the system environment variable `PATH`
-
-Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installation/)
 
 Install relevant packages:
 ```
@@ -54,4 +53,6 @@ Welcome any contributions, feedbacks, or inputs. Submit issue or pull requests t
 
 ## Contacts
 
+Discord Username: hh4939
 Email: xxzhangjinghexx@gmail.com
+QQ: 1766797600
