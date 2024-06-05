@@ -51,3 +51,7 @@ Welcome any contributions, feedbacks, or inputs. Submit issue or pull requests t
 ## Contacts
 
 Email: xxzhangjinghexx@gmail.com
+
+## Languages
+- [English](README_EN.md)
+- [中文](README_CN.md)

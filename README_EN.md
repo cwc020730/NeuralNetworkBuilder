@@ -1,7 +1,3 @@
-## Languages
-- [English](README_EN.md)
-- [中文](README_CN.md)
-
 # NeuralNetworkBuilder
 
 Create flowcharts of neural networks and convert the flowcharts into PyTorch for inferencing/training.
