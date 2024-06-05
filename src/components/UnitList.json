@@ -73,7 +73,7 @@
     },
     "dataset split": {
         "primary_label": "dataset split",
-        "in_unit_label": "DSSPLT",
+        "in_unit_label": "DSSPLIT",
         "in_unit_label_color": "black",
         "category": "DATA",
         "description": "Split a dataset into features and labels.",
@@ -292,7 +292,7 @@
     },
     "to dataloader": {
         "primary_label": "to dataloader",
-        "in_unit_label": "TODL",
+        "in_unit_label": "DATALOADER",
         "in_unit_label_color": "black",
         "category": "DATA",
         "description": "Convert dataset to dataloader. (Dataloader X has to be connected to a model start marker unit)",
