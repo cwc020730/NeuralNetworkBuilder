@@ -9,39 +9,45 @@ Clone this repository
 git clone https://github.com/cwc020730/NeuralNetworkBuilder.git
 ```
 
-Install NodeJS from `https://nodejs.org/en`.
+Install [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/)
 
-Make sure the directory `npm` executable is in the system environment variable `PATH`
+Make sure the directory of `npm`, `pip` and `python` executables are in the system environment variable `PATH`
+
+Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installation/)
 
 Install relevant packages:
 ```
 npm install
 ```
 
-Start the frontend:
+In a terminal, start the frontend:
 ```
 npm start
 ```
 
 `npm start` should start the app locally: `http://localhost:3000`.
 
-Start the backend:
+In another terminal, start the backend:
 ```
 pip install -r backend/requirements.txt
 python -m backend.backend
 ```
 The backend server should start locally: `http://localhost:5000`.
 
-## Project Prototyping Components
+## Example
 
-### Front-End (React)
-- Flowchart Canvas with zoom in/out utility (Finished)
-- Menu for neural network layer blocks (In Progress)
-- Draggable neural network layer blocks (To be dropped into the canvas) (Finished)
-- Arrows attach to the neural network layers blocks (Finished)
-- Data exchange with backend (TODO)
+![Simple NN trained on MNIST](images/img1.png)
 
-### Back-End (Python)
-- Graph To PyTorch code converter (TODO)
-- PyTorch inferencing/training utility (TODO)
-- Data exchange with frontend (In Progress)
+You may use File -> Import on `http://localhost:3000` and select `examples/simple_net_for_mnist.json` to load the same neural network.
+Click the Run button to start training the neural network.
+Currently all the training status will be shown on the terminal where you start `python -m backend.backend`.
+
+After each training epoch, the data (loss and accuracy) in CELOSS unit will be refreshed and a graph will appear.
+
+## Contribution
+
+Welcome any contributions, feedbacks, or inputs. Submit issue or pull requests to contribute.
+
+## Contacts
+
+Email: xxzhangjinghexx@gmail.com
