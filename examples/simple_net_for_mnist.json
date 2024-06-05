@@ -1,0 +1,883 @@
+{
+    "units": {
+        "9917aff1-7fcb-4c99-ab77-817bb0cba739": {
+            "unitInfo": {
+                "type": "HF dataset input",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 60,
+                        "x": 678.8732299804688,
+                        "y": 89.15492630004883,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Dataset",
+                        "occupied": true,
+                        "id": "9917aff1-7fcb-4c99-ab77-817bb0cba739-cp-0",
+                        "unitId": "9917aff1-7fcb-4c99-ab77-817bb0cba739"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "52b69544-23b6-4982-a63b-b7154e72e60c"
+                ],
+                "attachingArrowEnds": [],
+                "parameters": {
+                    "dataset": {
+                        "type": "string",
+                        "description": "Dataset to input.",
+                        "default": "mnist",
+                        "value": "mnist"
+                    },
+                    "split": {
+                        "type": "string",
+                        "description": "Split of the dataset.",
+                        "default": "train",
+                        "value": "train"
+                    }
+                }
+            },
+            "x": 598.8732299804688,
+            "y": 29.154926300048828
+        },
+        "65b4f5ec-9108-4b89-9df3-a89303e43e8c": {
+            "unitInfo": {
+                "type": "dataset split",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 679.5774688720703,
+                        "y": 111.54930114746094,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Dataset",
+                        "occupied": true,
+                        "id": "65b4f5ec-9108-4b89-9df3-a89303e43e8c-cp-0",
+                        "unitId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c"
+                    },
+                    {
+                        "originalX": 53.333333333333336,
+                        "originalY": 60,
+                        "x": 652.9108022054037,
+                        "y": 171.54930114746094,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Features",
+                        "occupied": true,
+                        "id": "65b4f5ec-9108-4b89-9df3-a89303e43e8c-cp-1",
+                        "unitId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c"
+                    },
+                    {
+                        "originalX": 106.66666666666667,
+                        "originalY": 60,
+                        "x": 706.2441355387369,
+                        "y": 171.54930114746094,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Labels",
+                        "occupied": true,
+                        "id": "65b4f5ec-9108-4b89-9df3-a89303e43e8c-cp-2",
+                        "unitId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "7bdbcca1-1fc8-498c-b9dd-c688e9c19c93",
+                    "60afeacb-9cd9-4713-aff1-241806efcbbc"
+                ],
+                "attachingArrowEnds": [
+                    "52b69544-23b6-4982-a63b-b7154e72e60c"
+                ],
+                "parameters": {}
+            },
+            "x": 599.5774688720703,
+            "y": 111.54930114746094
+        },
+        "2d1da645-85aa-4532-a80d-a2d253d4107b": {
+            "unitInfo": {
+                "type": "to tensor",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 585.2112731933594,
+                        "y": 197.46481323242188,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Input data",
+                        "occupied": true,
+                        "id": "2d1da645-85aa-4532-a80d-a2d253d4107b-cp-0",
+                        "unitId": "2d1da645-85aa-4532-a80d-a2d253d4107b"
+                    },
+                    {
+                        "originalX": 80,
+                        "originalY": 60,
+                        "x": 585.2112731933594,
+                        "y": 257.4648132324219,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Tensor",
+                        "occupied": true,
+                        "id": "2d1da645-85aa-4532-a80d-a2d253d4107b-cp-1",
+                        "unitId": "2d1da645-85aa-4532-a80d-a2d253d4107b"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "8d062adf-77d8-400b-b036-59fdac4d1954"
+                ],
+                "attachingArrowEnds": [
+                    "7bdbcca1-1fc8-498c-b9dd-c688e9c19c93"
+                ],
+                "parameters": {}
+            },
+            "x": 505.2112731933594,
+            "y": 197.46481323242188
+        },
+        "7787e801-f0f4-461d-9831-72cc3171b45c": {
+            "unitInfo": {
+                "type": "to tensor",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 785.2112884521484,
+                        "y": 200.28170776367188,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Input data",
+                        "occupied": true,
+                        "id": "7787e801-f0f4-461d-9831-72cc3171b45c-cp-0",
+                        "unitId": "7787e801-f0f4-461d-9831-72cc3171b45c"
+                    },
+                    {
+                        "originalX": 80,
+                        "originalY": 60,
+                        "x": 785.2112884521484,
+                        "y": 260.2817077636719,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Tensor",
+                        "occupied": true,
+                        "id": "7787e801-f0f4-461d-9831-72cc3171b45c-cp-1",
+                        "unitId": "7787e801-f0f4-461d-9831-72cc3171b45c"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "495748b0-bc08-48cc-af3f-9aa521ca869a"
+                ],
+                "attachingArrowEnds": [
+                    "60afeacb-9cd9-4713-aff1-241806efcbbc"
+                ],
+                "parameters": {}
+            },
+            "x": 705.2112884521484,
+            "y": 200.28170776367188
+        },
+        "0e37d387-d939-4b0d-8865-86500ea4ac91": {
+            "unitInfo": {
+                "type": "to dataloader",
+                "connectionPoints": [
+                    {
+                        "originalX": 53.333333333333336,
+                        "originalY": 0,
+                        "x": 661.3615468343099,
+                        "y": 295.3521270751953,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Features",
+                        "occupied": true,
+                        "id": "0e37d387-d939-4b0d-8865-86500ea4ac91-cp-0",
+                        "unitId": "0e37d387-d939-4b0d-8865-86500ea4ac91"
+                    },
+                    {
+                        "originalX": 106.66666666666667,
+                        "originalY": 0,
+                        "x": 714.6948801676432,
+                        "y": 295.3521270751953,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Labels",
+                        "occupied": true,
+                        "id": "0e37d387-d939-4b0d-8865-86500ea4ac91-cp-1",
+                        "unitId": "0e37d387-d939-4b0d-8865-86500ea4ac91"
+                    },
+                    {
+                        "originalX": 53.333333333333336,
+                        "originalY": 60,
+                        "x": 661.3615468343099,
+                        "y": 355.3521270751953,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Dataloader X",
+                        "occupied": true,
+                        "id": "0e37d387-d939-4b0d-8865-86500ea4ac91-cp-2",
+                        "unitId": "0e37d387-d939-4b0d-8865-86500ea4ac91"
+                    },
+                    {
+                        "originalX": 106.66666666666667,
+                        "originalY": 60,
+                        "x": 714.6948801676432,
+                        "y": 355.3521270751953,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Dataloader Y",
+                        "occupied": true,
+                        "id": "0e37d387-d939-4b0d-8865-86500ea4ac91-cp-3",
+                        "unitId": "0e37d387-d939-4b0d-8865-86500ea4ac91"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "f220ac5a-9ded-4cc0-b923-7ffe8b951bd6",
+                    "5868da90-6215-4a77-8d78-be36d7f2b467"
+                ],
+                "attachingArrowEnds": [
+                    "8d062adf-77d8-400b-b036-59fdac4d1954",
+                    "495748b0-bc08-48cc-af3f-9aa521ca869a"
+                ],
+                "parameters": {
+                    "batch_size": {
+                        "type": "int",
+                        "description": "Batch size.",
+                        "default": 1,
+                        "value": "100"
+                    },
+                    "shuffle": {
+                        "type": "bool",
+                        "description": "Shuffle.",
+                        "default": true,
+                        "value": true
+                    }
+                }
+            },
+            "x": 608.0282135009766,
+            "y": 295.3521270751953
+        },
+        "ab4bf4d7-55cf-4e6c-970e-685ae126e99b": {
+            "unitInfo": {
+                "type": "train start",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 431.6901550292969,
+                        "y": 396.7605895996094,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Data",
+                        "occupied": true,
+                        "id": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b-cp-0",
+                        "unitId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b"
+                    },
+                    {
+                        "originalX": 53.333333333333336,
+                        "originalY": 60,
+                        "x": 405.0234883626302,
+                        "y": 456.7605895996094,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Data",
+                        "occupied": true,
+                        "id": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b-cp-1",
+                        "unitId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b"
+                    },
+                    {
+                        "originalX": 106.66666666666667,
+                        "originalY": 60,
+                        "x": 458.35682169596356,
+                        "y": 456.7605895996094,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Optimizer connector",
+                        "occupied": true,
+                        "id": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b-cp-2",
+                        "unitId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "432dc4a0-6c28-4733-8f1c-d40b335d6b3b",
+                    "cc03ca50-7ee7-4451-a2a5-0ed038c9696f"
+                ],
+                "attachingArrowEnds": [
+                    "f220ac5a-9ded-4cc0-b923-7ffe8b951bd6"
+                ],
+                "parameters": {
+                    "epochs": {
+                        "type": "int",
+                        "description": "Number of epochs to train.",
+                        "default": 1,
+                        "value": "5"
+                    },
+                    "device": {
+                        "type": "string",
+                        "description": "Device to train on.",
+                        "default": "cuda",
+                        "value": "cuda"
+                    }
+                }
+            },
+            "x": 351.6901550292969,
+            "y": 396.7605895996094
+        },
+        "206ed840-b5f6-4c0d-9b11-83d97a5ea109": {
+            "unitInfo": {
+                "type": "SGD",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 569.0140838623047,
+                        "y": 484.0845184326172,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Train start connector",
+                        "occupied": true,
+                        "id": "206ed840-b5f6-4c0d-9b11-83d97a5ea109-cp-0",
+                        "unitId": "206ed840-b5f6-4c0d-9b11-83d97a5ea109"
+                    }
+                ],
+                "attachingArrowStarts": [],
+                "attachingArrowEnds": [
+                    "432dc4a0-6c28-4733-8f1c-d40b335d6b3b"
+                ],
+                "parameters": {
+                    "lr": {
+                        "type": "float",
+                        "description": "Learning rate.",
+                        "default": 0.01,
+                        "value": 0.01
+                    },
+                    "momentum": {
+                        "type": "float",
+                        "description": "Momentum.",
+                        "default": 0,
+                        "value": 0
+                    },
+                    "dampening": {
+                        "type": "float",
+                        "description": "Dampening.",
+                        "default": 0,
+                        "value": 0
+                    },
+                    "wgt_decay": {
+                        "type": "float",
+                        "description": "Weight decay.",
+                        "default": 0,
+                        "value": 0
+                    },
+                    "nesterov": {
+                        "type": "bool",
+                        "description": "Nesterov.",
+                        "default": false,
+                        "value": false
+                    },
+                    "maximize": {
+                        "type": "bool",
+                        "description": "Maximize.",
+                        "default": false,
+                        "value": false
+                    }
+                }
+            },
+            "x": 489.0140838623047,
+            "y": 484.0845184326172
+        },
+        "a3dfb841-f2de-4254-b545-e29aff7a01d4": {
+            "unitInfo": {
+                "type": "linear",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 364.08447265625,
+                        "y": 579.1549530029297,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Input",
+                        "occupied": true,
+                        "id": "a3dfb841-f2de-4254-b545-e29aff7a01d4-cp-0",
+                        "unitId": "a3dfb841-f2de-4254-b545-e29aff7a01d4"
+                    },
+                    {
+                        "originalX": 80,
+                        "originalY": 60,
+                        "x": 364.08447265625,
+                        "y": 639.1549530029297,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Output",
+                        "occupied": true,
+                        "id": "a3dfb841-f2de-4254-b545-e29aff7a01d4-cp-1",
+                        "unitId": "a3dfb841-f2de-4254-b545-e29aff7a01d4"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "3e72fbed-7d2f-497b-af97-acb4bae70518"
+                ],
+                "attachingArrowEnds": [
+                    "17c06a3d-f2da-41b7-a775-ad73e69950b2"
+                ],
+                "parameters": {
+                    "in_features": {
+                        "type": "int",
+                        "description": "Number of input features.",
+                        "default": 1,
+                        "value": "784"
+                    },
+                    "out_features": {
+                        "type": "int",
+                        "description": "Number of output features.",
+                        "default": 1,
+                        "value": "64"
+                    },
+                    "bias": {
+                        "type": "bool",
+                        "description": "Bias.",
+                        "default": true,
+                        "value": true
+                    }
+                }
+            },
+            "x": 284.08447265625,
+            "y": 579.1549530029297
+        },
+        "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c": {
+            "unitInfo": {
+                "type": "flatten",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 365.49293518066406,
+                        "y": 482.676025390625,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Input",
+                        "occupied": true,
+                        "id": "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c-cp-0",
+                        "unitId": "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c"
+                    },
+                    {
+                        "originalX": 80,
+                        "originalY": 60,
+                        "x": 365.49293518066406,
+                        "y": 542.676025390625,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Output",
+                        "occupied": true,
+                        "id": "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c-cp-1",
+                        "unitId": "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "17c06a3d-f2da-41b7-a775-ad73e69950b2"
+                ],
+                "attachingArrowEnds": [
+                    "cc03ca50-7ee7-4451-a2a5-0ed038c9696f"
+                ],
+                "parameters": {}
+            },
+            "x": 285.49293518066406,
+            "y": 482.676025390625
+        },
+        "ddf3e338-19a4-44e6-955f-fcd1883490e0": {
+            "unitInfo": {
+                "type": "relu",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 364.7887268066406,
+                        "y": 673.5211334228516,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Input",
+                        "occupied": true,
+                        "id": "ddf3e338-19a4-44e6-955f-fcd1883490e0-cp-0",
+                        "unitId": "ddf3e338-19a4-44e6-955f-fcd1883490e0"
+                    },
+                    {
+                        "originalX": 80,
+                        "originalY": 60,
+                        "x": 364.7887268066406,
+                        "y": 733.5211334228516,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Output",
+                        "occupied": true,
+                        "id": "ddf3e338-19a4-44e6-955f-fcd1883490e0-cp-1",
+                        "unitId": "ddf3e338-19a4-44e6-955f-fcd1883490e0"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "05ee349d-c8a0-443d-8d09-3829ef85ef1d"
+                ],
+                "attachingArrowEnds": [
+                    "3e72fbed-7d2f-497b-af97-acb4bae70518"
+                ],
+                "parameters": {}
+            },
+            "x": 284.7887268066406,
+            "y": 673.5211334228516
+        },
+        "0b867a41-8258-472e-be20-ef4bbb6e26a2": {
+            "unitInfo": {
+                "type": "linear",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 364.7887420654297,
+                        "y": 767.8873138427734,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Input",
+                        "occupied": true,
+                        "id": "0b867a41-8258-472e-be20-ef4bbb6e26a2-cp-0",
+                        "unitId": "0b867a41-8258-472e-be20-ef4bbb6e26a2"
+                    },
+                    {
+                        "originalX": 80,
+                        "originalY": 60,
+                        "x": 364.7887420654297,
+                        "y": 827.8873138427734,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Output",
+                        "occupied": true,
+                        "id": "0b867a41-8258-472e-be20-ef4bbb6e26a2-cp-1",
+                        "unitId": "0b867a41-8258-472e-be20-ef4bbb6e26a2"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "33eb7502-d3ce-4088-be8c-a03208045ec2"
+                ],
+                "attachingArrowEnds": [
+                    "05ee349d-c8a0-443d-8d09-3829ef85ef1d"
+                ],
+                "parameters": {
+                    "in_features": {
+                        "type": "int",
+                        "description": "Number of input features.",
+                        "default": 1,
+                        "value": "64"
+                    },
+                    "out_features": {
+                        "type": "int",
+                        "description": "Number of output features.",
+                        "default": 1,
+                        "value": "10"
+                    },
+                    "bias": {
+                        "type": "bool",
+                        "description": "Bias.",
+                        "default": true,
+                        "value": true
+                    }
+                }
+            },
+            "x": 284.7887420654297,
+            "y": 767.8873138427734
+        },
+        "bc22fd1a-da06-429d-9991-faff21605356": {
+            "unitInfo": {
+                "type": "model end",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 366.90142822265625,
+                        "y": 866.4788360595703,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Model output",
+                        "occupied": true,
+                        "id": "bc22fd1a-da06-429d-9991-faff21605356-cp-0",
+                        "unitId": "bc22fd1a-da06-429d-9991-faff21605356"
+                    },
+                    {
+                        "originalX": 80,
+                        "originalY": 60,
+                        "x": 366.90142822265625,
+                        "y": 926.4788360595703,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Model output",
+                        "occupied": true,
+                        "id": "bc22fd1a-da06-429d-9991-faff21605356-cp-1",
+                        "unitId": "bc22fd1a-da06-429d-9991-faff21605356"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "a5e6da48-438b-49a2-9681-e25dcfb79123"
+                ],
+                "attachingArrowEnds": [
+                    "33eb7502-d3ce-4088-be8c-a03208045ec2"
+                ],
+                "parameters": {}
+            },
+            "x": 286.90142822265625,
+            "y": 866.4788360595703
+        },
+        "2d876b35-cb9e-4a6b-90df-43cddef76459": {
+            "unitInfo": {
+                "type": "cross entropy loss",
+                "connectionPoints": [
+                    {
+                        "originalX": 53.333333333333336,
+                        "originalY": 0,
+                        "x": 665.7422601019697,
+                        "y": 995.0098053284653,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Model output",
+                        "occupied": true,
+                        "id": "2d876b35-cb9e-4a6b-90df-43cddef76459-cp-0",
+                        "unitId": "2d876b35-cb9e-4a6b-90df-43cddef76459"
+                    },
+                    {
+                        "originalX": 106.66666666666667,
+                        "originalY": 0,
+                        "x": 719.075593435303,
+                        "y": 995.0098053284653,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Labels",
+                        "occupied": true,
+                        "id": "2d876b35-cb9e-4a6b-90df-43cddef76459-cp-1",
+                        "unitId": "2d876b35-cb9e-4a6b-90df-43cddef76459"
+                    },
+                    {
+                        "originalX": 53.333333333333336,
+                        "originalY": 60,
+                        "x": 665.7422601019697,
+                        "y": 1055.0098053284653,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Loss",
+                        "occupied": false,
+                        "id": "2d876b35-cb9e-4a6b-90df-43cddef76459-cp-2",
+                        "unitId": "2d876b35-cb9e-4a6b-90df-43cddef76459"
+                    },
+                    {
+                        "originalX": 106.66666666666667,
+                        "originalY": 60,
+                        "x": 719.075593435303,
+                        "y": 1055.0098053284653,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Accuracy",
+                        "occupied": false,
+                        "id": "2d876b35-cb9e-4a6b-90df-43cddef76459-cp-3",
+                        "unitId": "2d876b35-cb9e-4a6b-90df-43cddef76459"
+                    }
+                ],
+                "attachingArrowStarts": [],
+                "attachingArrowEnds": [
+                    "5868da90-6215-4a77-8d78-be36d7f2b467",
+                    "a5e6da48-438b-49a2-9681-e25dcfb79123"
+                ],
+                "parameters": {}
+            },
+            "x": 612.4089267686363,
+            "y": 995.0098053284653
+        }
+    },
+    "arrows": {
+        "52b69544-23b6-4982-a63b-b7154e72e60c": {
+            "startPoint": {
+                "x": 678.8732299804688,
+                "y": 89.15492630004883
+            },
+            "endPoint": {
+                "x": 679.5774688720703,
+                "y": 111.54930114746094
+            },
+            "startUnitId": "9917aff1-7fcb-4c99-ab77-817bb0cba739",
+            "endUnitId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c",
+            "startAnchorPointId": "9917aff1-7fcb-4c99-ab77-817bb0cba739-cp-0",
+            "endAnchorPointId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c-cp-0"
+        },
+        "7bdbcca1-1fc8-498c-b9dd-c688e9c19c93": {
+            "startPoint": {
+                "x": 652.9108022054037,
+                "y": 171.54930114746094
+            },
+            "endPoint": {
+                "x": 585.2112731933594,
+                "y": 197.46481323242188
+            },
+            "startUnitId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c",
+            "endUnitId": "2d1da645-85aa-4532-a80d-a2d253d4107b",
+            "startAnchorPointId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c-cp-1",
+            "endAnchorPointId": "2d1da645-85aa-4532-a80d-a2d253d4107b-cp-0"
+        },
+        "60afeacb-9cd9-4713-aff1-241806efcbbc": {
+            "startPoint": {
+                "x": 706.2441355387369,
+                "y": 171.54930114746094
+            },
+            "endPoint": {
+                "x": 785.2112884521484,
+                "y": 200.28170776367188
+            },
+            "startUnitId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c",
+            "endUnitId": "7787e801-f0f4-461d-9831-72cc3171b45c",
+            "startAnchorPointId": "65b4f5ec-9108-4b89-9df3-a89303e43e8c-cp-2",
+            "endAnchorPointId": "7787e801-f0f4-461d-9831-72cc3171b45c-cp-0"
+        },
+        "8d062adf-77d8-400b-b036-59fdac4d1954": {
+            "startPoint": {
+                "x": 585.2112731933594,
+                "y": 257.4648132324219
+            },
+            "endPoint": {
+                "x": 661.3615468343099,
+                "y": 295.3521270751953
+            },
+            "startUnitId": "2d1da645-85aa-4532-a80d-a2d253d4107b",
+            "endUnitId": "0e37d387-d939-4b0d-8865-86500ea4ac91",
+            "startAnchorPointId": "2d1da645-85aa-4532-a80d-a2d253d4107b-cp-1",
+            "endAnchorPointId": "0e37d387-d939-4b0d-8865-86500ea4ac91-cp-0"
+        },
+        "495748b0-bc08-48cc-af3f-9aa521ca869a": {
+            "startPoint": {
+                "x": 785.2112884521484,
+                "y": 260.2817077636719
+            },
+            "endPoint": {
+                "x": 714.6948801676432,
+                "y": 295.3521270751953
+            },
+            "startUnitId": "7787e801-f0f4-461d-9831-72cc3171b45c",
+            "endUnitId": "0e37d387-d939-4b0d-8865-86500ea4ac91",
+            "startAnchorPointId": "7787e801-f0f4-461d-9831-72cc3171b45c-cp-1",
+            "endAnchorPointId": "0e37d387-d939-4b0d-8865-86500ea4ac91-cp-1"
+        },
+        "f220ac5a-9ded-4cc0-b923-7ffe8b951bd6": {
+            "startPoint": {
+                "x": 661.3615468343099,
+                "y": 355.3521270751953
+            },
+            "endPoint": {
+                "x": 431.6901550292969,
+                "y": 396.7605895996094
+            },
+            "startUnitId": "0e37d387-d939-4b0d-8865-86500ea4ac91",
+            "endUnitId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b",
+            "startAnchorPointId": "0e37d387-d939-4b0d-8865-86500ea4ac91-cp-2",
+            "endAnchorPointId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b-cp-0"
+        },
+        "5868da90-6215-4a77-8d78-be36d7f2b467": {
+            "startPoint": {
+                "x": 714.6948801676432,
+                "y": 355.3521270751953
+            },
+            "endPoint": {
+                "x": 719.075593435303,
+                "y": 995.0098053284653
+            },
+            "startUnitId": "0e37d387-d939-4b0d-8865-86500ea4ac91",
+            "endUnitId": "2d876b35-cb9e-4a6b-90df-43cddef76459",
+            "startAnchorPointId": "0e37d387-d939-4b0d-8865-86500ea4ac91-cp-3",
+            "endAnchorPointId": "2d876b35-cb9e-4a6b-90df-43cddef76459-cp-1"
+        },
+        "432dc4a0-6c28-4733-8f1c-d40b335d6b3b": {
+            "startPoint": {
+                "x": 458.35682169596356,
+                "y": 456.7605895996094
+            },
+            "endPoint": {
+                "x": 569.0140838623047,
+                "y": 484.0845184326172
+            },
+            "startUnitId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b",
+            "endUnitId": "206ed840-b5f6-4c0d-9b11-83d97a5ea109",
+            "startAnchorPointId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b-cp-2",
+            "endAnchorPointId": "206ed840-b5f6-4c0d-9b11-83d97a5ea109-cp-0"
+        },
+        "cc03ca50-7ee7-4451-a2a5-0ed038c9696f": {
+            "startPoint": {
+                "x": 405.0234883626302,
+                "y": 456.7605895996094
+            },
+            "endPoint": {
+                "x": 365.49293518066406,
+                "y": 482.676025390625
+            },
+            "startUnitId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b",
+            "endUnitId": "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c",
+            "startAnchorPointId": "ab4bf4d7-55cf-4e6c-970e-685ae126e99b-cp-1",
+            "endAnchorPointId": "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c-cp-0"
+        },
+        "3e72fbed-7d2f-497b-af97-acb4bae70518": {
+            "startPoint": {
+                "x": 364.08447265625,
+                "y": 639.1549530029297
+            },
+            "endPoint": {
+                "x": 364.7887268066406,
+                "y": 673.5211334228516
+            },
+            "startUnitId": "a3dfb841-f2de-4254-b545-e29aff7a01d4",
+            "endUnitId": "ddf3e338-19a4-44e6-955f-fcd1883490e0",
+            "startAnchorPointId": "a3dfb841-f2de-4254-b545-e29aff7a01d4-cp-1",
+            "endAnchorPointId": "ddf3e338-19a4-44e6-955f-fcd1883490e0-cp-0"
+        },
+        "17c06a3d-f2da-41b7-a775-ad73e69950b2": {
+            "startPoint": {
+                "x": 365.49293518066406,
+                "y": 542.676025390625
+            },
+            "endPoint": {
+                "x": 364.08447265625,
+                "y": 579.1549530029297
+            },
+            "startUnitId": "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c",
+            "endUnitId": "a3dfb841-f2de-4254-b545-e29aff7a01d4",
+            "startAnchorPointId": "ef18fdf1-a80f-4941-8a20-f5805d8a8a3c-cp-1",
+            "endAnchorPointId": "a3dfb841-f2de-4254-b545-e29aff7a01d4-cp-0"
+        },
+        "05ee349d-c8a0-443d-8d09-3829ef85ef1d": {
+            "startPoint": {
+                "x": 364.7887268066406,
+                "y": 733.5211334228516
+            },
+            "endPoint": {
+                "x": 364.7887420654297,
+                "y": 767.8873138427734
+            },
+            "startUnitId": "ddf3e338-19a4-44e6-955f-fcd1883490e0",
+            "endUnitId": "0b867a41-8258-472e-be20-ef4bbb6e26a2",
+            "startAnchorPointId": "ddf3e338-19a4-44e6-955f-fcd1883490e0-cp-1",
+            "endAnchorPointId": "0b867a41-8258-472e-be20-ef4bbb6e26a2-cp-0"
+        },
+        "33eb7502-d3ce-4088-be8c-a03208045ec2": {
+            "startPoint": {
+                "x": 364.7887420654297,
+                "y": 827.8873138427734
+            },
+            "endPoint": {
+                "x": 366.90142822265625,
+                "y": 866.4788360595703
+            },
+            "startUnitId": "0b867a41-8258-472e-be20-ef4bbb6e26a2",
+            "endUnitId": "bc22fd1a-da06-429d-9991-faff21605356",
+            "startAnchorPointId": "0b867a41-8258-472e-be20-ef4bbb6e26a2-cp-1",
+            "endAnchorPointId": "bc22fd1a-da06-429d-9991-faff21605356-cp-0"
+        },
+        "a5e6da48-438b-49a2-9681-e25dcfb79123": {
+            "startPoint": {
+                "x": 366.90142822265625,
+                "y": 926.4788360595703
+            },
+            "endPoint": {
+                "x": 665.7422601019697,
+                "y": 995.0098053284653
+            },
+            "startUnitId": "bc22fd1a-da06-429d-9991-faff21605356",
+            "endUnitId": "2d876b35-cb9e-4a6b-90df-43cddef76459",
+            "startAnchorPointId": "bc22fd1a-da06-429d-9991-faff21605356-cp-1",
+            "endAnchorPointId": "2d876b35-cb9e-4a6b-90df-43cddef76459-cp-0"
+        }
+    }
+}
