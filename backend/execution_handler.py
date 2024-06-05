@@ -87,6 +87,7 @@ class ExecutionHandler:
                             print(f'Epoch {epoch + 1}, batch {i + 1}, loss: {loss.item()}')
                             print(f'Avg time: {avg_time / 100}')
                             avg_time = 0.0
+                    # send data to the loss unit on the canvas
                     loss_data.add_loss(running_loss / len(dataloader))
                     acc_data.add_accuracy(total_accuracy / len(dataloader))
                     send_unit_data({
@@ -95,6 +96,11 @@ class ExecutionHandler:
                             'Accuracy': acc_data.to_json_dict()
                         }
                     })
+                    # send image to the loss unit on the canvas
+                    loss_img_buf = DataImageBuilder(loss_data).build_image()
+                    acc_img_buf = DataImageBuilder(acc_data).build_image()
+                    send_image(curr_loss_func_unit_id, 'Loss', loss_img_buf)
+                    send_image(curr_loss_func_unit_id, 'Accuracy', acc_img_buf)
                     print(f'Epoch {epoch + 1}, total accuracy: {total_accuracy / len(dataloader)}')
                 output_connections = unit_object.end_unit_connections
             else:

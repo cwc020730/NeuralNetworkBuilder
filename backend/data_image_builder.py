@@ -5,7 +5,11 @@ This file builds images for data objects.
 import io
 import matplotlib.pyplot as plt
 from PIL import Image
-from . import HuggingfaceImageClassificationDatasetData
+from . import (
+    HuggingfaceImageClassificationDatasetData,
+    LossData,
+    AccuracyData
+)
 
 plt.rcParams['text.color'] = 'white'
 plt.rcParams['axes.labelcolor'] = 'white'
@@ -53,16 +57,28 @@ class DataImageBuilder:
                     size=12, ha='center', transform=ax.transAxes)
                 ax.axis('off')
 
-            # set transparent background
-            fig.patch.set_alpha(0.0)
-
             for ax in axes.flatten():
                 ax.patch.set_alpha(0.0)
 
-            plt.tight_layout()
+        elif isinstance(self.data_object, LossData):
+            loss_vs_epoch = self.data_object.get_data()
+            fig = plt.figure(figsize=(12, 3))
+            plt.plot(loss_vs_epoch, marker='o')
+            plt.xlabel('Epoch')
+            plt.ylabel('Loss')
+            plt.xticks(range(len(loss_vs_epoch)))
+        elif isinstance(self.data_object, AccuracyData):
+            accuracy_vs_epoch = self.data_object.get_data()
+            fig = plt.figure(figsize=(12, 3))
+            plt.plot(accuracy_vs_epoch, marker='o')
+            plt.xlabel('Epoch')
+            plt.ylabel('Accuracy')
+            plt.xticks(range(len(accuracy_vs_epoch)))
         else:
             return None
         
+        plt.tight_layout()
+        fig.patch.set_alpha(0.0)
         buf = io.BytesIO()
         plt.savefig(buf, format='png', transparent=True)
         buf.seek(0)
