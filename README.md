@@ -4,25 +4,30 @@ Create flowcharts of neural networks and convert the flowcharts into PyTorch for
 
 ## How to run the project
 
+Clone this repository
+```
+git clone https://github.com/cwc020730/NeuralNetworkBuilder.git
+```
+
 Install NodeJS from `https://nodejs.org/en`.
 
 Make sure the directory `npm` executable is in the system environment variable `PATH`
 
-```
-git clone https://github.com/cwc020730/NeuralNetworkBuilder.git
-npm start
-```
 Install relevant packages:
 ```
 npm install
 ```
+
+Start the frontend:
+```
+npm start
+```
+
 `npm start` should start the app locally: `http://localhost:3000`.
 
-Start Backend:
-
-Use:
+Start the backend:
 ```
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 python -m backend.backend
 ```
 The backend server should start locally: `http://localhost:5000`.
