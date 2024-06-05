@@ -23,16 +23,27 @@ const DataSelectionController = () => {
     const selectedUnitInfo = selectedUnit ? UnitList[selectedUnit.type] : null;
     const dataSelectionList = [];
     if (selectedUnitInfo) {
-        for (let i = 0; i < selectedUnitInfo["output"]["output_labels"].length; i++) {
+        let i = 0;
+        if (selectedUnitInfo["internal_parameters"]) {
+            for (i = 0; i < selectedUnitInfo["internal_parameters"].length; i++) {
+                dataSelectionList.push({
+                    id: i,
+                    name: selectedUnitInfo["internal_parameters"][i]
+                });
+            }
+        }
+        for (let j = 0; j < selectedUnitInfo["output"]["output_labels"].length; j++) {
             // filter names that starts with *
-            if (selectedUnitInfo["output"]["output_labels"][i].startsWith('*')) {
+            if (selectedUnitInfo["output"]["output_labels"][j].startsWith('*')) {
                 continue;
             }
             dataSelectionList.push({
                 id: i,
-                name: selectedUnitInfo["output"]["output_labels"][i]
+                name: selectedUnitInfo["output"]["output_labels"][j]
             });
+            i++;
         }
+        
     }
 
     const handleItemClick = (id) => {

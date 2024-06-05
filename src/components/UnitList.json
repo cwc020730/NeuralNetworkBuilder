@@ -389,6 +389,10 @@
                 "Output"
             ]
         },
+        "internal_parameters": [
+            "weight",
+            "bias"
+        ],
         "parameters": {
             "in_features": {
                 "type": "int",

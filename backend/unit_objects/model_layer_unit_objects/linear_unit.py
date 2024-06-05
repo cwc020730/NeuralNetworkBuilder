@@ -36,6 +36,9 @@ class LinearUnit(ModelLayerUnit):
             torch.Tensor: The output data.
         """
         input_data_tensor = input_data['Input'].get_data()
+        output_tensor = self.linear(input_data_tensor)
         return {
-            "Output": TensorData(self.linear(input_data_tensor))
+            "weight": TensorData(self.linear.weight),
+            "bias": TensorData(self.linear.bias),
+            "Output": TensorData(output_tensor)
         }

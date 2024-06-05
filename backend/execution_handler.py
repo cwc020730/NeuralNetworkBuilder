@@ -56,6 +56,7 @@ class ExecutionHandler:
                         optimizer_unit_id = connection['connects_to']
                         break
                 assert optimizer_unit_id is not None, 'Optimizer unit not found'
+                # handles training
                 optimizer_unit_info = self.simplified_data[optimizer_unit_id]
                 optimizer_unit_object = UnitObjectAllocator.create_unit_object(optimizer_unit_id, optimizer_unit_info)
                 loss_function_unit_info = self.simplified_data[curr_loss_func_unit_id]
@@ -102,7 +103,8 @@ class ExecutionHandler:
                 # add the image to the data panel
                 for output_name, output_data in output.items():
                     buf = DataImageBuilder(output_data).build_image()
-                    send_image(unit_id, output_name, buf)
+                    if buf is not None:
+                        send_image(unit_id, output_name, buf)
                 output_connections = unit_info['outputs']
                 # handles the special dataloader case
                 if unit_info['type'] == 'to dataloader':
