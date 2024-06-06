@@ -30,13 +30,12 @@ class TensorData(DataObject):
             self.std = None
             self.shape = list(tensor.shape)
 
-    def _reduce_dimension(self, tensor: torch.Tensor, max_size=1000):
+    def _reduce_dimension(self, tensor: torch.Tensor):
         """
         Reduce the size of the largest dimension of the tensor for JSON serialization.
 
         Args:
             tensor (torch.Tensor): The tensor to reduce.
-            max_size (int): The maximum size for the largest dimension.
 
         Returns:
             torch.Tensor: The reduced tensor.
@@ -47,13 +46,22 @@ class TensorData(DataObject):
             multiplier *= dim
         if multiplier <= 100000:
             return tensor
-        # if not, reduce the size of the largest dimension to max_size
-        if tensor.numel() > max_size:
-            largest_dim = tensor.shape.index(max(tensor.shape))
-            if tensor.shape[largest_dim] > max_size:
-                indices = torch.cat((torch.arange(max_size // 2), torch.arange(tensor.shape[largest_dim] - max_size // 2, tensor.shape[largest_dim])))
-                tensor = tensor.index_select(largest_dim, indices)
-        return tensor
+        
+        new_shape = list(tensor.shape)
+        for i, dim in enumerate(tensor.shape):
+            # iteratively reduce the leftmost dimension by half until the total number of elements is less than 100000
+            while new_shape[i] > 1:
+                new_shape[i] //= 2
+                multiplier //= 2
+                if multiplier <= 100000:
+                    break
+            if multiplier <= 100000:
+                break
+
+        slices = tuple(slice(0, dim) for dim in new_shape)
+        new_tensor = tensor[slices]
+            
+        return new_tensor
 
     def to_json_dict(self):
         """
