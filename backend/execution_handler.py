@@ -136,7 +136,10 @@ class ExecutionHandler:
                     output_to_send = {}
                     for output_name, output_data in output.items():
                         output_data_json = output_data.to_json_dict()
-                        output_to_send[output_name] = output_data_json
+                        output_to_send[output_name] = output_data_json # TODO: need to rename output_to_send to something like data_to_send
+                        buf = DataImageBuilder(output_data).build_image()
+                        if buf is not None:
+                            send_image(unit_id, output_name, buf)
                     unit_data = {
                         unit_id: output_to_send
                     }

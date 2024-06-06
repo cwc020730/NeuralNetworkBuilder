@@ -5,9 +5,10 @@ This file contains the TrainStartUnit class, which is a subclass of the Unit cla
 import torch.nn as nn
 from . import Unit
 from .model_end_unit import ModelEndUnit
-from ..app import send_unit_data
+from ..app import send_unit_data, send_image
 from ..unit_object_allocator import UnitObjectAllocator
 from ..data_objects import TensorData
+from ..data_image_builder import DataImageBuilder
 
 class TrainStartUnit(Unit, nn.Module):
     """
@@ -98,7 +99,11 @@ class TrainStartUnit(Unit, nn.Module):
             output_to_send = {}
             for output_name, output_data in output.items():
                 output_data_json = output_data.to_json_dict()
-                output_to_send[output_name] = output_data_json
+                output_to_send[output_name] = output_data_json # TODO: need to rename output_to_send to something like data_to_send
+                if self.enable_send_data:
+                    buf = DataImageBuilder(output_data).build_image()
+                    if buf is not None:
+                        send_image(unit_id, output_name, buf)
             unit_data = {
                 unit_id: output_to_send
             }

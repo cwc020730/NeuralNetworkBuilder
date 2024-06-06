@@ -6,6 +6,7 @@ import io
 import matplotlib.pyplot as plt
 from PIL import Image
 from . import (
+    TensorData,
     HuggingfaceImageClassificationDatasetData,
     LossData,
     AccuracyData
@@ -74,6 +75,25 @@ class DataImageBuilder:
             plt.xlabel('Epoch')
             plt.ylabel('Accuracy')
             plt.xticks(range(len(accuracy_vs_epoch)))
+        elif isinstance(self.data_object, TensorData):
+            # check if the shape of the tensor is visualizable
+            if len(self.data_object.shape) != 4:
+                return None
+            [b, c, h, w] = self.data_object.shape
+            if c not in [1, 3]:
+                return None
+            # select at most 5 images from b
+            num_images = min(b, 5)
+            fig, axes = plt.subplots(1, num_images, figsize=(12, 3))
+            for i in range(num_images):
+                ax = axes[i]
+                if c == 1:
+                    ax.imshow(self.data_object.tensor[i, 0, :, :].tolist(), cmap='gray')
+                else:
+                    ax.imshow(self.data_object.tensor[i].tolist().permute(1, 2, 0))
+                ax.axis('off')
+            for ax in axes.flatten():
+                ax.patch.set_alpha(0.0)
         else:
             return None
         
