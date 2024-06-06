@@ -470,5 +470,78 @@
         "parameters": {
             
         }
+    },
+    "conv2d": {
+        "primary_label": "conv2d",
+        "in_unit_label": "CONV2D",
+        "in_unit_label_color": "black",
+        "category": "MODEL",
+        "description": "2D convolutional layer.",
+        "color": "#20B2AA",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Input"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Output"
+            ]
+        },
+        "internal_parameters": [
+            "weight",
+            "bias"
+        ],
+        "parameters": {
+            "in_channels": {
+                "type": "int",
+                "description": "Number of input channels.",
+                "default": 1
+            },
+            "out_channels": {
+                "type": "int",
+                "description": "Number of output channels.",
+                "default": 1
+            },
+            "kernel_size": {
+                "type": "int",
+                "description": "Kernel size.",
+                "default": 3
+            },
+            "stride": {
+                "type": "int",
+                "description": "Stride.",
+                "default": 1
+            },
+            "padding": {
+                "type": "int",
+                "description": "Padding.",
+                "default": 0
+            },
+            "dilation": {
+                "type": "int",
+                "description": "Dilation.",
+                "default": 1
+            },
+            "groups": {
+                "type": "int",
+                "description": "Groups.",
+                "default": 1
+            },
+            "bias": {
+                "type": "bool",
+                "description": "Bias.",
+                "default": true
+            }
+        }
     }
 }

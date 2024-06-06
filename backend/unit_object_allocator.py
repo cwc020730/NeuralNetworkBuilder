@@ -14,7 +14,8 @@ from . import (
     CrossEntropyLossUnit,
     FlattenUnit,
     LinearUnit,
-    ReLUUnit
+    ReLUUnit,
+    Conv2DUnit
 )
 
 class UnitObjectAllocator:
@@ -35,6 +36,7 @@ class UnitObjectAllocator:
         "linear": LinearUnit,
         "flatten": FlattenUnit,
         "relu": ReLUUnit,
+        "conv2d": Conv2DUnit
     }
 
     def __init__(self):

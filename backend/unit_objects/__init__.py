@@ -13,6 +13,7 @@ from .model_layer_unit_objects import (
     LinearUnit,
     FlattenUnit,
     ReLUUnit,
+    Conv2DUnit
 )
 from .optimizer_unit_objects import (
     SGDUnit
