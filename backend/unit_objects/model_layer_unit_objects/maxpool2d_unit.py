@@ -4,7 +4,7 @@ This module contains the MaxPool2DUnit class, which is a subclass of the ModelLa
 
 import torch.nn as nn
 from ..model_layer_unit import ModelLayerUnit
-from ...data_objects import TensorData
+from ...data_objects import VisualizableTensorData
 
 class MaxPool2DUnit(ModelLayerUnit):
     """
@@ -39,5 +39,5 @@ class MaxPool2DUnit(ModelLayerUnit):
         input_data_tensor = input_data['Input'].get_data()
         output_tensor = self.maxpool2d(input_data_tensor)
         return {
-            "Output": TensorData(output_tensor)
+            "Output": VisualizableTensorData(output_tensor)
         }

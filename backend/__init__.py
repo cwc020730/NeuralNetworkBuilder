@@ -9,7 +9,8 @@ from .data_objects import (
     TensorData,
     TrainingData,
     AccuracyData,
-    LossData
+    LossData,
+    VisualizableTensorData
 )
 from .unit_objects import (
     DatasetSplitUnit,

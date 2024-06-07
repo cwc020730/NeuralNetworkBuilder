@@ -4,7 +4,7 @@ This module contains the Conv2DUnit class, which is a subclass of the ModelLayer
 
 import torch.nn as nn
 from ..model_layer_unit import ModelLayerUnit
-from ...data_objects import TensorData
+from ...data_objects import TensorData, VisualizableTensorData
 
 class Conv2DUnit(ModelLayerUnit):
     """
@@ -44,7 +44,7 @@ class Conv2DUnit(ModelLayerUnit):
         weight_tensor = self.conv2d.weight
         bias_tensor = self.conv2d.bias
         return {
-            "weight": TensorData(weight_tensor),
+            "weight": VisualizableTensorData(weight_tensor),
             "bias": TensorData(bias_tensor),
-            "Output": TensorData(output_tensor)
+            "Output": VisualizableTensorData(output_tensor)
         }
