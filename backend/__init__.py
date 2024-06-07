@@ -27,5 +27,6 @@ from .unit_objects import (
     LinearUnit,
     FlattenUnit,
     ReLUUnit,
-    Conv2DUnit
+    Conv2DUnit,
+    MaxPool2DUnit
 )

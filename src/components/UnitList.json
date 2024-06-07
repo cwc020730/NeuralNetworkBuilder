@@ -543,5 +543,49 @@
                 "default": true
             }
         }
+    },
+    "maxpool2d": {
+        "primary_label": "maxpool2d",
+        "in_unit_label": "MAXPOOL2D",
+        "in_unit_label_color": "black",
+        "category": "MODEL",
+        "description": "2D max pooling layer.",
+        "color": "#20B2AA",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Input"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Output"
+            ]
+        },
+        "parameters": {
+            "kernel_size": {
+                "type": "int",
+                "description": "Kernel size.",
+                "default": 2
+            },
+            "stride": {
+                "type": "int",
+                "description": "Stride.",
+                "default": 2
+            },
+            "padding": {
+                "type": "int",
+                "description": "Padding.",
+                "default": 0
+            }
+        }
     }
 }
