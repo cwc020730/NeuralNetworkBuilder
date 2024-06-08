@@ -15,7 +15,8 @@ const DataPanelImageContainer = () => {
             console.log("image_updated", data);
             const key = `${data.unit_id}/${data.data_name}`;
             const newImageDataMap = new Map(imageDataMapRef.current);
-            newImageDataMap.set(key, `data:image/png;base64,${data.image_data}`);
+            newImageDataMap.set(key, data.image_data);
+            console.log(Array.isArray(newImageDataMap.get(key)));
             imageDataMapRef.current = newImageDataMap;
             setImageDataMap(newImageDataMap);
         });
@@ -25,9 +26,15 @@ const DataPanelImageContainer = () => {
         };
     }, []);
 
+    const getImageByPage = (page_number) => {
+        const image_data_at_page = imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`)[page_number - 1];
+        const src = `data:image/png;base64,${image_data_at_page}`;
+        return src;
+    }
+
     // Function to handle next page
     const nextPage = () => {
-        const totalPages = Math.ceil(imageDataMap.size / imagesPerPage);
+        const totalPages = imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`).length;
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
         }
@@ -43,15 +50,19 @@ const DataPanelImageContainer = () => {
     return (
         <div className="data-panel-image-container">
             {imageDataMap.get(`${selectedUnitId}/${selectedDataName}`) ? (
-                <img className="data-panel-image" src={imageDataMap.get(`${selectedUnitId}/${selectedDataName}`)} alt={`${selectedUnitId} ${selectedDataName}`} />
+                <img className="data-panel-image" src={getImageByPage(currentPage)} alt={`${selectedUnitId} ${selectedDataName}`} />
             ) : (
                 <></>
             )}
-            <div className="data-image-pagination-controls">
-                <button className="prev" onClick={prevPage} disabled={currentPage === 1}></button>
-                <span className="data-image-page-num">PAGE {currentPage} OF {Math.ceil(imageDataMap.size / imagesPerPage)}</span>
-                <button className="next" onClick={nextPage} disabled={currentPage === Math.ceil(imageDataMap.size / imagesPerPage)}></button>
-            </div>
+            {imageDataMap.get(`${selectedUnitId}/${selectedDataName}`) ? (
+                <div className="data-image-pagination-controls">
+                    <button className="prev" onClick={prevPage} disabled={currentPage === 1}></button>
+                    <span className="data-image-page-num">PAGE {currentPage} OF {imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`).length}</span>
+                    <button className="next" onClick={nextPage} disabled={currentPage === imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`).length}></button>
+                </div>
+            ) : (
+                <></>
+            )}
         </div>
     );
 }

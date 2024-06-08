@@ -2,7 +2,7 @@
 The file contains the app initialization code for the Flask server and the SocketIO server.
 """
 
-import os, base64, gc
+import os, base64, gc, io
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO
@@ -42,12 +42,13 @@ def send_image(unit_id, data_name, buf):
         dict: The image data.
     """
     try:
-        image_data = base64.b64encode(buf.read()).decode('utf-8')
-        # notifiy the client that the image has been updated
-        socketio.emit('image_updated', {'unit_id': unit_id, 'data_name': data_name, 'image_data': image_data})
-        buf.close()
-        gc.collect()
-        return jsonify({'status': 'success', 'message': 'Image send successfully'})
+        if isinstance(buf, io.BytesIO):
+            image_data = base64.b64encode(buf.read()).decode('utf-8')
+            # notifiy the client that the image has been updated
+            socketio.emit('image_updated', {'unit_id': unit_id, 'data_name': data_name, 'image_data': [image_data]})
+            buf.close()
+            gc.collect()
+            return jsonify({'status': 'success', 'message': 'Image send successfully'})
     except Exception as e:
         buf.close()
         print(f'Error sending image: {e}')
