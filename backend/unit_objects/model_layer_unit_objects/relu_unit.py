@@ -4,7 +4,6 @@ This file contains the ReLU unit object class.
 
 import torch.nn as nn
 from ..model_layer_unit import ModelLayerUnit
-from ...data_objects import TensorData
 
 class ReLUUnit(ModelLayerUnit):
     """
@@ -32,7 +31,8 @@ class ReLUUnit(ModelLayerUnit):
         Returns:
             torch.Tensor: The output tensor.
         """
+        input_class = input_data["Input"].__class__
         input_data_tensor = input_data["Input"].get_data()
         return {
-            "Output": TensorData(self.layer(input_data_tensor))
+            "Output": input_class(self.layer(input_data_tensor))
         }
