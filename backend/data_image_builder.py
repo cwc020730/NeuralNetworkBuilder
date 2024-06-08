@@ -5,8 +5,9 @@ This file builds images for data objects.
 import io
 import matplotlib.pyplot as plt
 from PIL import Image
+import numpy as np
 from . import (
-    TensorData,
+    VisualizableTensorData,
     HuggingfaceImageClassificationDatasetData,
     LossData,
     AccuracyData
@@ -75,25 +76,23 @@ class DataImageBuilder:
             plt.xlabel('Epoch')
             plt.ylabel('Accuracy')
             plt.xticks(range(len(accuracy_vs_epoch)))
-        elif isinstance(self.data_object, TensorData):
-            # check if the shape of the tensor is visualizable
-            if len(self.data_object.shape) != 4:
-                return None
-            [b, c, h, w] = self.data_object.shape
-            if c not in [1, 3]:
-                return None
-            # select at most 5 images from b
-            num_images = min(b, 5)
-            fig, axes = plt.subplots(1, num_images, figsize=(12, 3))
-            for i in range(num_images):
-                ax = axes[i]
-                if c == 1:
-                    ax.imshow(self.data_object.tensor[i, 0, :, :].tolist(), cmap='gray')
-                else:
-                    ax.imshow(self.data_object.tensor[i].tolist().permute(1, 2, 0))
+        elif isinstance(self.data_object, VisualizableTensorData):
+            sample, num_images = self.data_object.sample(n=5, batch=1) # sample 5 images from the first batch
+            sample_list = sample.tolist()
+            sample_list = self._normalize_list(sample_list)
+            if num_images == 1:
+                fig, ax = plt.subplots(1, num_images, figsize=(12, 3))
+                ax.imshow(sample_list[0], cmap='gray')
                 ax.axis('off')
-            for ax in axes.flatten():
                 ax.patch.set_alpha(0.0)
+            else:
+                fig, axes = plt.subplots(1, num_images, figsize=(12, 3))
+                for i in range(num_images):
+                    ax = axes[i]
+                    ax.imshow(sample_list[i], cmap='gray')
+                    ax.axis('off')
+                for ax in axes.flatten():
+                    ax.patch.set_alpha(0.0)
         else:
             return None
         
@@ -104,3 +103,17 @@ class DataImageBuilder:
         buf.seek(0)
 
         return buf
+    
+    def _normalize_list(self, data):
+        """
+        Normalize the image data.
+
+        Args:
+            data (list): The image data.
+
+        Returns:
+            list: The normalized image data.
+        """
+        data = np.array(data)
+        data_min, data_max = data.min(), data.max()
+        return list((data - data_min) / (data_max - data_min))

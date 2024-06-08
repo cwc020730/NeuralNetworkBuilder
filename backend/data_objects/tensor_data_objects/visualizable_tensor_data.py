@@ -34,12 +34,20 @@ class VisualizableTensorData(TensorData):
         Returns:
             torch.Tensor: The sampled images.
         """
+        # single image
         if self.tensor.ndim == 2:
-            return self.tensor[:n]
+            return self.tensor, 1
+        # sample from channel
         if batch == -1:
             if channel == -1:
-                return self.tensor[:n]
-            return self.tensor[:, channel, :n]
+                raise ValueError("Either batch or channel must be specified.")
+            if n > self.b:
+                n = self.b
+            return self.tensor[:n, channel, :], n
+        # sample from batch
         if channel == -1:
-            return self.tensor[batch, :n]
-        return self.tensor[batch, channel, :n]
+            if n > self.c:
+                n = self.c
+            return self.tensor[batch, :n, :], n
+        # sample from batch and channel
+        return self.tensor[batch, channel, :], 1
