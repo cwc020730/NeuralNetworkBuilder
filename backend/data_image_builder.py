@@ -101,6 +101,7 @@ class DataImageBuilder:
         buf = io.BytesIO()
         plt.savefig(buf, format='png', transparent=True)
         buf.seek(0)
+        plt.close(fig)
 
         return buf
     
