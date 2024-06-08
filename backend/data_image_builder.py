@@ -77,7 +77,7 @@ class DataImageBuilder:
             plt.ylabel('Accuracy')
             plt.xticks(range(len(accuracy_vs_epoch)))
         elif isinstance(self.data_object, VisualizableTensorData):
-            sample, num_images = self.data_object.sample(n=5, batch=1) # sample 5 images from the first batch
+            sample, num_images = self.data_object.sample(n=-1, batch=1) # sample all images from the first batch
             sample_list = sample.tolist()
             sample_list = self._normalize_list(sample_list)
             if num_images == 1:
@@ -86,11 +86,16 @@ class DataImageBuilder:
                 ax.axis('off')
                 ax.patch.set_alpha(0.0)
             else:
-                fig, axes = plt.subplots(1, num_images, figsize=(12, 3))
-                for i in range(num_images):
-                    ax = axes[i]
-                    ax.imshow(sample_list[i], cmap='gray')
-                    ax.axis('off')
+                row_img_cnt = num_images // 4 if num_images % 4 == 0 else num_images // 4 + 1
+                fig, axes = plt.subplots(4, row_img_cnt, figsize=(12, 3))
+                i = 0
+                for row in range(4):
+                    for col in range(row_img_cnt):
+                        ax = axes[row, col]
+                        if i < num_images:
+                            ax.imshow(sample_list[i], cmap='gray')
+                        ax.axis('off')
+                        i += 1
                 for ax in axes.flatten():
                     ax.patch.set_alpha(0.0)
         else:

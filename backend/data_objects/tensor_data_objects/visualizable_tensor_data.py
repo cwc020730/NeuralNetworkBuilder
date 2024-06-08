@@ -28,7 +28,7 @@ class VisualizableTensorData(TensorData):
         Sample n images from the tensor.
 
         Args:
-            n (int): The number of images to sample.
+            n (int): The number of images to sample. If -1, sample all images.
             batch (int): The batch to sample. If -1, sample from channel.
             channel (int): The channel to sample. If -1, sample from batch.
         Returns:
@@ -41,12 +41,12 @@ class VisualizableTensorData(TensorData):
         if batch == -1:
             if channel == -1:
                 raise ValueError("Either batch or channel must be specified.")
-            if n > self.b:
+            if n > self.b or n == -1:
                 n = self.b
             return self.tensor[:n, channel, :], n
         # sample from batch
         if channel == -1:
-            if n > self.c:
+            if n > self.c or n == -1:
                 n = self.c
             return self.tensor[batch, :n, :], n
         # sample from batch and channel
