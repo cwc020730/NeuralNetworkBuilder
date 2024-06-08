@@ -10,7 +10,8 @@ from .data_objects import (
     TrainingData,
     AccuracyData,
     LossData,
-    VisualizableTensorData
+    VisualizableTensorData,
+    VisualizableBatchedVectorTensorData
 )
 from .unit_objects import (
     DatasetSplitUnit,

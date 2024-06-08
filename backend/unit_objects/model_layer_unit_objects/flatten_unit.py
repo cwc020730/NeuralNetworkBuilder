@@ -4,7 +4,7 @@ This module contains the FlattenUnit class, which is a subclass of the ModelLaye
 
 import torch.nn as nn
 from ..model_layer_unit import ModelLayerUnit
-from ...data_objects import TensorData
+from ...data_objects import VisualizableBatchedVectorTensorData
 
 class FlattenUnit(ModelLayerUnit):
     """
@@ -34,5 +34,5 @@ class FlattenUnit(ModelLayerUnit):
         """
         input_data_tensor = input_data['Input'].get_data()
         return {
-            "Output": TensorData(self.flatten(input_data_tensor))
+            "Output": VisualizableBatchedVectorTensorData(self.flatten(input_data_tensor))
         }

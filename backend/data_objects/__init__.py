@@ -9,7 +9,8 @@ from .training_data_objects import (
     LossData
 )
 from .tensor_data_objects import (
-    VisualizableTensorData
+    VisualizableTensorData,
+    VisualizableBatchedVectorTensorData
 )
 from .data import DataObject
 from .dataset_data import DatasetData

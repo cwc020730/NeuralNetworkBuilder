@@ -8,6 +8,7 @@ from PIL import Image
 import numpy as np
 from . import (
     VisualizableTensorData,
+    VisualizableBatchedVectorTensorData,
     HuggingfaceImageClassificationDatasetData,
     LossData,
     AccuracyData
@@ -79,6 +80,7 @@ class DataImageBuilder:
         elif isinstance(self.data_object, VisualizableTensorData):
             sample, num_images = self.data_object.sample(n=-1, batch=1) # sample all images from the first batch
             sample_list = sample.tolist()
+            # sample_list = [self._normalize_list(s) for s in sample_list]
             sample_list = self._normalize_list(sample_list)
             if num_images == 1:
                 fig, ax = plt.subplots(1, num_images, figsize=(12, 3))
@@ -98,6 +100,40 @@ class DataImageBuilder:
                         i += 1
                 for ax in axes.flatten():
                     ax.patch.set_alpha(0.0)
+        elif isinstance(self.data_object, VisualizableBatchedVectorTensorData):
+            sample, num_items = self.data_object.sample(n=-1, batch=1)
+            sample_list = sample.tolist()
+            sample_list = self._normalize_list(sample_list)
+            if num_items == 1:
+                fig, ax = plt.subplots(1, 1, figsize=(12, 3))
+                ax.imshow([[sample_list[0]]], cmap='bwr', vmin=0, vmax=1)
+                ax.axis('off')
+                ax.patch.set_alpha(0.0)
+            elif num_items <= 25:
+                fig, axes = plt.subplots(1, num_items, figsize=(12, 3))
+                i = 0
+                for col in range(num_items):
+                    ax = axes[col]
+                    if i < num_items:
+                        ax.imshow([[sample_list[i]]], cmap='bwr', vmin=0, vmax=1)
+                    ax.axis('off')
+                    i += 1
+                for ax in axes.flatten():
+                    ax.patch.set_alpha(0.0)
+            elif num_items <= 100:
+                fig, axes = plt.subplots(4, 25, figsize=(12, 3))
+                i = 0
+                for row in range(4):
+                    for col in range(25):
+                        ax = axes[row, col]
+                        if i < num_items:
+                            ax.imshow([[sample_list[i]]], cmap='bwr', vmin=0, vmax=1)
+                        ax.axis('off')
+                        i += 1
+                for ax in axes.flatten():
+                    ax.patch.set_alpha(0.0)
+            else:
+                return None
         else:
             return None
         

@@ -4,7 +4,7 @@ This module contains the LinearUnit class, which is a subclass of the Unit class
 
 import torch.nn as nn
 from ..model_layer_unit import ModelLayerUnit
-from ...data_objects import TensorData
+from ...data_objects import TensorData, VisualizableBatchedVectorTensorData
 
 class LinearUnit(ModelLayerUnit):
     """
@@ -40,5 +40,5 @@ class LinearUnit(ModelLayerUnit):
         return {
             "weight": TensorData(self.linear.weight),
             "bias": TensorData(self.linear.bias),
-            "Output": TensorData(output_tensor)
+            "Output": VisualizableBatchedVectorTensorData(output_tensor)
         }
