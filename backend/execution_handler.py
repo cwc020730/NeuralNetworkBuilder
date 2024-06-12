@@ -86,7 +86,7 @@ class ExecutionHandler:
                         end_time = time.time()
                         avg_time += end_time - start_time
                         if i % 100 == 99:
-                            unit_object.toggle_send_data()
+                            # unit_object.toggle_send_data()
                             print(f'Epoch {epoch + 1}, batch {i + 1}, loss: {loss.item()}')
                             print(f'Avg time: {avg_time / 100}')
                             avg_time = 0.0
@@ -96,6 +96,7 @@ class ExecutionHandler:
                             send_header_status_data(f"Training: Epoch {epoch + 1}/{num_epochs}, {int(perc_progress)}% complete")
                             perc_progress = int(perc_progress)
                     # send data to the loss unit on the canvas
+                    unit_object.toggle_send_data()
                     loss_data.add_loss(running_loss / len(dataloader))
                     acc_data.add_accuracy(total_accuracy / len(dataloader))
                     send_unit_data({
