@@ -7,7 +7,7 @@ import time
 from torch.utils.data import DataLoader
 from .data_image_builder import DataImageBuilder
 from .unit_object_allocator import UnitObjectAllocator
-from .app import send_unit_data, send_image
+from .app import send_unit_data, send_image, send_header_status_data
 from . import EmptyData, AccuracyData, LossData
 from .unit_objects.train_start_unit import TrainStartUnit
 
@@ -65,10 +65,13 @@ class ExecutionHandler:
                 criterion = loss_function_unit_object.get_loss_func()
                 acc_data = AccuracyData([])
                 loss_data = LossData([])
+                send_header_status_data(f"Training: Epoch 1/{num_epochs}, 0% complete")
                 for epoch in range(num_epochs):
                     running_loss = 0.0
                     avg_time = 0.0
                     total_accuracy = 0.0
+                    perc_progress = 0.0
+                    prev_perc_progress = 0.0
                     for i, (inputs, labels) in enumerate(dataloader, 0):
                         start_time = time.time()
                         inputs, labels = inputs.to(device), labels.to(device)
@@ -87,6 +90,11 @@ class ExecutionHandler:
                             print(f'Epoch {epoch + 1}, batch {i + 1}, loss: {loss.item()}')
                             print(f'Avg time: {avg_time / 100}')
                             avg_time = 0.0
+                        prev_perc_progress = perc_progress
+                        perc_progress = ((i + 1) / len(dataloader)) * 100
+                        if int(perc_progress) > int(prev_perc_progress):
+                            send_header_status_data(f"Training: Epoch {epoch + 1}/{num_epochs}, {int(perc_progress)}% complete")
+                            perc_progress = int(perc_progress)
                     # send data to the loss unit on the canvas
                     loss_data.add_loss(running_loss / len(dataloader))
                     acc_data.add_accuracy(total_accuracy / len(dataloader))

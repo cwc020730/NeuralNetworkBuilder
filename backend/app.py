@@ -28,6 +28,19 @@ def send_unit_data(unit_data):
     socketio.emit('data_updated', {'data': unit_data})
     return jsonify({'unit_data': unit_data})
 
+def send_header_status_data(status):
+    """
+    Send header status data to the client via WebSocket.
+
+    Args:
+        status (dict): The status data to be sent to the client.
+
+    Returns:
+        dict: The status data.
+    """
+    socketio.emit('header_status_updated', {'status': status})
+    return jsonify({'status': status})
+
 @app.route('/send_image', methods=['POST'])
 def send_image(unit_id, data_name, buf):
     """

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { generateJSONCanvasRepresentation, removeAllObjectsOnCanvas, loadJSONCanvasRepresentation } from './D3Canvas';
+import { io } from 'socket.io-client';
 
 const Header = () => {
     const [isListVisible, setIsListVisible] = useState(false);
+    const [currStatus, setCurrStatus] = useState('idle');
 
     const handleFileButtonClick = () => {
         setIsListVisible(!isListVisible);
@@ -77,6 +79,19 @@ const Header = () => {
         }
     };
 
+    useEffect(() => {
+        const socket = io('http://localhost:5000');
+
+        socket.on('header_status_updated', (message) => {
+            console.log('header_status_updated', message.status)
+            setCurrStatus(message.status);
+        });
+
+        return () => {
+            socket.off('header_status_updated');
+        };
+    }, []);
+
     return (
         <div className='header-container'>
             <div className='logo'></div>
@@ -96,9 +111,11 @@ const Header = () => {
                 <button className='header-button'>Edit</button>
                 <button className='header-button'>Help</button>
             </div>
-            <div className='header-blank-reserve'></div>
+            <div className='header-status'>
+                {currStatus}
+            </div>
             <div className='header-action-buttons'>
-            <button className='header-button' onClick={handleRunButtonClick}>Run</button>
+                <button className='header-button' onClick={handleRunButtonClick}>Run</button>
             </div>
         </div>
     );

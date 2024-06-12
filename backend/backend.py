@@ -7,7 +7,7 @@ from flask import jsonify, request
 from .json_graph_handler import JSONGraphHandler
 from .execution_handler import ExecutionHandler
 
-from .app import app
+from .app import app, send_header_status_data
 
 @app.route('/receive_data', methods=['POST'])
 def receive_data():
@@ -17,6 +17,7 @@ def receive_data():
     data = request.get_json()
     json_graph_handler = JSONGraphHandler(data)
     execution_handler = ExecutionHandler(json_graph_handler.simplified_data)
+    send_header_status_data('idle')
 
     return jsonify({'status': 'Data received!'}), 200
 
