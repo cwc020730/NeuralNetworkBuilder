@@ -14,6 +14,7 @@ def receive_data():
     """
     Function to receive data from the frontend and pass it to the JSONGraphHandler.
     """
+    send_header_status_data('Preparing ...')
     data = request.get_json()
     json_graph_handler = JSONGraphHandler(data)
     execution_handler = ExecutionHandler(json_graph_handler.simplified_data)

@@ -3,6 +3,7 @@ This file contains the HuggingFaceDatasetInputUnit class, which is a subclass of
 """
 
 from datasets import load_dataset, load_dataset_builder
+from ...app import send_header_status_data
 from ..input_unit import InputUnit
 from ...data_objects.huggingface_dataset_data_objects.image.huggingface_image_classification_dataset_data import HuggingfaceImageClassificationDatasetData
 
@@ -41,6 +42,7 @@ class HuggingFaceDatasetInputUnit(InputUnit):
         Returns:
             dict: A dictionary containing the HuggingFaceDatasetData object.
         """
+        send_header_status_data(f"Loading dataset {self.dataset_name}...")
         dataset = load_dataset(self.dataset_name)
         
         tasks = self.get_dataset_tasks()

@@ -4,6 +4,7 @@ This file contains the ToDataloaderUnit class, which is responsible for converti
 
 import torch.utils.data as data
 
+from ...app import send_header_status_data
 from ..data_processing_unit import DataProcessingUnit
 
 class ToDataloaderUnit(DataProcessingUnit):
@@ -35,6 +36,7 @@ class ToDataloaderUnit(DataProcessingUnit):
         Returns:
             dict: The converted data.
         """
+        send_header_status_data("Building DataLoader...")
         features_tensor, labels_tensor = input_data['Features'].get_data(), input_data['Labels'].get_data()
         dataloader = data.DataLoader(
             data.TensorDataset(features_tensor, labels_tensor),
