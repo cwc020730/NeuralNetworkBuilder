@@ -49,7 +49,12 @@ export const AppProvider = ({ children }) => {
     });
 
     socket.on('backend_error', (backend_error) => {
-      setBackendError(backend_error.message);
+      setBackendError(
+        {
+          "header": backend_error.header,
+          "error": backend_error.message
+        }
+      );
     });
 
     socket.on('connect', () => {

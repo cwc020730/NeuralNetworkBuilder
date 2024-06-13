@@ -28,7 +28,7 @@ def send_unit_data(unit_data):
     socketio.emit('data_updated', {'data': unit_data})
     return jsonify({'unit_data': unit_data})
 
-def send_error(error_message):
+def send_error(error_header, error_message):
     """
     Send an error message to the client via WebSocket.
 
@@ -38,7 +38,7 @@ def send_error(error_message):
     Returns:
         dict: The error message.
     """
-    socketio.emit('backend_error', {'message': error_message})
+    socketio.emit('backend_error', {'header': error_header, 'message': error_message})
     return jsonify({'backend_error': error_message})
 
 def send_header_status_data(status):

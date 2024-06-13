@@ -16,11 +16,11 @@ const ErrorModal = () => {
             <div className="modal-backdrop">
                 <div className="modal">
                     <div className="modal-header">
-                        <h2>Error</h2>
+                        <h2>{backendError["header"]}</h2>
                         <button onClick={onClose} className="close-button">&times;</button>
                     </div>
                     <div className="modal-body">
-                        <p>{backendError}</p>
+                        <p>{backendError["error"]}</p>
                     </div>
                 </div>
             </div>
