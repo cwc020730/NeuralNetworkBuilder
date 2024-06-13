@@ -16,7 +16,7 @@ const ErrorModal = () => {
             <div className="modal-backdrop">
                 <div className="modal">
                     <div className="modal-header">
-                        <h2>{backendError["header"]}</h2>
+                        <h2>⚠ Error: {backendError["header"]}</h2>
                         <button onClick={onClose} className="close-button">&times;</button>
                     </div>
                     <div className="modal-body">
