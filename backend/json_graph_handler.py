@@ -86,6 +86,8 @@ class JSONGraphHandler:
             assert isinstance(arrow_info['startAnchorPointId'], (str, type(None)))
             assert 'endAnchorPointId' in arrow_info
             assert isinstance(arrow_info['endAnchorPointId'], (str, type(None)))
+        
+        assert contains_input, 'No input unit found on the canvas.'
 
     def simplify_data(self):
         """

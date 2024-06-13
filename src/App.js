@@ -11,6 +11,7 @@ import IOInfo from "./components/IOInfo";
 import Header from "./components/Header";
 import MainBottomAreaControlBar from "./components/MainBottomAreaControlBar";
 import MainBottomArea from "./components/MainBottomArea";
+import ErrorModal from "./components/ErrorModal";
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
                     <MainBottomArea />
                 </main>
                 <footer className="footer">Footer</footer>
+                <ErrorModal message="This is an error message" />
             </div>
         </AppProvider>
     );

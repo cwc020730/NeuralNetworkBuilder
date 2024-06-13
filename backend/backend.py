@@ -7,7 +7,7 @@ from flask import jsonify, request
 from .json_graph_handler import JSONGraphHandler
 from .execution_handler import ExecutionHandler
 
-from .app import app, send_header_status_data
+from .app import app, send_header_status_data, send_error
 
 @app.route('/receive_data', methods=['POST'])
 def receive_data():
@@ -16,7 +16,11 @@ def receive_data():
     """
     send_header_status_data('Preparing ...')
     data = request.get_json()
-    json_graph_handler = JSONGraphHandler(data)
+    try:
+        json_graph_handler = JSONGraphHandler(data)
+    except AssertionError as e:
+        send_error(str(e))
+        return jsonify({'error': str(e)}), 400
     execution_handler = ExecutionHandler(json_graph_handler.simplified_data)
     send_header_status_data('idle')
 

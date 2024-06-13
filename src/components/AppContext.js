@@ -18,6 +18,8 @@ export const AppProvider = ({ children }) => {
 
   const [imageDataMap, setImageDataMap] = useState(new Map());
 
+  const [backendError, setBackendError] = useState(null);
+
   useEffect(() => {
 
     // Set up WebSocket connection
@@ -44,6 +46,10 @@ export const AppProvider = ({ children }) => {
       });
   
       console.log('Data updated:', message.data);
+    });
+
+    socket.on('backend_error', (backend_error) => {
+      setBackendError(backend_error.message);
     });
 
     socket.on('connect', () => {
@@ -84,7 +90,9 @@ export const AppProvider = ({ children }) => {
         selectedDataName,
         setSelectedDataName,
         imageDataMap,
-        setImageDataMap
+        setImageDataMap,
+        backendError,
+        setBackendError
       }
     }>
       {children}
