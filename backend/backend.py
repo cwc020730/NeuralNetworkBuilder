@@ -20,6 +20,7 @@ def receive_data():
         json_graph_handler = JSONGraphHandler(data)
     except AssertionError as e:
         send_error(str(e))
+        send_header_status_data('idle')
         return jsonify({'error': str(e)}), 400
     execution_handler = ExecutionHandler(json_graph_handler.simplified_data)
     send_header_status_data('idle')

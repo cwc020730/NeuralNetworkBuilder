@@ -22,9 +22,6 @@ const ErrorModal = () => {
                     <div className="modal-body">
                         <p>{backendError}</p>
                     </div>
-                    <div className="modal-footer">
-                        <button onClick={onClose} className="close-button">Close</button>
-                    </div>
                 </div>
             </div>
         )

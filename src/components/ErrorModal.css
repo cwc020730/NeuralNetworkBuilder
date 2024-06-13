@@ -20,7 +20,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.modal-header, .modal-footer {
+.modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
