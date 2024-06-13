@@ -24,7 +24,7 @@ class TrainStartUnit(Unit, nn.Module):
         unit_info (dict): The information of the unit.
         all_units_data (dict): The data of all the units.
     """
-    def __init__(self, unit_id: str, unit_info: dict, all_units_data: dict, enable_send_data: bool = True):
+    def __init__(self, unit_id: str, unit_info: dict, all_units_data: dict, enable_send_data: bool = True, curr_unit_id: list = []):
         Unit.__init__(self, unit_id, unit_info)
         nn.Module.__init__(self)
         self.all_units_data = all_units_data
@@ -34,6 +34,7 @@ class TrainStartUnit(Unit, nn.Module):
         self.unit_id_to_module = {}
         self.register_modules()
         self.enable_send_data = enable_send_data
+        self.curr_unit_id = curr_unit_id
 
     def toggle_send_data(self):
         """
@@ -82,6 +83,8 @@ class TrainStartUnit(Unit, nn.Module):
         end_unit_output = None
 
         def traverse(unit_id, input_data):
+            if self.curr_unit_id != []: self.curr_unit_id.pop()
+            self.curr_unit_id.append(unit_id)
             unit_info = self.all_units_data[unit_id]
             if unit_id in self.unit_id_to_module:
                 module_unit_object = self.unit_id_to_module[unit_id]

@@ -21,8 +21,9 @@ class ExecutionHandler:
     Attributes:
         simplified_data (dict): The simplified version of the JSON data after processing.
     """
-    def __init__(self, simplified_data: dict):
+    def __init__(self, simplified_data: dict, curr_unit_id: list = []):
         self.simplified_data = simplified_data
+        self.curr_unit_id = curr_unit_id
         self.execute_operations()
 
     def execute_operations(self):
@@ -39,13 +40,16 @@ class ExecutionHandler:
         input_cache = {unit_id: {} for unit_id in self.simplified_data}
         
         def exec_traverse(unit_id, input_data):
+            if self.curr_unit_id != []: self.curr_unit_id.pop()
+            self.curr_unit_id.append(unit_id)
             unit_info = self.simplified_data[unit_id]
             # Check if the unit is a train start unit
             if unit_info['type'] == 'train start':
                 assert isinstance(input_data['Data'], DataLoader), 'DataLoader input expected for TrainStartUnit'
                 dataloader = input_data['Data']
                 curr_loss_func_unit_id = input_data['Loss function id']
-                unit_object = TrainStartUnit(unit_id, unit_info, self.simplified_data)
+                assert curr_loss_func_unit_id is not None, 'Loss function unit not found'
+                unit_object = TrainStartUnit(unit_id, unit_info, self.simplified_data, curr_unit_id=self.curr_unit_id)
                 num_epochs, device = unit_object.get_training_config()
                 # set training device
                 unit_object.to(device)

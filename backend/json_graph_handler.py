@@ -126,7 +126,10 @@ class JSONGraphHandler:
                         if self.raw_data['arrows'][arrow_id]['startAnchorPointId'] == connection_point['id']:
                             this_connection['name'] = connection_point['label']
                             this_connection['connects_to'] = self.raw_data['arrows'][arrow_id]['endUnitId']
-                            this_connection['end_name'] = id_to_connection_point[self.raw_data['arrows'][arrow_id]['endAnchorPointId']]['label']
+                            if this_connection['connects_to'] == None:
+                                this_connection['end_name'] = 'None'
+                            else:
+                                this_connection['end_name'] = id_to_connection_point[self.raw_data['arrows'][arrow_id]['endAnchorPointId']]['label']
                             break
                     if this_connection:
                         simplified_data[unit_id]['outputs'].append(this_connection)

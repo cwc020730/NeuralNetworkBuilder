@@ -22,7 +22,13 @@ def receive_data():
         send_error("Invalid Graph", str(e))
         send_header_status_data('idle')
         return jsonify({'error': str(e)}), 400
-    execution_handler = ExecutionHandler(json_graph_handler.simplified_data)
+    try:
+        curr_unit_id = []
+        execution_handler = ExecutionHandler(json_graph_handler.simplified_data, curr_unit_id)
+    except Exception as e: # pylint: disable=broad-except
+        send_error("Execution Error", f"At Unit {json_graph_handler.simplified_data[curr_unit_id[0]]["type"]}({curr_unit_id[0]}):\n\n{str(e)}")
+        send_header_status_data('idle')
+        return jsonify({'error': 'Error while executing the graph.'}), 400
     send_header_status_data('idle')
 
     return jsonify({'status': 'Data received!'}), 200
