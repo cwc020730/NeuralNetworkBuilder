@@ -11,6 +11,9 @@ const InventoryController = () => {
   const [categories, setCategories] = useState({});
   const [selectedCategories, setSelectedCategories] = useState(new Set());
   const [isOpen, setIsOpen] = useState(false);
+  const [parentMap, setParentMap] = useState({});
+
+  const [expandedCategory, setExpandedCategory] = useState(null);
 
   useEffect(() => {
     const unitKeys = Object.keys(unitList);
@@ -32,25 +35,68 @@ const InventoryController = () => {
 
   const buildCategoryStructure = (units) => {
     const categoryStructure = {};
+    const parentMap = {};
+  
     Object.keys(units).forEach(key => {
       const unitCategories = units[key].category || [];
       let currentLevel = categoryStructure;
-      unitCategories.forEach(cat => {
+  
+      unitCategories.forEach((cat, index) => {
         if (!currentLevel[cat]) {
           currentLevel[cat] = { subcategories: {} };
+        }
+        if (index > 0) {
+          parentMap[cat] = unitCategories[index - 1];
         }
         currentLevel = currentLevel[cat].subcategories;
       });
     });
+  
     setCategories(categoryStructure);
+    setParentMap(parentMap);
+  };
+
+  const addCategory = (category, updatedSelectedCategories) => {
+    updatedSelectedCategories.add(category);
+    if (categories[category]) {
+      for (let subcat in categories[category].subcategories) {
+        updatedSelectedCategories = addCategory(subcat, updatedSelectedCategories);
+      }
+    }
+    if (parentMap[category]) {
+      let containsAllChildren = true;
+      for (let subcat in categories[parentMap[category]].subcategories) {
+        if (!updatedSelectedCategories.has(subcat)) {
+          containsAllChildren = false;
+          break;
+        }
+      }
+      if (containsAllChildren) {
+        updatedSelectedCategories.add(parentMap[category]);
+      }
+    }
+    return updatedSelectedCategories;
+  };
+
+  const removeCategory = (category, updatedSelectedCategories) => {
+    updatedSelectedCategories.delete(category);
+    if (categories[category]) {
+      for (let subcat in categories[category].subcategories) {
+        updatedSelectedCategories = removeCategory(subcat, updatedSelectedCategories);
+      }
+    }
+    if (parentMap[category]) {
+      updatedSelectedCategories.delete(parentMap[category]);
+    }
+    return updatedSelectedCategories;
   };
 
   const handleCategorySelect = (category) => {
-    const updatedSelectedCategories = new Set(selectedCategories);
-    if (updatedSelectedCategories.has(category)) {
-      updatedSelectedCategories.delete(category);
+    let updatedSelectedCategories = new Set(selectedCategories);
+    if (selectedCategories.has(category)) {
+      updatedSelectedCategories = removeCategory(category, updatedSelectedCategories);
     } else {
-      updatedSelectedCategories.add(category);
+      updatedSelectedCategories = addCategory(category, updatedSelectedCategories);
     }
     setSelectedCategories(updatedSelectedCategories);
     filterUnits(searchQuery, updatedSelectedCategories);
@@ -68,6 +114,9 @@ const InventoryController = () => {
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
+    if (!isOpen) {
+      setExpandedCategory(null);
+    }
   };
 
   return (
@@ -81,7 +130,14 @@ const InventoryController = () => {
             <div className='category-dropdown-button-text'>FILTERS</div>
             <div className='category-dropdown-clearall-button'>x</div>
             {isOpen && (
-              <CategoryMenu categories={categories} handleCategorySelect={handleCategorySelect} selectedCategories={selectedCategories} />
+              <CategoryMenu 
+                categories={categories} 
+                handleCategorySelect={handleCategorySelect} 
+                selectedCategories={selectedCategories} 
+                expandedCategory={expandedCategory}
+                setExpandedCategory={setExpandedCategory}
+                parentMap={parentMap}
+              />
             )}
           </div>
         </div>
