@@ -9,7 +9,7 @@ const InventoryController = () => {
   const [allUnits, setAllUnits] = useState([]);
 
   const [categories, setCategories] = useState({});
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState(new Set());
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -46,14 +46,21 @@ const InventoryController = () => {
   };
 
   const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-    filterUnits(searchQuery, category);
+    const updatedSelectedCategories = new Set(selectedCategories);
+    if (updatedSelectedCategories.has(category)) {
+      updatedSelectedCategories.delete(category);
+    } else {
+      updatedSelectedCategories.add(category);
+    }
+    setSelectedCategories(updatedSelectedCategories);
+    filterUnits(searchQuery, updatedSelectedCategories);
   };
 
-  const filterUnits = (query, category) => {
+
+  const filterUnits = (query, categories) => {
     const filteredUnits = allUnits.filter(id => {
       const matchesQuery = id.toLowerCase().includes(query.toLowerCase());
-      const matchesCategory = !category || unitList[id].category.includes(category);
+      const matchesCategory = !categories.size || Array.from(categories).some(category => unitList[id].category.includes(category));
       return matchesQuery && matchesCategory;
     });
     setSearchResults(filteredUnits);
@@ -72,7 +79,7 @@ const InventoryController = () => {
               {isOpen ? 'Collapse All' : 'Expand All'}
             </button>
             {isOpen && (
-              <CategoryMenu categories={categories} handleCategorySelect={handleCategorySelect} />
+              <CategoryMenu categories={categories} handleCategorySelect={handleCategorySelect} selectedCategories={selectedCategories} />
             )}
           </div>
         </div>

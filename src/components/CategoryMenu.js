@@ -1,14 +1,14 @@
 import { React, useState } from 'react';
 
-const CategoryItem = ({ category, subcategories, handleCategorySelect }) => {
+const CategoryItem = ({ category, subcategories, selectedCategories, handleCategorySelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleOpen = () => setIsOpen(!isOpen);
   
     return (
-      <li>
-        <div className="category-item">
-          <span onClick={toggleOpen} className="category-name">{category}</span>
-          <button onClick={() => handleCategorySelect(category)} className="filter-button">Filter</button>
+      <li className='category-dropdown-menu-list'>
+        <div className={selectedCategories.has(category) ? "category-item-selected" : "category-item"}>
+          <span onClick={() => handleCategorySelect(category)} onMouseOver={toggleOpen} className="category-name">{category}</span>
+          <div onClick={() => handleCategorySelect(category)} onMouseOver={toggleOpen}>{">"}</div>
         </div>
         {isOpen && Object.keys(subcategories).length > 0 && (
           <div className="subcategory">
@@ -19,7 +19,7 @@ const CategoryItem = ({ category, subcategories, handleCategorySelect }) => {
     );
 };
 
-const CategoryMenu = ({ categories, handleCategorySelect }) => {
+const CategoryMenu = ({ categories, handleCategorySelect, selectedCategories }) => {
   return (
     <ul className='category-dropdown-menu'>
         {Object.keys(categories).map(category => (
@@ -28,6 +28,7 @@ const CategoryMenu = ({ categories, handleCategorySelect }) => {
             category={category}
             subcategories={categories[category].subcategories}
             handleCategorySelect={handleCategorySelect}
+            selectedCategories={selectedCategories}
             />
         ))}
     </ul>
