@@ -12,7 +12,11 @@ const CategoryItem = ({ category, subcategories, selectedCategories, handleCateg
         </div>
         {isOpen && Object.keys(subcategories).length > 0 && (
           <div className="subcategory">
-            <CategoryMenu categories={subcategories} handleCategorySelect={handleCategorySelect} />
+            <CategoryMenu 
+              categories={subcategories}
+              handleCategorySelect={handleCategorySelect}
+              selectedCategories={selectedCategories}
+            />
           </div>
         )}
       </li>

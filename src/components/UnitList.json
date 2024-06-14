@@ -37,7 +37,7 @@
         "primary_label": "HF dataset input",
         "in_unit_label": "HFDSINP",
         "in_unit_label_color": "black",
-        "category": ["INPUT"],
+        "category": ["INPUT", "DATASET"],
         "description": "Input a huggingface dataset.",
         "color": "#FADADD",
         "image": null,
