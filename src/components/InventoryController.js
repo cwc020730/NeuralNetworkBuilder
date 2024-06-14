@@ -75,9 +75,11 @@ const InventoryController = () => {
       <div className="sidebar-menu">
         <div className="category-menu">
           <div className='category-dropdown-container'>
-            <button onClick={toggleOpen} className="toggle-button">
-              {isOpen ? 'Collapse All' : 'Expand All'}
+            <button onClick={toggleOpen} className="category-dropdown-toggle-button">
+              ≡
             </button>
+            <div className='category-dropdown-button-text'>FILTERS</div>
+            <div className='category-dropdown-clearall-button'>x</div>
             {isOpen && (
               <CategoryMenu categories={categories} handleCategorySelect={handleCategorySelect} selectedCategories={selectedCategories} />
             )}

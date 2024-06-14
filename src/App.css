@@ -451,8 +451,81 @@
   height: 40px;
 }
 
-.category-dropdown-container {
+.category-dropdown-toggle-button {
+  border: none;
+  color: white;
+  background: transparent;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger-icon {
+  width: 30px;
+  height: 2px;
+  background-color: white;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+  content: '';
+  width: 30px;
+  height: 2px;
+  background-color: white;
+  position: absolute;
+  transition: transform 0.3s ease;
+}
+
+.hamburger-icon::before {
+  transform: translateY(-8px);
+}
+
+.hamburger-icon::after {
+  transform: translateY(8px);
+}
+
+.category-dropdown-toggle-button.open .hamburger-icon {
+  transform: rotate(45deg);
+}
+
+.category-dropdown-toggle-button.open .hamburger-icon::before {
+  transform: rotate(90deg) translateX(-8px);
+}
+
+.category-dropdown-toggle-button.open .hamburger-icon::after {
+  transform: rotate(90deg) translateX(8px);
+}
+
+.category-dropdown-container {
+  display: grid;
+  grid-template-columns: 30% 50% 20%;
+  width: 100%;
+  position: relative;
+}
+
+.category-dropdown-button-text {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 12px;
+  padding-left: 15px;
+}
+
+.category-dropdown-clearall-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  padding-right: 15px;
+  padding-bottom: 4px;
+  cursor: pointer;
 }
 
 .category-dropdown-menu {
@@ -461,9 +534,9 @@
   width: 150px;
   font-size: 12px;
   left: 0;
-  background-color: rgba(34, 34, 34, 0.85);
+  background-color: rgba(34, 34, 34, 0.95);
   border-radius: 4px;
-  padding: 10px 0;
+  padding: 2px 0;
   list-style: none;
   margin: 5px 0 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -471,7 +544,7 @@
 }
 
 .category-name {
-  filter: none;
+  padding-left: 15px;
 }
 
 .category-dropdown-menu-list {
