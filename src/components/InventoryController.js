@@ -23,14 +23,8 @@ const InventoryController = () => {
   }, []);
 
   const handleSearch = (query) => {
-    console.log('allUnits:', allUnits);
-    console.log('query:', query);
     setSearchQuery(query);
-    const filteredUnits = allUnits.filter(id =>
-      id.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchResults(filteredUnits);
-    console.log('filteredComponents:', filteredUnits);
+    filterUnits(query, selectedCategories);
   };
 
   const buildCategoryStructure = (units) => {
