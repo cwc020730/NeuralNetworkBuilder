@@ -7,7 +7,8 @@ const UnitInventory = ({ components: units }) => {
   const scale = useContext(AppContext).scale;
 
   useEffect(() => {
-    setUnitIds(units);
+    const sortedUnits = [...units].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    setUnitIds(sortedUnits);
   }, [units]);
 
   const handleDragStart = (event, unitId) => {
