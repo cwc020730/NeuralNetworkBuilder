@@ -15,7 +15,7 @@ const Header = () => {
         removeAllObjectsOnCanvas();
     };
 
-    const handleFileExportButtonClick = async () => {
+    const handleFileSaveButtonClick = async () => {
         setIsListVisible(false);
         try {
             const JSONExport = generateJSONCanvasRepresentation();
@@ -39,7 +39,7 @@ const Header = () => {
         }
     };
 
-    const handleFileImportButtonClick = async () => {
+    const handleFileOpenButtonClick = async () => {
         setIsListVisible(false);
         try {
             const [fileHandle] = await window.showOpenFilePicker({
@@ -79,6 +79,14 @@ const Header = () => {
         }
     };
 
+    const handleFileImportButtonClick = async () => {
+        setIsListVisible(false);
+    }
+
+    const handleFileExportButtonClick = () => {
+        setIsListVisible(false);
+    }
+
     useEffect(() => {
         const socket = io('http://localhost:5000');
 
@@ -103,6 +111,8 @@ const Header = () => {
                     {isListVisible && (
                         <div className='header-dropdown-menu'>
                             <button className='dropdown-button' onClick={handleFileNewButtonClick}>New</button>
+                            <button className='dropdown-button' onClick={handleFileOpenButtonClick}>Open</button>
+                            <button className='dropdown-button' onClick={handleFileSaveButtonClick}>Save</button>
                             <button className='dropdown-button' onClick={handleFileImportButtonClick}>Import</button>
                             <button className='dropdown-button' onClick={handleFileExportButtonClick}>Export</button>
                         </div>
