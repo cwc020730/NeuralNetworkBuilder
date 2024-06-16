@@ -20,12 +20,14 @@ export const AppProvider = ({ children }) => {
 
   const [backendError, setBackendError] = useState(null);
 
+  const [socket, setSocket] = useState(null);
+
   useEffect(() => {
 
     // Set up WebSocket connection
-    const socket = io('http://localhost:5000');
+    const newSocket = io('http://localhost:5000');
 
-    socket.on('data_updated', (message) => {
+    newSocket.on('data_updated', (message) => {
       // Extract the unitId and unitData from message.data
       const [unitId, unitData] = Object.entries(message.data)[0];
   
@@ -48,7 +50,7 @@ export const AppProvider = ({ children }) => {
       console.log('Data updated:', message.data);
     });
 
-    socket.on('backend_error', (backend_error) => {
+    newSocket.on('backend_error', (backend_error) => {
       setBackendError(
         {
           "header": backend_error.header,
@@ -57,21 +59,23 @@ export const AppProvider = ({ children }) => {
       );
     });
 
-    socket.on('connect', () => {
+    newSocket.on('connect', () => {
       console.log('WebSocket connection established');
     });
 
-    socket.on('disconnect', () => {
+    newSocket.on('disconnect', () => {
       console.log('WebSocket connection closed');
     });
 
-    socket.on('connect_error', (error) => {
+    newSocket.on('connect_error', (error) => {
       console.error('WebSocket connection error:', error);
     });
 
+    setSocket(newSocket);
+
     // Clean up WebSocket connection on component unmount
     return () => {
-      socket.disconnect();
+      newSocket.disconnect();
     };
   }, []);
 

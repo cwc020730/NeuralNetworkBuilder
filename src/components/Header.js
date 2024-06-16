@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { generateJSONCanvasRepresentation, removeAllObjectsOnCanvas, loadJSONCanvasRepresentation } from './D3Canvas';
 import { io } from 'socket.io-client';
+import { AppContext } from './AppContext';
 
 const Header = () => {
     const [isListVisible, setIsListVisible] = useState(false);
     const [currStatus, setCurrStatus] = useState('idle');
+    const { setBackendError, socket } = useContext(AppContext);
 
     const handleFileButtonClick = () => {
         setIsListVisible(!isListVisible);
@@ -81,11 +83,53 @@ const Header = () => {
 
     const handleFileImportButtonClick = async () => {
         setIsListVisible(false);
+        if (currStatus === 'idle') {
+            try {
+                const [fileHandle] = await window.showOpenFilePicker({
+                    types: [{
+                        description: 'Model state dict file',
+                        accept: { 'application/octet-stream': ['.pt', '.pth'] },
+                    }],
+                });
+                const file = await fileHandle.getFile();
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const arrayBuffer = reader.result;
+                    const byteArray = new Uint8Array(arrayBuffer);
+                    socket.emit('send_state_dict', { file: byteArray });
+                };
+                reader.readAsArrayBuffer(file);
+            }
+            catch (error) {
+                console.error('Error importing file:', error);
+            }
+        }
+        else {
+            setBackendError({
+                header: 'Import Error',
+                error: 'Cannot import while the model is running.'
+            });
+        }
     }
 
-    const handleFileExportButtonClick = () => {
-        setIsListVisible(false);
-    }
+    const handleFileExportButtonClick = async () => {
+        try {
+                const response = await fetch('http://localhost:5000/download_model');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'model.pth';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } catch (error) {
+                console.error('Error exporting model:', error);
+            }
+      };
 
     useEffect(() => {
         const socket = io('http://localhost:5000');
