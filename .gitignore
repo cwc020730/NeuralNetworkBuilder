@@ -184,3 +184,4 @@ yarn-debug.log*
 yarn-error.log*
 
 .vscode/
+model.pth

@@ -21,9 +21,10 @@ class ExecutionHandler:
     Attributes:
         simplified_data (dict): The simplified version of the JSON data after processing.
     """
-    def __init__(self, simplified_data: dict, curr_unit_id: list = []):
+    def __init__(self, simplified_data: dict, curr_unit_id: list = [], state_dict = None):
         self.simplified_data = simplified_data
         self.curr_unit_id = curr_unit_id
+        self.state_dict = state_dict
         self.execute_operations()
 
     def execute_operations(self):
@@ -50,6 +51,9 @@ class ExecutionHandler:
                 curr_loss_func_unit_id = input_data['Loss function id']
                 assert curr_loss_func_unit_id is not None, 'Loss function unit not found'
                 unit_object = TrainStartUnit(unit_id, unit_info, self.simplified_data, curr_unit_id=self.curr_unit_id)
+                # try load state dict
+                if self.state_dict is not None:
+                    unit_object.load_state_dict(self.state_dict)
                 num_epochs, device = unit_object.get_training_config()
                 # set training device
                 unit_object.to(device)
@@ -116,6 +120,7 @@ class ExecutionHandler:
                     send_image(curr_loss_func_unit_id, 'Accuracy', acc_img_buf)
                     print(f'Epoch {epoch + 1}, total accuracy: {total_accuracy / len(dataloader)}')
                 output_connections = unit_object.end_unit_connections
+                self.state_dict = unit_object.state_dict()
             else:
                 unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
                 output = unit_object.execute(input_data)

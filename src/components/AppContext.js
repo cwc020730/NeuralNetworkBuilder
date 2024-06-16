@@ -101,7 +101,9 @@ export const AppProvider = ({ children }) => {
         imageDataMap,
         setImageDataMap,
         backendError,
-        setBackendError
+        setBackendError,
+        socket,
+        setSocket
       }
     }>
       {children}

@@ -3,11 +3,37 @@ The main file for the backend server.
 """
 
 import os
-from flask import jsonify, request
+import torch
+from flask import jsonify, request, send_file
+from flask_socketio import emit
 from .json_graph_handler import JSONGraphHandler
 from .execution_handler import ExecutionHandler
 
-from .app import app, send_header_status_data, send_error
+from .app import app, send_header_status_data, send_error, socketio
+
+MODEL_PATH = os.path.join('backend', 'model.pth')
+MODEL_PATH_LOCAL = 'model.pth'
+
+@socketio.on('send_state_dict')
+def handle_state_dict(data):
+    """
+    Function to receive the state_dict from the frontend and save it as a file.
+    """
+    file_bytes = data['file']
+    byte_array = bytearray(file_bytes)
+    with open(MODEL_PATH, 'wb') as f:
+        f.write(byte_array)
+    print('Received and saved file as model.pth')
+    emit('response', {'status': 'File received and saved'})
+
+@app.route('/download_model', methods=['GET'])
+def download_model():
+    """
+    The function to download the model file from the server.
+    """
+    if not os.path.exists(MODEL_PATH):
+        return jsonify({'error': 'Model file not found'}), 404
+    return send_file(MODEL_PATH_LOCAL, as_attachment=True)
 
 @app.route('/receive_data', methods=['POST'])
 def receive_data():
@@ -16,6 +42,11 @@ def receive_data():
     """
     send_header_status_data('Preparing ...')
     data = request.get_json()
+    # try loading state dict
+    if os.path.exists(MODEL_PATH):
+        state_dict = torch.load(MODEL_PATH)
+    else:
+        state_dict = None
     try:
         json_graph_handler = JSONGraphHandler(data)
     except AssertionError as e:
@@ -24,8 +55,10 @@ def receive_data():
         return jsonify({'error': str(e)}), 400
     try:
         curr_unit_id = []
-        execution_handler = ExecutionHandler(json_graph_handler.simplified_data, curr_unit_id)
+        execution_handler = ExecutionHandler(json_graph_handler.simplified_data, curr_unit_id, state_dict)
+        torch.save(execution_handler.state_dict, MODEL_PATH)
     except Exception as e: # pylint: disable=broad-except
+        print(e)
         send_error("Execution Error", f"At Unit {json_graph_handler.simplified_data[curr_unit_id[0]]["type"]}({curr_unit_id[0]}):\n\n{str(e)}")
         send_header_status_data('idle')
         return jsonify({'error': 'Error while executing the graph.'}), 400
@@ -34,4 +67,7 @@ def receive_data():
     return jsonify({'status': 'Data received!'}), 200
 
 if __name__ == '__main__':
+    if os.path.exists(MODEL_PATH):
+        os.remove(MODEL_PATH)
+        print('Removed existing model.pth file')
     app.run(debug=True, port=5000)

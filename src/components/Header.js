@@ -96,12 +96,25 @@ const Header = () => {
                 reader.onload = () => {
                     const arrayBuffer = reader.result;
                     const byteArray = new Uint8Array(arrayBuffer);
-                    socket.emit('send_state_dict', { file: byteArray });
+                    if (socket) {
+                        socket.emit('send_state_dict', { file: byteArray });
+                    } 
+                    else {
+                        console.error('Socket is not available');
+                        setBackendError({
+                            header: 'Import Error',
+                            error: 'Socket is not available',
+                        });
+                    }
                 };
                 reader.readAsArrayBuffer(file);
             }
             catch (error) {
                 console.error('Error importing file:', error);
+                setBackendError({
+                    header: 'Import Error',
+                    error: 'Error importing file: ' + error
+                });
             }
         }
         else {
@@ -113,7 +126,8 @@ const Header = () => {
     }
 
     const handleFileExportButtonClick = async () => {
-        try {
+        if (currStatus === 'idle') {
+            try {
                 const response = await fetch('http://localhost:5000/download_model');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -128,7 +142,18 @@ const Header = () => {
                 a.remove();
             } catch (error) {
                 console.error('Error exporting model:', error);
+                setBackendError({
+                    header: 'Export Error',
+                    error: 'Error exporting model: ' + error
+                });
             }
+        }
+        else {
+            setBackendError({
+                header: 'Export Error',
+                error: 'Cannot export while the model is running.'
+            });
+        }
       };
 
     useEffect(() => {
