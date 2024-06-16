@@ -53,7 +53,7 @@ class JSONGraphHandler:
             assert 'type' in unit_info_details
             assert isinstance(unit_info_details['type'], str)
             assert unit_info_details['type'] in self.unit_list
-            if self.unit_list[unit_info_details['type']]['category'] == 'INPUT':
+            if self.unit_list[unit_info_details['type']]['category'][0] == 'INPUT':
                 assert contains_input == False, 'Multiple input units are not supported.'
                 contains_input = True
             assert 'connectionPoints' in unit_info_details
@@ -102,7 +102,7 @@ class JSONGraphHandler:
         for unit_id, unit_info in self.raw_data['units'].items():
             simplified_data[unit_id] = {
                 'type': unit_info['unitInfo']['type'],
-                'input_unit': self.unit_list[unit_info['unitInfo']['type']]['category'] == 'INPUT',
+                'input_unit': self.unit_list[unit_info['unitInfo']['type']]['category'][0] == 'INPUT',
                 'inputs': [],
                 'outputs': [],
                 'parameters': unit_info['unitInfo']['parameters']
