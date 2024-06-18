@@ -33,6 +33,6 @@ class CopyUnit(ModelLayerUnit):
         input_class = input_data["Input"].__class__
         input_data_tensor = input_data["Input"].get_data()
         return {
-            "Output1": input_class(input_data_tensor),
-            "Output2": input_class(input_data_tensor)
+            "Output 1": input_class(input_data_tensor),
+            "Output 2": input_class(input_data_tensor)
         }

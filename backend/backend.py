@@ -4,6 +4,7 @@ The main file for the backend server.
 
 import os
 import torch
+import traceback
 from flask import jsonify, request, send_file
 from flask_socketio import emit
 from .json_graph_handler import JSONGraphHandler
@@ -61,6 +62,7 @@ def receive_data():
         print(e)
         send_error("Execution Error", f"At Unit {json_graph_handler.simplified_data[curr_unit_id[0]]["type"]}({curr_unit_id[0]}):\n\n{str(e)}")
         send_header_status_data('idle')
+        print(traceback.format_exc())
         return jsonify({'error': 'Error while executing the graph.'}), 400
     send_header_status_data('idle')
 
