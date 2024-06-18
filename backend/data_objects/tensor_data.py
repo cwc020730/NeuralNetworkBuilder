@@ -17,18 +17,11 @@ class TensorData(DataObject):
     """
     def __init__(self, tensor: torch.Tensor):
         self.tensor = tensor
-        if self.tensor.dtype == torch.float32:
-            self.min = tensor.min().item() if tensor.numel() > 0 else None
-            self.max = tensor.max().item() if tensor.numel() > 0 else None
-            self.mean = tensor.mean().item() if tensor.numel() > 0 else None
-            self.std = tensor.std().item() if tensor.numel() > 0 else None
-            self.shape = list(tensor.shape)
-        elif self.tensor.dtype == torch.long:
-            self.min = tensor.min().item() if tensor.numel() > 0 else None
-            self.max = tensor.max().item() if tensor.numel() > 0 else None
-            self.mean = None
-            self.std = None
-            self.shape = list(tensor.shape)
+        self.min = None
+        self.max = None
+        self.mean = None
+        self.std = None
+        self.shape = None
 
     def _reduce_dimension(self, tensor: torch.Tensor):
         """
@@ -66,11 +59,23 @@ class TensorData(DataObject):
     def to_json_dict(self):
         """
         Convert the data to a JSON string.
-
+    
         Returns:
             str: A JSON string.
         """
         reduced_tensor = self._reduce_dimension(self.tensor)  # Get a reduced view of the tensor
+        if self.tensor.dtype == torch.float32:
+            self.min = self.tensor.min().item() if self.tensor.numel() > 0 else None
+            self.max = self.tensor.max().item() if self.tensor.numel() > 0 else None
+            self.mean = self.tensor.mean().item() if self.tensor.numel() > 0 else None
+            self.std = self.tensor.std().item() if self.tensor.numel() > 0 else None
+            self.shape = list(self.tensor.shape)
+        elif self.tensor.dtype == torch.long:
+            self.min = self.tensor.min().item() if self.tensor.numel() > 0 else None
+            self.max = self.tensor.max().item() if self.tensor.numel() > 0 else None
+            self.mean = None
+            self.std = None
+            self.shape = list(self.tensor.shape)
         data = {
             "type": "Tensor",
             "value": reduced_tensor.clone().tolist(),
