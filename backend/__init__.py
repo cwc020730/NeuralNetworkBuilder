@@ -30,5 +30,6 @@ from .unit_objects import (
     FlattenUnit,
     ReLUUnit,
     Conv2DUnit,
-    MaxPool2DUnit
+    MaxPool2DUnit,
+    CopyUnit
 )

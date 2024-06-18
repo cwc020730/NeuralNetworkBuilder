@@ -14,7 +14,8 @@ from .model_layer_unit_objects import (
     FlattenUnit,
     ReLUUnit,
     Conv2DUnit,
-    MaxPool2DUnit
+    MaxPool2DUnit,
+    CopyUnit
 )
 from .optimizer_unit_objects import (
     SGDUnit

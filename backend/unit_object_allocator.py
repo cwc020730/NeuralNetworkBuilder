@@ -16,7 +16,8 @@ from . import (
     LinearUnit,
     ReLUUnit,
     Conv2DUnit,
-    MaxPool2DUnit
+    MaxPool2DUnit,
+    CopyUnit
 )
 
 class UnitObjectAllocator:
@@ -38,7 +39,8 @@ class UnitObjectAllocator:
         "flatten": FlattenUnit,
         "relu": ReLUUnit,
         "conv2d": Conv2DUnit,
-        "maxpool2d": MaxPool2DUnit
+        "maxpool2d": MaxPool2DUnit,
+        "copy": CopyUnit
     }
 
     def __init__(self):

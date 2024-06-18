@@ -611,7 +611,8 @@
                 "variable": false
             },
             "output_labels": [
-                "Output"
+                "Output 1",
+                "Output 2"
             ]
         },
         "parameters": {
