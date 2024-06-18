@@ -592,7 +592,7 @@
         "primary_label": "copy",
         "in_unit_label": "COPY",
         "in_unit_label_color": "black",
-        "category": ["MODEL", "DATA"],
+        "category": ["MODEL", "TOOL"],
         "description": "Copy input to output.",
         "color": "#cccccc",
         "image": null,
