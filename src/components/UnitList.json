@@ -587,5 +587,35 @@
                 "default": 0
             }
         }
+    },
+    "copy": {
+        "primary_label": "copy",
+        "in_unit_label": "COPY",
+        "in_unit_label_color": "black",
+        "category": ["MODEL", "DATA"],
+        "description": "Copy input to output.",
+        "color": "#cccccc",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Input"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 2,
+                "variable": false
+            },
+            "output_labels": [
+                "Output"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }
