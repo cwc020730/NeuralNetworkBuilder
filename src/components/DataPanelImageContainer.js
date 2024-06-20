@@ -10,22 +10,6 @@ const DataPanelImageContainer = () => {
     const [currentPage, setCurrentPage] = useState(1); // Current page state
     const imagesPerPage = 5; // Number of images per page (you can adjust this as needed)
 
-    useEffect(() => {
-        socket.on("image_updated", (data) => {
-            console.log("image_updated", data);
-            const key = `${data.unit_id}/${data.data_name}`;
-            const newImageDataMap = new Map(imageDataMapRef.current);
-            newImageDataMap.set(key, data.image_data);
-            console.log(Array.isArray(newImageDataMap.get(key)));
-            imageDataMapRef.current = newImageDataMap;
-            setImageDataMap(newImageDataMap);
-        });
-
-        return () => {
-            socket.off("image_updated");
-        };
-    }, []);
-
     const getImageByPage = (page_number) => {
         const image_data_at_page = imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`)[page_number - 1];
         const src = `data:image/png;base64,${image_data_at_page}`;

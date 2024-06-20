@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
 
 // Create the context
@@ -21,6 +21,8 @@ export const AppProvider = ({ children }) => {
   const [backendError, setBackendError] = useState(null);
 
   const [socket, setSocket] = useState(null);
+
+  const imageDataMapRef = useRef(imageDataMap);
 
   useEffect(() => {
 
@@ -70,6 +72,16 @@ export const AppProvider = ({ children }) => {
     newSocket.on('connect_error', (error) => {
       console.error('WebSocket connection error:', error);
     });
+
+    newSocket.on("image_updated", (data) => {
+      console.log("image_updated", data);
+      const key = `${data.unit_id}/${data.data_name}`;
+      const newImageDataMap = new Map(imageDataMapRef.current);
+      newImageDataMap.set(key, data.image_data);
+      console.log(Array.isArray(newImageDataMap.get(key)));
+      imageDataMapRef.current = newImageDataMap;
+      setImageDataMap(newImageDataMap);
+  });
 
     setSocket(newSocket);
 
