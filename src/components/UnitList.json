@@ -190,6 +190,11 @@
             ]
         },
         "parameters": {
+            "mode": {
+                "type": "string",
+                "description": "Mode of the model. (train, eval)",
+                "default": "train"
+            },
             "epochs": {
                 "type": "int",
                 "description": "Number of epochs to train.",

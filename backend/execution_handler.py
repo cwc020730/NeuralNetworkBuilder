@@ -51,100 +51,101 @@ class ExecutionHandler:
             unit_info = self.simplified_data[unit_id]
             # Check if the unit is a train start unit
             if unit_info['type'] == 'model start':
-                assert isinstance(input_data['Data'], DataLoader), \
-                    'DataLoader input expected for TrainStartUnit'
-                dataloader = input_data['Data']
-                curr_loss_func_unit_id = input_data['Loss function id']
-                assert curr_loss_func_unit_id is not None, \
-                    'Loss function unit not found'
-                unit_object = ModelStartUnit(
-                    unit_id,
-                    unit_info,
-                    self.simplified_data,
-                    curr_unit_id=self.curr_unit_id
-                )
-                # try load state dict
-                if self.state_dict is not None:
-                    unit_object.load_state_dict(self.state_dict)
-                num_epochs, device = unit_object.get_training_config()
-                # set training device
-                unit_object.to(device)
-                # find optimizer
-                optimizer_unit_id = None
-                for connection in unit_object.output_connections:
-                    if connection['name'] == "Optimizer connector":
-                        optimizer_unit_id = connection['connects_to']
-                        break
-                assert optimizer_unit_id is not None, 'Optimizer unit not found'
-                # handles training
-                optimizer_unit_info = self.simplified_data[optimizer_unit_id]
-                optimizer_unit_object = UnitObjectAllocator.create_unit_object(
-                    optimizer_unit_id,
-                    optimizer_unit_info
-                )
-                loss_function_unit_info = self.simplified_data[curr_loss_func_unit_id]
-                loss_function_unit_object = UnitObjectAllocator.create_unit_object(
-                    curr_loss_func_unit_id,
-                    loss_function_unit_info
-                )
-                optimizer = optimizer_unit_object.get_optimizer(unit_object)
-                criterion = loss_function_unit_object.get_loss_func()
-                acc_data = AccuracyData([])
-                loss_data = LossData([])
-                asyncio.run(send_header_status_data(f"Training: Epoch 1/{num_epochs}, 0% complete"))
-                for epoch in range(num_epochs):
-                    running_loss = 0.0
-                    avg_time = 0.0
-                    total_accuracy = 0.0
-                    perc_progress = 0.0
-                    prev_perc_progress = 0.0
-                    for i, (inputs, labels) in enumerate(dataloader, 0):
-                        start_time = time.time()
-                        inputs, labels = inputs.to(device), labels.to(device)
-                        optimizer.zero_grad()
-                        output = unit_object(inputs)
-                        loss = criterion(output["Model output"].get_data(), labels)
-                        loss.backward()
-                        total_accuracy += loss_function_unit_object.get_accuracy(
-                            output["Model output"].get_data(),
-                            labels
-                        )
-                        optimizer.step()
+                if unit_info['parameters']['mode']['value'] == 'train':
+                    assert isinstance(input_data['Data'], DataLoader), \
+                        'DataLoader input expected for ModelStartUnit in train mode'
+                    dataloader = input_data['Data']
+                    curr_loss_func_unit_id = input_data['Loss function id']
+                    assert curr_loss_func_unit_id is not None, \
+                        'Loss function unit not found'
+                    unit_object = ModelStartUnit(
+                        unit_id,
+                        unit_info,
+                        self.simplified_data,
+                        curr_unit_id=self.curr_unit_id
+                    )
+                    # try load state dict
+                    if self.state_dict is not None:
+                        unit_object.load_state_dict(self.state_dict)
+                    num_epochs, device = unit_object.get_training_config()
+                    # set training device
+                    unit_object.to(device)
+                    # find optimizer
+                    optimizer_unit_id = None
+                    for connection in unit_object.output_connections:
+                        if connection['name'] == "Optimizer connector":
+                            optimizer_unit_id = connection['connects_to']
+                            break
+                    assert optimizer_unit_id is not None, 'Optimizer unit not found'
+                    # handles training
+                    optimizer_unit_info = self.simplified_data[optimizer_unit_id]
+                    optimizer_unit_object = UnitObjectAllocator.create_unit_object(
+                        optimizer_unit_id,
+                        optimizer_unit_info
+                    )
+                    loss_function_unit_info = self.simplified_data[curr_loss_func_unit_id]
+                    loss_function_unit_object = UnitObjectAllocator.create_unit_object(
+                        curr_loss_func_unit_id,
+                        loss_function_unit_info
+                    )
+                    optimizer = optimizer_unit_object.get_optimizer(unit_object)
+                    criterion = loss_function_unit_object.get_loss_func()
+                    acc_data = AccuracyData([])
+                    loss_data = LossData([])
+                    asyncio.run(send_header_status_data(f"Training: Epoch 1/{num_epochs}, 0% complete"))
+                    for epoch in range(num_epochs):
+                        running_loss = 0.0
+                        avg_time = 0.0
+                        total_accuracy = 0.0
+                        perc_progress = 0.0
+                        prev_perc_progress = 0.0
+                        for i, (inputs, labels) in enumerate(dataloader, 0):
+                            start_time = time.time()
+                            inputs, labels = inputs.to(device), labels.to(device)
+                            optimizer.zero_grad()
+                            output = unit_object(inputs)
+                            loss = criterion(output["Model output"].get_data(), labels)
+                            loss.backward()
+                            total_accuracy += loss_function_unit_object.get_accuracy(
+                                output["Model output"].get_data(),
+                                labels
+                            )
+                            optimizer.step()
 
-                        running_loss += loss.item()
-                        end_time = time.time()
-                        avg_time += end_time - start_time
-                        if i % 100 == 99:
-                            # unit_object.toggle_send_data()
-                            print(f'Epoch {epoch + 1}, batch {i + 1}, loss: {loss.item()}')
-                            print(f'Avg time: {avg_time / 100}')
-                            avg_time = 0.0
-                        prev_perc_progress = perc_progress
-                        perc_progress = ((i + 1) / len(dataloader)) * 100
-                        if int(perc_progress) > int(prev_perc_progress):
-                            asyncio.run(send_header_status_data(
-                                f"Training: Epoch {epoch + 1}/{num_epochs}, " + \
-                                f"{int(perc_progress)}% complete"
-                            ))
-                            perc_progress = int(perc_progress)
-                    # send data to the loss unit on the canvas
-                    unit_object.toggle_send_data()
-                    loss_data.add_loss(running_loss / len(dataloader))
-                    acc_data.add_accuracy(total_accuracy / len(dataloader))
-                    asyncio.run(send_unit_data({
-                        curr_loss_func_unit_id: {
-                            'Loss': loss_data.to_json_dict(),
-                            'Accuracy': acc_data.to_json_dict()
-                        }
-                    }))
-                    # send image to the loss unit on the canvas
-                    loss_img_buf = DataImageBuilder(loss_data).build_image()
-                    acc_img_buf = DataImageBuilder(acc_data).build_image()
-                    asyncio.run(send_image(curr_loss_func_unit_id, 'Loss', loss_img_buf))
-                    asyncio.run(send_image(curr_loss_func_unit_id, 'Accuracy', acc_img_buf))
-                    print(f'Epoch {epoch + 1}, total accuracy: {total_accuracy / len(dataloader)}')
-                output_connections = unit_object.end_unit_connections
-                self.state_dict = unit_object.state_dict()
+                            running_loss += loss.item()
+                            end_time = time.time()
+                            avg_time += end_time - start_time
+                            if i % 100 == 99:
+                                # unit_object.toggle_send_data()
+                                print(f'Epoch {epoch + 1}, batch {i + 1}, loss: {loss.item()}')
+                                print(f'Avg time: {avg_time / 100}')
+                                avg_time = 0.0
+                            prev_perc_progress = perc_progress
+                            perc_progress = ((i + 1) / len(dataloader)) * 100
+                            if int(perc_progress) > int(prev_perc_progress):
+                                asyncio.run(send_header_status_data(
+                                    f"Training: Epoch {epoch + 1}/{num_epochs}, " + \
+                                    f"{int(perc_progress)}% complete"
+                                ))
+                                perc_progress = int(perc_progress)
+                        # send data to the loss unit on the canvas
+                        unit_object.toggle_send_data()
+                        loss_data.add_loss(running_loss / len(dataloader))
+                        acc_data.add_accuracy(total_accuracy / len(dataloader))
+                        asyncio.run(send_unit_data({
+                            curr_loss_func_unit_id: {
+                                'Loss': loss_data.to_json_dict(),
+                                'Accuracy': acc_data.to_json_dict()
+                            }
+                        }))
+                        # send image to the loss unit on the canvas
+                        loss_img_buf = DataImageBuilder(loss_data).build_image()
+                        acc_img_buf = DataImageBuilder(acc_data).build_image()
+                        asyncio.run(send_image(curr_loss_func_unit_id, 'Loss', loss_img_buf))
+                        asyncio.run(send_image(curr_loss_func_unit_id, 'Accuracy', acc_img_buf))
+                        print(f'Epoch {epoch + 1}, total accuracy: {total_accuracy / len(dataloader)}')
+                    output_connections = unit_object.end_unit_connections
+                    self.state_dict = unit_object.state_dict()
             else:
                 unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
                 output = unit_object.execute(input_data)

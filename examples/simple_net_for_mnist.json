@@ -251,72 +251,6 @@
             "x": 765.7746429443359,
             "y": 400.28167724609375
         },
-        "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87": {
-            "unitInfo": {
-                "type": "model start",
-                "connectionPoints": [
-                    {
-                        "originalX": 80,
-                        "originalY": 0,
-                        "x": 639.4365997314453,
-                        "y": 502.3943786621094,
-                        "is_input": true,
-                        "is_output": false,
-                        "label": "Data",
-                        "occupied": true,
-                        "id": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87-cp-0",
-                        "unitId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87"
-                    },
-                    {
-                        "originalX": 53.333333333333336,
-                        "originalY": 60,
-                        "x": 612.7699330647787,
-                        "y": 562.3943786621094,
-                        "is_input": false,
-                        "is_output": true,
-                        "label": "Data",
-                        "occupied": true,
-                        "id": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87-cp-1",
-                        "unitId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87"
-                    },
-                    {
-                        "originalX": 106.66666666666667,
-                        "originalY": 60,
-                        "x": 666.1032663981119,
-                        "y": 562.3943786621094,
-                        "is_input": false,
-                        "is_output": true,
-                        "label": "Optimizer connector",
-                        "occupied": true,
-                        "id": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87-cp-2",
-                        "unitId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87"
-                    }
-                ],
-                "attachingArrowStarts": [
-                    "8f61c730-da52-4500-863c-2478669ed9fb",
-                    "ee33877e-665a-4768-aa29-3c208f4e76d5"
-                ],
-                "attachingArrowEnds": [
-                    "eef5a4b5-5cbb-47c8-9387-f06a0604fd07"
-                ],
-                "parameters": {
-                    "epochs": {
-                        "type": "int",
-                        "description": "Number of epochs to train.",
-                        "default": 1,
-                        "value": "5"
-                    },
-                    "device": {
-                        "type": "string",
-                        "description": "Device to train on.",
-                        "default": "cuda",
-                        "value": "cuda"
-                    }
-                }
-            },
-            "x": 559.4365997314453,
-            "y": 502.3943786621094
-        },
         "fe4e585c-5bb9-45bf-897b-780595e2046e": {
             "unitInfo": {
                 "type": "SGD",
@@ -336,7 +270,7 @@
                 ],
                 "attachingArrowStarts": [],
                 "attachingArrowEnds": [
-                    "8f61c730-da52-4500-863c-2478669ed9fb"
+                    "53452dca-e8a6-4459-a525-a80f9c02d9e0"
                 ],
                 "parameters": {
                     "lr": {
@@ -472,7 +406,7 @@
                     "272b6148-2e69-449a-91c1-4be66e7e3dec"
                 ],
                 "attachingArrowEnds": [
-                    "ee33877e-665a-4768-aa29-3c208f4e76d5"
+                    "c309b28e-b3d8-420a-a796-280555a640ca"
                 ],
                 "parameters": {}
             },
@@ -680,6 +614,78 @@
             },
             "x": 757.334905469232,
             "y": 1085.4463961826348
+        },
+        "b6055ace-4236-4f88-9cb0-0257a4510f4b": {
+            "unitInfo": {
+                "type": "model start",
+                "connectionPoints": [
+                    {
+                        "originalX": 80,
+                        "originalY": 0,
+                        "x": 649.9254025265358,
+                        "y": 500.9306470747488,
+                        "is_input": true,
+                        "is_output": false,
+                        "label": "Data",
+                        "occupied": true,
+                        "id": "b6055ace-4236-4f88-9cb0-0257a4510f4b-cp-0",
+                        "unitId": "b6055ace-4236-4f88-9cb0-0257a4510f4b"
+                    },
+                    {
+                        "originalX": 53.333333333333336,
+                        "originalY": 60,
+                        "x": 623.2587358598691,
+                        "y": 560.9306470747488,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Data",
+                        "occupied": true,
+                        "id": "b6055ace-4236-4f88-9cb0-0257a4510f4b-cp-1",
+                        "unitId": "b6055ace-4236-4f88-9cb0-0257a4510f4b"
+                    },
+                    {
+                        "originalX": 106.66666666666667,
+                        "originalY": 60,
+                        "x": 676.5920691932024,
+                        "y": 560.9306470747488,
+                        "is_input": false,
+                        "is_output": true,
+                        "label": "Optimizer connector",
+                        "occupied": true,
+                        "id": "b6055ace-4236-4f88-9cb0-0257a4510f4b-cp-2",
+                        "unitId": "b6055ace-4236-4f88-9cb0-0257a4510f4b"
+                    }
+                ],
+                "attachingArrowStarts": [
+                    "53452dca-e8a6-4459-a525-a80f9c02d9e0",
+                    "c309b28e-b3d8-420a-a796-280555a640ca"
+                ],
+                "attachingArrowEnds": [
+                    "eef5a4b5-5cbb-47c8-9387-f06a0604fd07"
+                ],
+                "parameters": {
+                    "mode": {
+                        "type": "string",
+                        "description": "Mode of the model. (train, eval)",
+                        "default": "train",
+                        "value": "train"
+                    },
+                    "epochs": {
+                        "type": "int",
+                        "description": "Number of epochs to train.",
+                        "default": 1,
+                        "value": 1
+                    },
+                    "device": {
+                        "type": "string",
+                        "description": "Device to train on.",
+                        "default": "cuda",
+                        "value": "cuda"
+                    }
+                }
+            },
+            "x": 569.9254025265358,
+            "y": 500.9306470747488
         }
     },
     "arrows": {
@@ -759,13 +765,13 @@
                 "y": 460.28167724609375
             },
             "endPoint": {
-                "x": 639.4365997314453,
-                "y": 502.3943786621094
+                "x": 649.9254025265358,
+                "y": 500.9306470747488
             },
             "startUnitId": "3b176473-6f5a-43a4-9f84-794ed6d4ebce",
-            "endUnitId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87",
+            "endUnitId": "b6055ace-4236-4f88-9cb0-0257a4510f4b",
             "startAnchorPointId": "3b176473-6f5a-43a4-9f84-794ed6d4ebce-cp-2",
-            "endAnchorPointId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87-cp-0"
+            "endAnchorPointId": "b6055ace-4236-4f88-9cb0-0257a4510f4b-cp-0"
         },
         "119f28ba-a812-41b5-a323-3c7fa25999f0": {
             "startPoint": {
@@ -780,34 +786,6 @@
             "endUnitId": "1ac43f3f-b7f7-4651-930c-2114aa6e43e9",
             "startAnchorPointId": "3b176473-6f5a-43a4-9f84-794ed6d4ebce-cp-3",
             "endAnchorPointId": "1ac43f3f-b7f7-4651-930c-2114aa6e43e9-cp-1"
-        },
-        "8f61c730-da52-4500-863c-2478669ed9fb": {
-            "startPoint": {
-                "x": 666.1032663981119,
-                "y": 562.3943786621094
-            },
-            "endPoint": {
-                "x": 748.5915069580078,
-                "y": 591.1267242431641
-            },
-            "startUnitId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87",
-            "endUnitId": "fe4e585c-5bb9-45bf-897b-780595e2046e",
-            "startAnchorPointId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87-cp-2",
-            "endAnchorPointId": "fe4e585c-5bb9-45bf-897b-780595e2046e-cp-0"
-        },
-        "ee33877e-665a-4768-aa29-3c208f4e76d5": {
-            "startPoint": {
-                "x": 612.7699330647787,
-                "y": 562.3943786621094
-            },
-            "endPoint": {
-                "x": 561.9718170166016,
-                "y": 589.7183074951172
-            },
-            "startUnitId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87",
-            "endUnitId": "b6fb77e2-0359-47d3-819d-937fcc3bad23",
-            "startAnchorPointId": "85f6ab8f-83b3-4b3d-98e1-220c5f92dc87-cp-1",
-            "endAnchorPointId": "b6fb77e2-0359-47d3-819d-937fcc3bad23-cp-0"
         },
         "6e0d3c4a-6195-489a-8665-f0555d8f33c0": {
             "startPoint": {
@@ -878,6 +856,34 @@
             "endUnitId": "1ac43f3f-b7f7-4651-930c-2114aa6e43e9",
             "startAnchorPointId": "8748e41b-3467-44e2-ac58-f2c8daa581ce-cp-1",
             "endAnchorPointId": "1ac43f3f-b7f7-4651-930c-2114aa6e43e9-cp-0"
+        },
+        "53452dca-e8a6-4459-a525-a80f9c02d9e0": {
+            "startPoint": {
+                "x": 676.5920691932024,
+                "y": 560.9306470747488
+            },
+            "endPoint": {
+                "x": 748.5915069580078,
+                "y": 591.1267242431641
+            },
+            "startUnitId": "b6055ace-4236-4f88-9cb0-0257a4510f4b",
+            "endUnitId": "fe4e585c-5bb9-45bf-897b-780595e2046e",
+            "startAnchorPointId": "b6055ace-4236-4f88-9cb0-0257a4510f4b-cp-2",
+            "endAnchorPointId": "fe4e585c-5bb9-45bf-897b-780595e2046e-cp-0"
+        },
+        "c309b28e-b3d8-420a-a796-280555a640ca": {
+            "startPoint": {
+                "x": 623.2587358598691,
+                "y": 560.9306470747488
+            },
+            "endPoint": {
+                "x": 561.9718170166016,
+                "y": 589.7183074951172
+            },
+            "startUnitId": "b6055ace-4236-4f88-9cb0-0257a4510f4b",
+            "endUnitId": "b6fb77e2-0359-47d3-819d-937fcc3bad23",
+            "startAnchorPointId": "b6055ace-4236-4f88-9cb0-0257a4510f4b-cp-1",
+            "endAnchorPointId": "b6fb77e2-0359-47d3-819d-937fcc3bad23-cp-0"
         }
     }
 }
