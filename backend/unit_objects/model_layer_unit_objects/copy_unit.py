@@ -17,7 +17,7 @@ class CopyUnit(ModelLayerUnit):
         unit_id (str): The ID of the unit.
         unit_info (dict): The information of the unit.
     """
-    def __init__(self, unit_id: str, unit_info: dict):
+    def __init__(self, unit_id: str, unit_info: dict): # pylint: disable=useless-super-delegation
         super().__init__(unit_id, unit_info)
 
     def forward(self, input_data):

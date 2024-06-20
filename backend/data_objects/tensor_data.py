@@ -33,16 +33,18 @@ class TensorData(DataObject):
         Returns:
             torch.Tensor: The reduced tensor.
         """
-        # if the total number of elements in the tensor does not exceed 100000, return the tensor as is
+        # if the total number of elements in the tensor does not exceed 100000,
+        # return the tensor as is
         multiplier = 1
         for dim in tensor.shape:
             multiplier *= dim
         if multiplier <= 100000:
             return tensor
-        
+
         new_shape = list(tensor.shape)
         for i, dim in enumerate(tensor.shape):
-            # iteratively reduce the leftmost dimension by half until the total number of elements is less than 100000
+            # iteratively reduce the leftmost dimension by half until the total
+            # number of elements is less than 100000
             while new_shape[i] > 1:
                 new_shape[i] //= 2
                 multiplier //= 2
@@ -53,7 +55,7 @@ class TensorData(DataObject):
 
         slices = tuple(slice(0, dim) for dim in new_shape)
         new_tensor = tensor[slices]
-            
+
         return new_tensor
 
     def to_json_dict(self):
@@ -86,7 +88,7 @@ class TensorData(DataObject):
             "shape": self.shape
         }
         return data
-    
+
     def get_data(self):
         """
         Get the data from the data object.

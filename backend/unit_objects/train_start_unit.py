@@ -24,7 +24,16 @@ class TrainStartUnit(Unit, nn.Module):
         unit_info (dict): The information of the unit.
         all_units_data (dict): The data of all the units.
     """
-    def __init__(self, unit_id: str, unit_info: dict, all_units_data: dict, enable_send_data: bool = True, curr_unit_id: list = []):
+    def __init__(
+        self,
+        unit_id: str,
+        unit_info: dict,
+        all_units_data: dict,
+        enable_send_data: bool = True,
+        curr_unit_id: list = None
+    ):
+        if curr_unit_id is None:
+            curr_unit_id = []
         Unit.__init__(self, unit_id, unit_info)
         nn.Module.__init__(self)
         self.all_units_data = all_units_data
@@ -50,7 +59,7 @@ class TrainStartUnit(Unit, nn.Module):
             dict: The training configuration.
         """
         return (self.epochs, self.device)
-    
+
     def register_modules(self):
         """
         This method preregisters the modules in the model.
@@ -62,7 +71,10 @@ class TrainStartUnit(Unit, nn.Module):
                 if isinstance(module_unit_object, ModelEndUnit):
                     return
                 # register the module object
-                assert isinstance(module_unit_object, nn.Module), f"Module object must be an instance of nn.Module, got {type(module_unit_object)}"
+                assert isinstance(module_unit_object, nn.Module), \
+                    f"Module object must be an instance of nn.Module, got {
+                        type(module_unit_object)
+                    }"
                 if unit_id not in self._modules:
                     self.add_module(unit_id, module_unit_object)
                     print(f'Registered module: {module_unit_object}')
@@ -83,7 +95,8 @@ class TrainStartUnit(Unit, nn.Module):
         end_unit_output = None
 
         def traverse(unit_id, input_data):
-            if self.curr_unit_id != []: self.curr_unit_id.pop()
+            if self.curr_unit_id != []:
+                self.curr_unit_id.pop()
             self.curr_unit_id.append(unit_id)
             unit_info = self.all_units_data[unit_id]
             if unit_id in self.unit_id_to_module:
@@ -95,14 +108,21 @@ class TrainStartUnit(Unit, nn.Module):
                 end_unit_output = module_unit_object.execute(input_data)
                 self.end_unit_connections = unit_info['outputs']
                 if self.enable_send_data:
-                    send_unit_data({unit_id: {"Model output": end_unit_output["Model output"].to_json_dict()}})
+                    send_unit_data(
+                        {
+                            unit_id: {
+                                "Model output": end_unit_output["Model output"].to_json_dict()
+                            }
+                        }
+                    )
                 # print(f'Executing unit: {module_unit_object}')
                 return
             output = module_unit_object(input_data)
             output_to_send = {}
             for output_name, output_data in output.items():
                 output_data_json = output_data.to_json_dict()
-                output_to_send[output_name] = output_data_json # TODO: need to rename output_to_send to something like data_to_send
+                # TODO: need to rename output_to_send to something like data_to_send
+                output_to_send[output_name] = output_data_json
                 if self.enable_send_data:
                     buf = DataImageBuilder(output_data).build_image()
                     if buf is not None:
@@ -120,7 +140,8 @@ class TrainStartUnit(Unit, nn.Module):
                 next_unit_input_name_to_connect = connection['end_name']
                 input_cache[next_unit_id][next_unit_input_name_to_connect] = input_for_next_unit
                 # Check if all inputs for the next unit are ready
-                if len(input_cache[next_unit_id]) == len(self.all_units_data[next_unit_id]['inputs']):
+                input_count = len(self.all_units_data[next_unit_id]['inputs'])
+                if len(input_cache[next_unit_id]) == input_count:
                     traverse(next_unit_id, input_cache[next_unit_id])
 
         # send unit data of itself
@@ -144,7 +165,7 @@ class TrainStartUnit(Unit, nn.Module):
                 data = x
                 traverse(connection['connects_to'], {end_name: TensorData(data)})
                 break
-            
+
         x = end_unit_output
         self.enable_send_data = False
         return x
@@ -154,6 +175,6 @@ class TrainStartUnit(Unit, nn.Module):
         This method is unnecessary for this unit.
         """
         raise AssertionError('This method should not be called.')
-    
+
     def __repr__(self):
         return nn.Module.__repr__(self)
