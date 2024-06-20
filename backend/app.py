@@ -2,16 +2,19 @@
 The file contains the app initialization code for the Flask server and the SocketIO server.
 """
 
-import os, base64, gc, io
+import base64
+import gc
+import io
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO
 
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*")  # Allow all origins
+# Allow all origins
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
-def send_unit_data(unit_data):
+async def send_unit_data(unit_data):
     """
     Send unit data to the client via WebSocket.
 
@@ -28,7 +31,7 @@ def send_unit_data(unit_data):
     socketio.emit('data_updated', {'data': unit_data})
     return jsonify({'unit_data': unit_data})
 
-def send_error(error_header, error_message):
+async def send_error(error_header, error_message):
     """
     Send an error message to the client via WebSocket.
 
@@ -41,7 +44,7 @@ def send_error(error_header, error_message):
     socketio.emit('backend_error', {'header': error_header, 'message': error_message})
     return jsonify({'backend_error': error_message})
 
-def send_header_status_data(status):
+async def send_header_status_data(status):
     """
     Send header status data to the client via WebSocket.
 
@@ -55,7 +58,7 @@ def send_header_status_data(status):
     return jsonify({'status': status})
 
 @app.route('/send_image', methods=['POST'])
-def send_image(unit_id, data_name, buf):
+async def send_image(unit_id, data_name, buf):
     """
     Send an image to the client via WebSocket.
 
@@ -71,11 +74,15 @@ def send_image(unit_id, data_name, buf):
         if isinstance(buf, io.BytesIO):
             image_data = base64.b64encode(buf.read()).decode('utf-8')
             # notifiy the client that the image has been updated
-            socketio.emit('image_updated', {'unit_id': unit_id, 'data_name': data_name, 'image_data': [image_data]})
+            socketio.emit('image_updated', {
+                'unit_id': unit_id,
+                'data_name': data_name,
+                'image_data': [image_data]}
+            )
             buf.close()
             gc.collect()
             return jsonify({'status': 'success', 'message': 'Image send successfully'})
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-except
         buf.close()
         print(f'Error sending image: {e}')
         return jsonify({'status': 'error', 'message': str(e)}), 500

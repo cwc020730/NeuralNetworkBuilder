@@ -2,6 +2,7 @@
 This file contains the HuggingFaceDatasetInputUnit class, which is a subclass of the InputUnit class.
 """
 
+import asyncio
 from datasets import load_dataset, load_dataset_builder
 from ...app import send_header_status_data
 from ..input_unit import InputUnit
@@ -42,7 +43,7 @@ class HuggingFaceDatasetInputUnit(InputUnit):
         Returns:
             dict: A dictionary containing the HuggingFaceDatasetData object.
         """
-        send_header_status_data(f"Loading dataset {self.dataset_name}...")
+        asyncio.run(send_header_status_data(f"Loading dataset {self.dataset_name}..."))
         dataset = load_dataset(self.dataset_name)
         
         tasks = self.get_dataset_tasks()

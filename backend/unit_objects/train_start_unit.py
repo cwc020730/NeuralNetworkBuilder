@@ -2,6 +2,7 @@
 This file contains the TrainStartUnit class, which is a subclass of the Unit class.
 """
 
+import asyncio
 import torch.nn as nn
 from . import Unit
 from .model_end_unit import ModelEndUnit
@@ -108,13 +109,13 @@ class TrainStartUnit(Unit, nn.Module):
                 end_unit_output = module_unit_object.execute(input_data)
                 self.end_unit_connections = unit_info['outputs']
                 if self.enable_send_data:
-                    send_unit_data(
+                    asyncio.run(send_unit_data(
                         {
                             unit_id: {
                                 "Model output": end_unit_output["Model output"].to_json_dict()
                             }
                         }
-                    )
+                    ))
                 # print(f'Executing unit: {module_unit_object}')
                 return
             output = module_unit_object(input_data)
@@ -126,12 +127,12 @@ class TrainStartUnit(Unit, nn.Module):
                 if self.enable_send_data:
                     buf = DataImageBuilder(output_data).build_image()
                     if buf is not None:
-                        send_image(unit_id, output_name, buf)
+                        asyncio.run(send_image(unit_id, output_name, buf))
             unit_data = {
                 unit_id: output_to_send
             }
             if self.enable_send_data:
-                send_unit_data(unit_data)
+                asyncio.run(send_unit_data(unit_data))
             # print(f'Executing unit: {module_unit_object}')
 
             for connection in unit_info['outputs']:
@@ -155,7 +156,7 @@ class TrainStartUnit(Unit, nn.Module):
             "Optimizer connector": optimizer_unit_id
         }
         if self.enable_send_data:
-            send_unit_data({self.id: self_data_to_send})
+            asyncio.run(send_unit_data({self.id: self_data_to_send}))
         # get the next unit id and input name to connect
         self_info = self.all_units_data[self.id]
         self_outputs = self_info['outputs']
