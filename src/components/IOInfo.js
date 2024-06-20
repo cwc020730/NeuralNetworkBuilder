@@ -36,10 +36,10 @@ const IOInfo = () => {
           const label = connectionPoint.label;
           if ((type === 'input' && connectionPoint.is_input) || (type === 'output' && connectionPoint.is_output)) {
             return (
-              <>
+              <React.Fragment key={index}>
                 <div className={`io-occupied-flag ${occupiedClass}`}></div>
                 <div className="io-label">{label}</div>
-              </>
+              </React.Fragment>
             );
           }
           return null;
