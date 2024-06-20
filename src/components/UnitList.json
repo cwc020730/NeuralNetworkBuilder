@@ -162,12 +162,12 @@
             
         }
     },
-    "train start": {
-        "primary_label": "train start",
-        "in_unit_label": "TRAINSTART",
+    "model start": {
+        "primary_label": "model start",
+        "in_unit_label": "MODELSTART",
         "in_unit_label_color": "black",
         "category": ["MARKER"],
-        "description": "Indicate the start of training a model.",
+        "description": "Indicate the start of a model.",
         "color": "#ADD8E6",
         "image": null,
         "input": {

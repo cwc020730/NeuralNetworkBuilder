@@ -10,7 +10,7 @@ from .data_image_builder import DataImageBuilder
 from .unit_object_allocator import UnitObjectAllocator
 from .app import send_unit_data, send_image, send_header_status_data
 from . import EmptyData, AccuracyData, LossData
-from .unit_objects.train_start_unit import TrainStartUnit
+from .unit_objects.model_start_unit import ModelStartUnit
 
 class ExecutionHandler:
     """
@@ -50,14 +50,14 @@ class ExecutionHandler:
             self.curr_unit_id.append(unit_id)
             unit_info = self.simplified_data[unit_id]
             # Check if the unit is a train start unit
-            if unit_info['type'] == 'train start':
+            if unit_info['type'] == 'model start':
                 assert isinstance(input_data['Data'], DataLoader), \
                     'DataLoader input expected for TrainStartUnit'
                 dataloader = input_data['Data']
                 curr_loss_func_unit_id = input_data['Loss function id']
                 assert curr_loss_func_unit_id is not None, \
                     'Loss function unit not found'
-                unit_object = TrainStartUnit(
+                unit_object = ModelStartUnit(
                     unit_id,
                     unit_info,
                     self.simplified_data,

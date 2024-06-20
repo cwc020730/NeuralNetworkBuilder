@@ -55,6 +55,10 @@ def receive_data():
         asyncio.run(send_error("Invalid Graph", str(e)))
         asyncio.run(send_header_status_data('idle'))
         return jsonify({'error': str(e)}), 400
+    except Exception as e: # pylint: disable=broad-except
+        asyncio.run(send_error("Invalid Graph", f"An error occurred while parsing the graph: {e}"))
+        asyncio.run(send_header_status_data('idle'))
+        return jsonify({'error': f'An error occurred while parsing the graph: {e}'}), 400
     try:
         curr_unit_id = []
         execution_handler = ExecutionHandler(json_graph_handler.simplified_data, curr_unit_id, state_dict)

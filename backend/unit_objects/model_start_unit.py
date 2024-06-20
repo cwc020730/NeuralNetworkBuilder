@@ -11,7 +11,7 @@ from ..unit_object_allocator import UnitObjectAllocator
 from ..data_objects import TensorData
 from ..data_image_builder import DataImageBuilder
 
-class TrainStartUnit(Unit, nn.Module):
+class ModelStartUnit(Unit, nn.Module):
     """
     The TrainStartUnit class is a subclass of the Unit class.
 
