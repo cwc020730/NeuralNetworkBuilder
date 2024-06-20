@@ -234,7 +234,7 @@ const D3Canvas = () => {
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .style('display', 'block')
       .style('margin', 'auto')
-      .style('background', '#f8f8f8');
+      .style('background', '#545454');
 
     const g = svg.append('g');
     const arrowContainer = svg.append('g').attr('class', 'arrows');
@@ -243,10 +243,29 @@ const D3Canvas = () => {
     const bgWidth = 10 * width;
     const bgHeight = 10 * height;
 
+    // define grid pattern
+    const pattern = svg.append('defs')
+      .append('pattern')
+      .attr('id', 'grid')
+      .attr('width', 10)
+      .attr('height', 10)
+      .attr('patternUnits', 'userSpaceOnUse');
+
+    pattern.append('rect')
+      .attr('width', 10)
+      .attr('height', 10)
+      .attr('fill', '#767676');
+
+    pattern.append('path')
+      .attr('d', 'M 10 0 L 0 0 0 10')
+      .attr('fill', 'none')
+      .attr('stroke', '#cbcbcb')
+      .attr('stroke-width', 0.5);
+
     g.append('rect')
       .attr('width', bgWidth)
       .attr('height', bgHeight)
-      .attr('fill', '#545454');
+      .attr('fill', 'url(#grid)');
 
     const zoomBehavior = d3.zoom()
       .scaleExtent([0.1, 1])
@@ -308,7 +327,7 @@ const D3Canvas = () => {
       const arrow = arrowContainerRef.current
         .append('path')
         .attr('d', d3.line()([[start.x, start.y], [end.x, end.y]]))
-        .attr('stroke', 'grey')
+        .attr('stroke', '#212121')
         .attr('stroke-width', 1)
         .attr('fill', 'none')
         .attr('marker-end', 'url(#arrowhead)')
@@ -681,7 +700,7 @@ const D3Canvas = () => {
       .attr('orient', 'auto')
       .append('polygon')
       .attr('points', '0 0, 10 3.5, 0 7')
-      .attr('fill', 'grey');
+      .attr('fill', '#212121');
 
       window.createUnit = createUnit;
       window.drawArrow = drawArrow;
