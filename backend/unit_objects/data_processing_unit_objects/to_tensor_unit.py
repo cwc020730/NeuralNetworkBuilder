@@ -7,7 +7,7 @@ import numpy as np
 from PIL.Image import Image as PILImage
 from torchvision.transforms import transforms
 from ..data_processing_unit import DataProcessingUnit
-from ...data_objects import TensorData
+from ...data_objects import TensorData, VisualizableTensorData
 
 class ToTensorUnit(DataProcessingUnit):
     """
@@ -42,16 +42,20 @@ class ToTensorUnit(DataProcessingUnit):
                 list_of_tensor = [transform(data) for data in input_data]
                 tensor = torch.stack(list_of_tensor)
                 return {
-                    "Tensor": TensorData(tensor)
+                    "Tensor": VisualizableTensorData(tensor)
                 }
             # Check if all elements are integers
             elif all(isinstance(data, int) for data in input_data):
                 return {
                     "Tensor": TensorData(torch.tensor(input_data, dtype=torch.long))
                 }
-        elif isinstance(input_data, (PILImage, np.ndarray)):
+        elif isinstance(input_data, PILImage):
             return {
-                "Tensor": TensorData(transform(input_data))
+                "Tensor": VisualizableTensorData(transform(input_data))
+            }
+        elif isinstance(input_data, np.ndarray):
+            return {
+                "Tensor": TensorData(torch.tensor(input_data))
             }
         else:
             raise ValueError(f"Invalid input data type: {type(input_data)}")

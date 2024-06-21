@@ -6,22 +6,18 @@ const socket = io("http://localhost:5000");
 
 const DataPanelImageContainer = () => {
     const { selectedUnitId, selectedDataName, imageDataMap, setImageDataMap } = useContext(AppContext);
-    const imageDataMapRef = useRef(imageDataMap);
     const [currentPage, setCurrentPage] = useState(1); // Current page state
     const imagesPerPage = 5; // Number of images per page (you can adjust this as needed)
 
     const getImageByPage = (page_number) => {
-        if (!imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`)) {
-            return null;
-        }
-        const image_data_at_page = imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`)[page_number - 1];
+        const image_data_at_page = imageDataMap.get(`${selectedUnitId}/${selectedDataName}`)[page_number - 1];
         const src = `data:image/png;base64,${image_data_at_page}`;
         return src;
     }
 
     // Function to handle next page
     const nextPage = () => {
-        const totalPages = imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`).length;
+        const totalPages = imageDataMap.get(`${selectedUnitId}/${selectedDataName}`).length;
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
         }
@@ -44,8 +40,8 @@ const DataPanelImageContainer = () => {
             {imageDataMap.get(`${selectedUnitId}/${selectedDataName}`) ? (
                 <div className="data-image-pagination-controls">
                     <button className="prev" onClick={prevPage} disabled={currentPage === 1}></button>
-                    <span className="data-image-page-num">PAGE {currentPage} OF {imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`).length}</span>
-                    <button className="next" onClick={nextPage} disabled={currentPage === imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`).length}></button>
+                    <span className="data-image-page-num">PAGE {currentPage} OF {imageDataMap.get(`${selectedUnitId}/${selectedDataName}`).length}</span>
+                    <button className="next" onClick={nextPage} disabled={currentPage === imageDataMap.get(`${selectedUnitId}/${selectedDataName}`).length}></button>
                 </div>
             ) : (
                 <></>
