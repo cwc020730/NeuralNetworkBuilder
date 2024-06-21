@@ -674,7 +674,7 @@
                         "type": "int",
                         "description": "Number of epochs to train.",
                         "default": 1,
-                        "value": 1
+                        "value": "5"
                     },
                     "device": {
                         "type": "string",

@@ -11,6 +11,9 @@ const DataPanelImageContainer = () => {
     const imagesPerPage = 5; // Number of images per page (you can adjust this as needed)
 
     const getImageByPage = (page_number) => {
+        if (!imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`)) {
+            return null;
+        }
         const image_data_at_page = imageDataMapRef.current.get(`${selectedUnitId}/${selectedDataName}`)[page_number - 1];
         const src = `data:image/png;base64,${image_data_at_page}`;
         return src;
