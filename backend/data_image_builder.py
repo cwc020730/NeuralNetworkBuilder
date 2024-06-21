@@ -78,7 +78,7 @@ class DataImageBuilder:
             plt.ylabel('Accuracy')
             plt.xticks(range(len(accuracy_vs_epoch)))
         elif isinstance(self.data_object, VisualizableTensorData):
-            sample, num_images = self.data_object.sample(n=-1, batch=1) # sample all images from the first batch
+            sample, num_images = self.data_object.sample(n=-1, batch=0) # sample all images from the first batch
             sample_list = sample.tolist()
             # sample_list = [self._normalize_list(s) for s in sample_list]
             sample_list = self._normalize_list(sample_list)
@@ -101,7 +101,7 @@ class DataImageBuilder:
                 for ax in axes.flatten():
                     ax.patch.set_alpha(0.0)
         elif isinstance(self.data_object, VisualizableBatchedVectorTensorData):
-            sample, num_items = self.data_object.sample(n=-1, batch=1)
+            sample, num_items = self.data_object.sample(n=-1, batch=0)
             sample_list = sample.tolist()
             sample_list = self._normalize_list(sample_list)
             if num_items == 1:
