@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from .data_image_builder import DataImageBuilder
 from .unit_object_allocator import UnitObjectAllocator
 from .app import send_unit_data, send_image, send_header_status_data
-from . import EmptyData, AccuracyData, LossData
+from . import EmptyData, AccuracyData, LossData, TensorData
 from .unit_objects.model_start_unit import ModelStartUnit
 
 class ExecutionHandler:
@@ -146,6 +146,28 @@ class ExecutionHandler:
                         print(f'Epoch {epoch + 1}, total accuracy: {total_accuracy / len(dataloader)}')
                     output_connections = unit_object.end_unit_connections
                     self.state_dict = unit_object.state_dict()
+                elif unit_info['parameters']['mode']['value'] == 'eval':
+                    assert isinstance(input_data['Data'], TensorData), \
+                        'TensorData input expected for ModelStartUnit in eval mode'
+                    unit_object = ModelStartUnit(
+                        unit_id,
+                        unit_info,
+                        self.simplified_data,
+                        curr_unit_id=self.curr_unit_id
+                    )
+                    # try load state dict
+                    if self.state_dict is not None:
+                        unit_object.load_state_dict(self.state_dict)
+                    _, device = unit_object.get_training_config()
+                    # set evaluation device
+                    unit_object.to(device)
+                    # evaluate the model
+                    inputs = input_data['Data'].get_data()
+                    inputs = inputs.to(device)
+                    output = unit_object(inputs)
+
+                    output_connections = unit_object.end_unit_connections
+                    self.state_dict = unit_object.state_dict()
             else:
                 unit_object = UnitObjectAllocator.create_unit_object(unit_id, unit_info)
                 output = unit_object.execute(input_data)
@@ -192,6 +214,9 @@ class ExecutionHandler:
             for connection in output_connections:
                 input_for_next_unit = output[connection['name']]
                 next_unit_id = connection['connects_to']
+                # handles the case when the model end unit is the last unit
+                if not next_unit_id:
+                    continue
                 next_unit_input_name_to_connect = connection['end_name']
                 input_cache[next_unit_id][next_unit_input_name_to_connect] = input_for_next_unit
                 # Check if all inputs for the next unit are ready
