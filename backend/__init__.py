@@ -31,5 +31,6 @@ from .unit_objects import (
     ReLUUnit,
     Conv2DUnit,
     MaxPool2DUnit,
-    CopyUnit
+    CopyUnit,
+    RandomSampleUnit
 )

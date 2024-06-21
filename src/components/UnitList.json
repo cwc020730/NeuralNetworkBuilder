@@ -623,5 +623,39 @@
         "parameters": {
             
         }
+    },
+    "random sample": {
+        "primary_label": "random sample",
+        "in_unit_label": "RANDSAMPLE",
+        "in_unit_label_color": "black",
+        "category": ["DATA", "PREPROCESSING"],
+        "description": "Randomly sample from a dataset.",
+        "color": "white",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Data"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Sampled data"
+            ]
+        },
+        "parameters": {
+            "size": {
+                "type": "int",
+                "description": "Size of the sample.",
+                "default": 1
+            }
+        }
     }
 }
