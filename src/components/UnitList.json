@@ -657,5 +657,35 @@
                 "default": 1
             }
         }
+    },
+    "normalize": {
+        "primary_label": "normalize",
+        "in_unit_label": "NORMALIZE",
+        "in_unit_label_color": "black",
+        "category": ["DATA", "PREPROCESSING"],
+        "description": "Normalize data.",
+        "color": "white",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "input_labels": [
+                "Data"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Normalized data"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }

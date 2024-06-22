@@ -4,7 +4,8 @@ from .data_processing_unit_objects import (
     IntegerToOneHotUnit,
     ToTensorUnit,
     ToDataloaderUnit,
-    RandomSampleUnit
+    RandomSampleUnit,
+    NormalizeUnit
 )
 from .input_unit_objects import (
     HuggingFaceDatasetInputUnit,

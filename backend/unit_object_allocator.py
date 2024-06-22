@@ -18,7 +18,8 @@ from . import (
     Conv2DUnit,
     MaxPool2DUnit,
     CopyUnit,
-    RandomSampleUnit
+    RandomSampleUnit,
+    NormalizeUnit
 )
 
 class UnitObjectAllocator:
@@ -42,7 +43,8 @@ class UnitObjectAllocator:
         "conv2d": Conv2DUnit,
         "maxpool2d": MaxPool2DUnit,
         "copy": CopyUnit,
-        "random sample": RandomSampleUnit
+        "random sample": RandomSampleUnit,
+        "normalize": NormalizeUnit,
     }
 
     def __init__(self):
