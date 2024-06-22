@@ -39,7 +39,7 @@ python -m backend.backend
 
 ## 例子
 
-![Simple NN trained on MNIST](images/img1.png)
+![Simple NN trained on MNIST](images/img2.png)
 
 在 `http://localhost:3000` 使用 File -> Import 并选择 `examples/simple_net_for_mnist.json` 来加载和图片一样的神经网络。
 点击 Run 按钮以训练。

@@ -39,7 +39,7 @@ The backend server should start locally: `http://localhost:5000`.
 
 ## Example
 
-![Simple NN trained on MNIST](images/img1.png)
+![Simple NN trained on MNIST](images/img2.png)
 
 You may use File -> Import on `http://localhost:3000` and select `examples/simple_net_for_mnist.json` to load the same neural network.
 Click the Run button to start training the neural network.
