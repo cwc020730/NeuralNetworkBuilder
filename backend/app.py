@@ -8,6 +8,7 @@ import io
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO
+from .data_image_builder import DataImageBuilder
 
 app = Flask(__name__)
 CORS(app)
@@ -56,6 +57,22 @@ async def send_header_status_data(status):
     """
     socketio.emit('header_status_updated', {'status': status})
     return jsonify({'status': status})
+
+async def build_and_send_image(unit_id, data_name, data_obj):
+    """
+    Build and send an image to the client via WebSocket.
+
+    Args:
+        unit_id (str): The ID of the unit.
+        data_name (str): The name of the data.
+        data_obj (object): The image object.
+
+    Returns:
+        dict: The image data.
+    """
+    buf = DataImageBuilder(data_obj).build_image()
+    if buf is not None:
+        await send_image(unit_id, data_name, buf)
 
 @app.route('/send_image', methods=['POST'])
 async def send_image(unit_id, data_name, buf):

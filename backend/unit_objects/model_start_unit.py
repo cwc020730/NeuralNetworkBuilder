@@ -6,10 +6,9 @@ import asyncio
 import torch.nn as nn
 from . import Unit
 from .model_end_unit import ModelEndUnit
-from ..app import send_unit_data, send_image
+from ..app import send_unit_data, build_and_send_image
 from ..unit_object_allocator import UnitObjectAllocator
 from ..data_objects import TensorData
-from ..data_image_builder import DataImageBuilder
 
 class ModelStartUnit(Unit, nn.Module):
     """
@@ -125,9 +124,7 @@ class ModelStartUnit(Unit, nn.Module):
                 # TODO: need to rename output_to_send to something like data_to_send
                 output_to_send[output_name] = output_data_json
                 if self.enable_send_data:
-                    buf = DataImageBuilder(output_data).build_image()
-                    if buf is not None:
-                        asyncio.run(send_image(unit_id, output_name, buf))
+                    asyncio.run(build_and_send_image(unit_id, output_name, output_data))
             unit_data = {
                 unit_id: output_to_send
             }

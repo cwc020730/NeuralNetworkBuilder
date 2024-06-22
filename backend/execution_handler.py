@@ -6,9 +6,8 @@ which is responsible for executing the operations of the units on the canvas.
 import time
 import asyncio
 from torch.utils.data import DataLoader
-from .data_image_builder import DataImageBuilder
 from .unit_object_allocator import UnitObjectAllocator
-from .app import send_unit_data, send_image, send_header_status_data
+from .app import send_unit_data, build_and_send_image, send_header_status_data
 from . import EmptyData, AccuracyData, LossData, TensorData
 from .unit_objects.model_start_unit import ModelStartUnit
 
@@ -139,10 +138,8 @@ class ExecutionHandler:
                             }
                         }))
                         # send image to the loss unit on the canvas
-                        loss_img_buf = DataImageBuilder(loss_data).build_image()
-                        acc_img_buf = DataImageBuilder(acc_data).build_image()
-                        asyncio.run(send_image(curr_loss_func_unit_id, 'Loss', loss_img_buf))
-                        asyncio.run(send_image(curr_loss_func_unit_id, 'Accuracy', acc_img_buf))
+                        asyncio.run(build_and_send_image(curr_loss_func_unit_id, 'Loss', loss_data))
+                        asyncio.run(build_and_send_image(curr_loss_func_unit_id, 'Accuracy', acc_data))
                         print(f'Epoch {epoch + 1}, total accuracy: {total_accuracy / len(dataloader)}')
                     output_connections = unit_object.end_unit_connections
                     self.state_dict = unit_object.state_dict()
@@ -173,9 +170,7 @@ class ExecutionHandler:
                 output = unit_object.execute(input_data)
                 # add the image to the data panel
                 for output_name, output_data in output.items():
-                    buf = DataImageBuilder(output_data).build_image()
-                    if buf is not None:
-                        asyncio.run(send_image(unit_id, output_name, buf))
+                    asyncio.run(build_and_send_image(unit_id, output_name, output_data))
                 output_connections = unit_info['outputs']
                 # handles the special dataloader case
                 if unit_info['type'] == 'to dataloader':
@@ -202,9 +197,7 @@ class ExecutionHandler:
                     for output_name, output_data in output.items():
                         output_data_json = output_data.to_json_dict()
                         output_to_send[output_name] = output_data_json # TODO: need to rename output_to_send to something like data_to_send
-                        buf = DataImageBuilder(output_data).build_image()
-                        if buf is not None:
-                            asyncio.run(send_image(unit_id, output_name, buf))
+                        asyncio.run(build_and_send_image(unit_id, output_name, output_data))
                     unit_data = {
                         unit_id: output_to_send
                     }
