@@ -283,7 +283,7 @@
                         "type": "float",
                         "description": "Momentum.",
                         "default": 0,
-                        "value": 0
+                        "value": "0.9"
                     },
                     "dampening": {
                         "type": "float",
