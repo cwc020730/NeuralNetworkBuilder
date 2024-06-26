@@ -5,15 +5,23 @@ The file contains the app initialization code for the Flask server and the Socke
 import base64
 import gc
 import io
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_socketio import SocketIO
 from .data_image_builder import DataImageBuilder
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../build', static_url_path='/')
 CORS(app)
 # Allow all origins
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:path>')
+def static_proxy(path):
+    return send_from_directory(app.static_folder, path)
 
 async def send_unit_data(unit_data):
     """
