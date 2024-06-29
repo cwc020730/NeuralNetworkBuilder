@@ -33,6 +33,7 @@ npm start
 在另一个终端中，启动后端:
 ```
 pip install -r backend/requirements.txt
+pip install -r backend/requirements_pytorch.txt
 python -m backend.backend
 ```
 后端会在 `http://localhost:5000` 运行。

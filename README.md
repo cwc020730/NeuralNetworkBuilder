@@ -33,6 +33,7 @@ npm start
 In another terminal, start the backend:
 ```
 pip install -r backend/requirements.txt
+pip install -r backend/requirements_pytorch.txt
 python -m backend.backend
 ```
 The backend server should start locally: `http://localhost:5000`.
