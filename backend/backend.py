@@ -73,8 +73,14 @@ def receive_data():
 
     return jsonify({'status': 'Data received!'}), 200
 
-if __name__ == '__main__':
+def start_server():
+    """
+    Function to start the server.
+    """
     if os.path.exists(MODEL_PATH):
         os.remove(MODEL_PATH)
         print('Removed existing model.pth file')
     app.run(debug=True, port=5000)
+
+if __name__ == '__main__':
+    start_server()
