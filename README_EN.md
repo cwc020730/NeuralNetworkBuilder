@@ -18,6 +18,11 @@ Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.i
 
 Make sure the directory of `npm`, `pip` and `python` executables are in the system environment variable `PATH`
 
+Go to the frontend directory:
+```
+cd frontend
+```
+
 Install relevant packages:
 ```
 npm install

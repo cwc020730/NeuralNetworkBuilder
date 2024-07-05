@@ -18,6 +18,11 @@ git clone https://github.com/cwc020730/NeuralNetworkBuilder.git
 
 确保含有 `npm`, `pip` 和 `python` 可执行文件的路径在系统环境变量 `PATH` 下。
 
+进入frontend路径:
+```
+cd frontend
+```
+
 下载需要的库:
 ```
 npm install
