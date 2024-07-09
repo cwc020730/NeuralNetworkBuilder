@@ -186,3 +186,7 @@ yarn-error.log*
 
 .vscode/
 model.pth
+setup.py
+package.json
+package-lock.json
+main.js
