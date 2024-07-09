@@ -687,5 +687,36 @@
         "parameters": {
             
         }
+    },
+    "add": {
+        "primary_label": "add",
+        "in_unit_label": "ADD",
+        "in_unit_label_color": "black",
+        "category": ["MODEL", "ARITHMETIC"],
+        "description": "Add two tensors.",
+        "color": "#cccccc",
+        "image": null,
+        "input": {
+            "input_cnt": {
+                "default": 2,
+                "variable": false
+            },
+            "input_labels": [
+                "Addend 1",
+                "Addend 2"
+            ]
+        },
+        "output": {
+            "output_cnt": {
+                "default": 1,
+                "variable": false
+            },
+            "output_labels": [
+                "Sum"
+            ]
+        },
+        "parameters": {
+            
+        }
     }
 }
